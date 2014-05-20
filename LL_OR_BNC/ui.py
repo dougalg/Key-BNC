@@ -57,7 +57,7 @@ def show_help():
         """1) Click "load corpus" and choose a directory containing UTF8 encoded text files (.txt)
 2) You will see a list of the files loaded. Loading new files replaces old ones, so put all files in one directory before loading
 3) Save your results (2 ways)
-    3a) You can copy/paste results by clicking in the middle window and typing "ctrl-a" followed by "ctrl-c" in MS Excell
+    3a) You can copy/paste results by clicking in the middle window and typing "ctrl-a" followed by "ctrl-c" in MS Excel
     3b) Use the "save csv" button to save the results to a file which can be opened by MS Excel (You don't need to click "calculate" first)""")
 
 # Set up the frames.
