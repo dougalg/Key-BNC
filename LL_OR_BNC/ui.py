@@ -11,6 +11,33 @@ window = tk.Tk()
 window.title("LL/OR vs. BNC Calculator")
 window.geometry("700x500")
 
+def encoding_warning(file_names):
+    text = "Warning: the following files could not be opened. Please check that they are .txt files encoded in UTF8 encoding.\n\n{}".format("\n".join(file_names))
+    ## Create main window
+    root = tk.Tk()
+    root.geometry("500x300")
+
+    tk.Button(root, text="Close", activebackground="white", bg="white", command=lambda: root.destroy()).pack(side=tk.BOTTOM)
+    
+    textbox = tk.Text(root, width=25)
+
+    scrollbar = tk.Scrollbar(root)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    textbox.config(yscrollcommand=scrollbar.set)
+    scrollbar.config(command=textbox.yview)
+
+    textbox.pack(fill=tk.BOTH)
+
+    textbox.insert(tk.END, text)
+
+    root.update_idletasks()
+    # Remove window decorations
+    root.overrideredirect(1)
+    root.wm_attributes("-topmost", 1)
+
+    ## Run appliction
+    root.mainloop()
+
 def select_all(event):
     results_text.tag_add(tk.SEL, "1.0", tk.END)
     results_text.mark_set(tk.INSERT, "1.0")
@@ -19,9 +46,11 @@ def select_all(event):
 
 def load_corpus():
     the_dir = filedialog.askdirectory()
-    calculator.load_target_data_dir(the_dir, add_name)
+    bad_files = calculator.load_target_data_dir(the_dir, add_name)
     update_labels()
     calculate()
+    if len(bad_files) > 0:
+        encoding_warning(bad_files)
 
 def add_name(file_name):
     """

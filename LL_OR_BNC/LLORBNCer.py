@@ -2,7 +2,7 @@ from LL_OR_BNC.functions import *
 import LL_OR_BNC
 import os, csv, string, collections
 
-data_dir = r'LL_OR_BNC\Data'
+data_dirs = ['LL_OR_BNC', 'Data']
 BNC_wordlist = r'BNC_wordlist.csv'
 
 class LLORBNCer(object):
@@ -33,16 +33,21 @@ class LLORBNCer(object):
         return sum(words.values())
 
     def load_target_data_dir(self, dir_name, func=None):
+        indecipherable_files = []
         results = collections.Counter()
         for root, dirs, files in os.walk(dir_name):
             for f in files:
                 fname = os.path.join(root, f)
                 with open(fname, encoding='utf8') as fh:
-                    results.update(self.words_from_text(fh.read()))
-                    if func is not None:
-                        func(f)
+                    try:
+                        results.update(self.words_from_text(fh.read()))
+                        if func is not None:
+                            func(f)
+                    except UnicodeDecodeError:
+                        indecipherable_files.append(f)
         self.target_words = results
         self.target_corpus_size = self.size_from_words(self.target_words)
+        return indecipherable_files
 
     def words_from_text(self, data):
         r"""
@@ -93,7 +98,7 @@ class LLORBNCer(object):
             ...
         }
         """
-        BNC_wordlist_path = os.path.join(data_dir, BNC_wordlist)
+        BNC_wordlist_path = os.path.join(data_dirs[0], data_dirs[1], BNC_wordlist)
         data = {}
         with open(BNC_wordlist_path, encoding='utf8') as bnc_data:
             reader = csv.reader(bnc_data)
