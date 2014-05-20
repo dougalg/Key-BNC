@@ -16,10 +16,10 @@ Downloads are available under the "build" directory. Currently only Windows vers
 
 ###Tokenization###
 
-The tokenizer splits on spaces. For punctuation, the rules are:
+The tokenizer splits on spaces, and converts upper case letters to lower. For punctuation, the rules are:
 
 1. If it is followed by a space, the punctuation is separated from the word.
-2. Double-quotation marks are ignored
+2. Double-quotation marks, parentheses, and braces are ignored
 3. If it is a right single quote or apostrophe, it is separated from the preceding word
 
 

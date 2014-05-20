@@ -59,7 +59,7 @@ class LLORBNCer(object):
         num_char = len(data)
         for i, c in enumerate(data):
             c = c.lower()
-            if c in ['"', '“', '”', '‘']:
+            if c in ['"', '“', '”', '‘', '(', ')', '{', '}', '[', ']']:
                 if word != '':
                     yield word
                 yield c
