@@ -22,6 +22,7 @@ The tokenizer splits on spaces, and converts upper case letters to lower. For pu
 2. Double-quotation marks, parentheses, and braces are ignored
 3. If it is a right single quote or apostrophe, it is separated from the preceding word
 
+EG:
 
     "You're fine, fire-truck!" --> "You", "'re", "fine", ",", "fire-truck" "!"
 
