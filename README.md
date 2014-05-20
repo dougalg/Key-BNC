@@ -2,7 +2,13 @@
 
 This is a simple application to help researchers calculate Log Likelihood (LL) and Odds Ratio (OR) statistics against a word list from the BNC.
 
-Downloads are available under the "build" directory. Currently only Windows versions are available, but if you have Python 3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
+##Download##
+
+[Windows 32-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC.win32.zip)
+[Windows 64-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC.win-amd64.zip)
+[Mac OSX 64-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC_mac.zip)
+
+Compiled packages exist for both Windows and Mac OS. If you have Python-3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
 
     python LL_OR_BNC.py
 
