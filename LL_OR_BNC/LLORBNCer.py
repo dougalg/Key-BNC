@@ -26,7 +26,7 @@ class LLORBNCer(object):
         Counts total number of words
 
         >>> words = {'a': 12, 'b': 2, 'c': 0}
-        >>> o = LLBNCer()
+        >>> o = LLORBNCer()
         >>> o.size_from_words(words)
         14
         """
@@ -50,6 +50,10 @@ class LLORBNCer(object):
         1) Add space before punct if space follows punct
         2) Add space before apostrophe
         3) Tokenize on spaces
+
+        >>> o = LLORBNCer()
+        >>> list(o.words_from_text("You're fine, fire-truck!"))
+        ['you', "'re", 'fine', ',', 'fire-truck', '!']
         """
         word = ''
         num_char = len(data)
@@ -71,6 +75,9 @@ class LLORBNCer(object):
                 if word != '':
                     yield word
                 word = c
+            else:
+                word += c
+
             if i+1 == num_char and word != '':
                 yield word
 
