@@ -1,5 +1,4 @@
 from LL_OR_BNC.functions import *
-import LL_OR_BNC
 import os, csv, string, collections
 
 data_dirs = ['LL_OR_BNC', 'Data']
