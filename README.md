@@ -2,7 +2,7 @@
 
 This is a simple application to help researchers calculate Log Likelihood (LL) and Odds Ratio (OR) statistics against a word list from the BNC.
 
-Downloads are available under the "build" directory. Currently only Windows versions are available, but if you have Python installed, you can run the source code directly on any platform.
+Downloads are available under the "build" directory. Currently only Windows versions are available, but if you have Python 3 installed, you can run the source code directly on any platform.
 
 ###Use###
 
