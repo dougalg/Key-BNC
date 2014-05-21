@@ -12,7 +12,18 @@ window.title("LL/OR vs. BNC Calculator")
 window.geometry("700x500")
 
 def encoding_warning(file_names):
-    text = "Warning: the following files could not be opened. Please check that they are .txt files encoded in UTF8 encoding.\n\n{}".format("\n".join(file_names))
+    num_skipped = len(file_names['ignored'])
+    num_opened = len(file_names['guessed'])
+
+    text = 'Warning:'
+    if num_opened > 0:
+        text += "\n{} files were opened but may contain errors as they are not encoded as UTF8.".format(num_opened)
+    if num_skipped > 0:
+        text += "\n{} files were skipped".format(num_skipped)
+    if num_opened >0 :
+        text += "\n\nOpened files:\n{}".format("\n".join(file_names['guessed']))
+    if num_skipped >0 :
+        text += "\n\nSkipped files:\n{}".format("\n".join(file_names['ignored']))
 
     root = tk.Tk()
     root.geometry("500x300")
@@ -45,11 +56,12 @@ def select_all(event):
 
 def load_corpus():
     the_dir = filedialog.askdirectory()
-    bad_files = calculator.load_target_data_dir(the_dir, add_name)
-    update_labels()
-    calculate()
-    if len(bad_files) > 0:
-        encoding_warning(bad_files)
+    if not (the_dir == ''):
+        bad_files = calculator.load_target_data_dir(the_dir, add_name)
+        update_labels()
+        calculate()
+        if len(bad_files) > 0:
+            encoding_warning(bad_files)
 
 def add_name(file_name):
     """

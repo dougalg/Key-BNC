@@ -32,18 +32,28 @@ class LLORBNCer(object):
         return sum(words.values())
 
     def load_target_data_dir(self, dir_name, func=None):
-        indecipherable_files = []
+        indecipherable_files = {'ignored':[],'guessed':[]}
         results = collections.Counter()
         for root, dirs, files in os.walk(dir_name):
             for f in files:
-                fname = os.path.join(root, f)
-                with open(fname, encoding='utf8') as fh:
+                fn, ext = os.path.splitext(f)
+                if ext == 'txt':
+                    fname = os.path.join(root, f)
+                    error = None
                     try:
-                        results.update(self.words_from_text(fh.read()))
-                        if func is not None:
-                            func(f)
+                        with open(fname, encoding='utf8') as fh:
+                            results.update(self.words_from_text(fh.read()))
                     except UnicodeDecodeError:
-                        indecipherable_files.append(f)
+                        try:
+                            with open(fname, encoding='latin-1', errors=surrogateescape) as fh:
+                                results.update(self.words_from_text(fh.read()))
+                                indecipherable_files['guessed'].append(f)
+                        except:
+                            indecipherable_files['ignored'].append(f)
+                    if func is not None and error is None:
+                        func(f)
+                else:
+                    indecipherable_files['ignored'].append(f)
         self.target_words = results
         self.target_corpus_size = self.size_from_words(self.target_words)
         return indecipherable_files
