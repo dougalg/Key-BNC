@@ -13,12 +13,12 @@ window.geometry("700x500")
 
 def encoding_warning(file_names):
     text = "Warning: the following files could not be opened. Please check that they are .txt files encoded in UTF8 encoding.\n\n{}".format("\n".join(file_names))
-    ## Create main window
+
     root = tk.Tk()
     root.geometry("500x300")
 
     tk.Button(root, text="Close", activebackground="white", bg="white", command=lambda: root.destroy()).pack(side=tk.BOTTOM)
-    
+
     textbox = tk.Text(root, width=25)
 
     scrollbar = tk.Scrollbar(root)
@@ -31,8 +31,7 @@ def encoding_warning(file_names):
     textbox.insert(tk.END, text)
 
     root.update_idletasks()
-    # Remove window decorations
-    root.overrideredirect(1)
+
     root.wm_attributes("-topmost", 1)
 
     ## Run appliction
