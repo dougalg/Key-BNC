@@ -37,7 +37,7 @@ class LLORBNCer(object):
         for root, dirs, files in os.walk(dir_name):
             for f in files:
                 fn, ext = os.path.splitext(f)
-                if ext == 'txt':
+                if ext == '.txt':
                     fname = os.path.join(root, f)
                     error = None
                     try:
@@ -45,10 +45,10 @@ class LLORBNCer(object):
                             results.update(self.words_from_text(fh.read()))
                     except UnicodeDecodeError:
                         try:
-                            with open(fname, encoding='latin-1', errors=surrogateescape) as fh:
+                            with open(fname, encoding='latin-1', errors='surrogateescape') as fh:
                                 results.update(self.words_from_text(fh.read()))
                                 indecipherable_files['guessed'].append(f)
-                        except:
+                        except UnicodeDecodeError:
                             indecipherable_files['ignored'].append(f)
                     if func is not None and error is None:
                         func(f)
