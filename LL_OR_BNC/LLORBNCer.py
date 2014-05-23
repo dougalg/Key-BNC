@@ -10,13 +10,12 @@ class LLORBNCer(object):
         self.bnc_words = self.load_BNC_data()
         self.bnc_corpus_size = self.size_from_words(self.bnc_words)
 
-        self.target_words = {}
-        self.target_corpus_size = 0
+        self.clear()
 
     def get_stats(self):
         r"""
         Runs the statistics and returns the results as a list of tuples:
-        [ (word, f, f_bnc, LL, OL), ... ] sorted by f
+        [ (word, f, f_bnc, LL, OR), ... ] sorted by f
         """
         return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words], key=lambda x: x[1], reverse=True)
 
@@ -31,31 +30,52 @@ class LLORBNCer(object):
         """
         return sum(words.values())
 
+    def clear(self):
+        self.target_words = collections.Counter()
+        self.target_corpus_size = 0
+
+    def load_file(self, file_name, func=None, indecipherable_files=None):
+        if indecipherable_files is None:
+            indecipherable_files = {'ignored':[],'guessed':[]}
+
+        results = self.target_words
+        fn, f = os.path.split(file_name)
+        fn, ext = os.path.splitext(file_name)
+        if ext == '.txt':
+            error = None
+            try:
+                with open(file_name, encoding='utf8') as fh:
+                    results.update(self.words_from_text(fh.read()))
+            except UnicodeDecodeError:
+                try:
+                    with open(file_name, encoding='latin-1', errors='surrogateescape') as fh:
+                        results.update(self.words_from_text(fh.read()))
+                        indecipherable_files['guessed'].append(f)
+                except UnicodeDecodeError:
+                    indecipherable_files['ignored'].append(f)
+            if func is not None and error is None:
+                func(f)
+        else:
+            indecipherable_files['ignored'].append(f)
+
+        self.target_words = results
+        return indecipherable_files
+
+    def load_target_file(self, file_name, func=None):
+        indecipherable_files = self.load_file(file_name, func)
+        self.target_corpus_size = self.size_from_words(self.target_words)
+        return indecipherable_files
+
     def load_target_data_dir(self, dir_name, func=None):
         indecipherable_files = {'ignored':[],'guessed':[]}
-        results = collections.Counter()
+
         for root, dirs, files in os.walk(dir_name):
             for f in files:
-                fn, ext = os.path.splitext(f)
-                if ext == '.txt':
-                    fname = os.path.join(root, f)
-                    error = None
-                    try:
-                        with open(fname, encoding='utf8') as fh:
-                            results.update(self.words_from_text(fh.read()))
-                    except UnicodeDecodeError:
-                        try:
-                            with open(fname, encoding='latin-1', errors='surrogateescape') as fh:
-                                results.update(self.words_from_text(fh.read()))
-                                indecipherable_files['guessed'].append(f)
-                        except UnicodeDecodeError:
-                            indecipherable_files['ignored'].append(f)
-                    if func is not None and error is None:
-                        func(f)
-                else:
-                    indecipherable_files['ignored'].append(f)
-        self.target_words = results
+                fname = os.path.join(root, f)
+                indecipherable_files = self.load_file(fname, func, indecipherable_files)
+
         self.target_corpus_size = self.size_from_words(self.target_words)
+
         return indecipherable_files
 
     def words_from_text(self, data):
