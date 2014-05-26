@@ -121,7 +121,7 @@ def calculate():
     fbnc_text.insert(tk.END, "F(BNC)")
     ll_text.insert(tk.END, "LL")
     or_text.insert(tk.END, "OR")
-    
+
     for d in data:
         word_text.insert(tk.END, "\n{}".format(d[0]))
         f_text.insert(tk.END, "\n{:,.0f}".format(d[1]))
@@ -166,9 +166,9 @@ def scrollResults(*args):
     return "break"
 
 def onMouseWheel(event):
-    system = platform.system() 
+    system = platform.system()
     if system == 'Windows':
-        scroll_dist = -1*(event.delta/120)
+        scroll_dist = int((event.delta/120)*(-1))
     elif system == 'Darwin':
         scroll_dist = -1*event.delta
     else:
