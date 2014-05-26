@@ -10,14 +10,14 @@ This is a simple application to help researchers calculate Log Likelihood (LL) a
 
 Compiled packages exist for both Windows and Mac OS. If you have Python-3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
 
-    python LL_OR_BNC.py
+    python LL_OR_BNC_app.py
 
 ###Use###
 
 1. Download the appropriate version
 2. Unzip the folder. Note that ALL contents of the folder are necessary, do not remove any of them. If you need to move the .exe file, move the entire folder together
 3. Run the executable file from the folder by double-clicking it
-4. Click the "load corpus" button to load a **folder** of **utf8 text files** (this means the files should be *.txt not .csv or .xml)
+4. Under the "File" menu, load either a file or folder. Each time more data is loaded, the statistics are re-calculated.
 5. The program will create a word frequency list from your corpus and use it to calculate LL and OR against the BNC<sup>[1]</sup>. Results are sorted by frequency, but you can save the results as a CSV and sort them by other criteria using MS Excel, LibreOffice, or similar programs
 
 [1]: Note that the running time will depend on your corpus size. If your corpus is large, it may take some time to run the calculations, so please be patient. Results are displayed when complete.
