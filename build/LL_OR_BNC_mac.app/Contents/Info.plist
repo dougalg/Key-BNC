@@ -54,7 +54,7 @@
 	<key>PyOptions</key>
 	<dict>
 		<key>alias</key>
-		<true/>
+		<false/>
 		<key>argv_emulation</key>
 		<true/>
 		<key>emulate_shell_environment</key>
@@ -76,22 +76,21 @@
 	<array/>
 	<key>PyRuntimeLocations</key>
 	<array>
-		<string>@executable_path/../Frameworks/Python.framework/Versions/3.3/Python</string>
-		<string>/usr/local/Cellar/python3/3.3.2/Frameworks/Python.framework/Versions/3.3/Python</string>
+		<string>@executable_path/../Frameworks/Python.framework/Versions/3.4/Python</string>
 	</array>
 	<key>PythonInfoDict</key>
 	<dict>
 		<key>PythonExecutable</key>
-		<string>/usr/local/opt/python3/bin/python3.3</string>
+		<string>/Library/Frameworks/Python.framework/Versions/3.4/bin/python3</string>
 		<key>PythonLongVersion</key>
-		<string>3.3.2 (default, Nov  2 2013, 10:33:54) 
-[GCC 4.2.1 Compatible Apple LLVM 5.0 (clang-500.2.79)]</string>
+		<string>3.4.1 (v3.4.1:c0e311e010fc, May 18 2014, 00:54:21) 
+[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]</string>
 		<key>PythonShortVersion</key>
-		<string>3.3</string>
+		<string>3.4</string>
 		<key>py2app</key>
 		<dict>
 			<key>alias</key>
-			<true/>
+			<false/>
 			<key>template</key>
 			<string>app</string>
 			<key>version</key>
