@@ -211,20 +211,25 @@ menubar = tk.Menu(window)
 filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="Load directory (d)", command=load_corpus)
 window.bind("<Control-Key-d>", load_corpus)
+window.bind("<Command-d>", load_corpus)
 
 filemenu.add_command(label="Load file (f)", command=load_corpus_file)
 window.bind("<Control-Key-f>", load_corpus_file)
+window.bind("<Command-f>", load_corpus_file)
 
 filemenu.add_command(label="Save CSV (s)", command=save)
 window.bind("<Control-Key-s>", save)
+window.bind("<Command-s>", save)
 
 filemenu.add_command(label="Clear files and results", command=clear_all)
 
 filemenu.add_command(label="Help (?)", command=show_help)
 window.bind("<Control-Key-?>", show_help)
+window.bind("<Command-?>", show_help)
 
 filemenu.add_command(label="Quit (q)", command=window.quit)
-window.bind("<Control-Key-q>", quit)
+window.bind("<Control-Key-q>", window.quit)
+window.bind("<Command-q>", window.quit)
 
 menubar.add_cascade(label="File", menu=filemenu)
 # display the menu
