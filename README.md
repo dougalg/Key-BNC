@@ -1,12 +1,12 @@
-##LL OR BNC##
+##Key-BNC##
 
 This is a simple application to help researchers calculate Log Likelihood (LL) and Odds Ratio (OR) statistics against a word list from the BNC.
 
 ##Download##
 
-1. [Windows 32-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC.win32.zip)
-2. [Windows 64-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC.win-amd64.zip)
-3. [Mac OSX 64-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/LL_OR_BNC_mac.zip)
+1. [Windows 32-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/Key-BNC-win32-v1.0.zip)
+2. [Windows 64-Bit](https://github.com/dougalg/LL_OR_BNC/raw/master/build/Key-BNC-amd64-v1.0.zip)
+3. Mac OSX 64-Bit (Awaiting compilation)
 
 Compiled packages exist for both Windows and Mac OS. If you have Python-3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
 
