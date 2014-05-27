@@ -8,7 +8,7 @@ Usage:
 from setuptools import setup
 
 APP = ['KEY_BNC_app.py']
-DATA_FILES = ['LL_OR_BNC/Data']
+DATA_FILES = ['KEY_BNC/Data']
 OPTIONS = {'argv_emulation': True}
 
 setup(
