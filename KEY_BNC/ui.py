@@ -113,7 +113,7 @@ def calculate():
         c.tag_add("right", 1.0, "end")
 
 def save(event=None):
-    file_name = filedialog.asksaveasfilename(initialfile='BNC_LL.csv')
+    file_name = filedialog.asksaveasfilename(initialfile='BNC_LL_OR.csv')
 
     if file_name != None and file_name != '':
         data = calculator.get_stats()
@@ -217,7 +217,7 @@ filemenu.add_command(label="Load file (f)", command=load_corpus_file)
 window.bind("<Control-Key-f>", load_corpus_file)
 window.bind("<Command-f>", load_corpus_file)
 
-filemenu.add_command(label="Save CSV (s)", command=save)
+filemenu.add_command(label="Save Results (s)", command=save)
 window.bind("<Control-Key-s>", save)
 window.bind("<Command-s>", save)
 
