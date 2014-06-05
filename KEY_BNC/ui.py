@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from operator import itemgetter
 from KEY_BNC.KEY_BNC import KEY_BNC
+from KEY_BNC import windows
 import csv, platform
 
 calculator = KEY_BNC()
@@ -10,42 +11,6 @@ calculator = KEY_BNC()
 window = tk.Tk()
 window.title("LL/OR vs. BNC Keyword Calculator")
 window.geometry("700x500")
-
-def encoding_warning(file_names):
-    num_skipped = len(file_names['ignored'])
-    num_opened = len(file_names['guessed'])
-
-    text = 'Warning:'
-    if num_opened > 0:
-        text += "\n{} files were opened but may contain errors as they are not encoded as UTF8.".format(num_opened)
-    if num_skipped > 0:
-        text += "\n{} files were skipped. Please make sure that they are TXT files.".format(num_skipped)
-    if num_opened >0 :
-        text += "\n\nOpened files:\n{}".format("\n".join(file_names['guessed']))
-    if num_skipped >0 :
-        text += "\n\nSkipped files:\n{}".format("\n".join(file_names['ignored']))
-
-    root = tk.Tk()
-    root.title("Warning")
-    root.geometry("500x300")
-
-    tk.Button(root, text="Close", activebackground="white", bg="white", command=lambda: root.destroy()).pack(side=tk.BOTTOM)
-
-    textbox = tk.Text(root, width=40)
-
-    tscrollbar = tk.Scrollbar(root)
-    tscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    textbox.config(yscrollcommand=tscrollbar.set)
-    tscrollbar.config(command=textbox.yview)
-
-    textbox.pack(fill=tk.BOTH)
-    textbox.insert(tk.END, text)
-
-    root.update_idletasks()
-    root.wm_attributes("-topmost", 1)
-
-    ## Run appliction
-    root.mainloop()
 
 def select_all(event):
     for c in columns:
@@ -71,7 +36,7 @@ def load_corpus_file(event=None):
         update_labels()
         calculate()
         if len(bad_files['ignored']) > 0 or len(bad_files['guessed']) > 0:
-            encoding_warning(bad_files)
+            windows.encoding_warning(bad_files)
 
 def load_corpus(event=None):
     the_dir = filedialog.askdirectory()
@@ -80,7 +45,7 @@ def load_corpus(event=None):
         update_labels()
         calculate()
         if len(bad_files['ignored']) > 0 or len(bad_files['guessed']) > 0:
-            encoding_warning(bad_files)
+            windows.encoding_warning(bad_files)
 
 def add_name(file_name):
     """
@@ -124,7 +89,28 @@ def save(event=None):
                 writer.writerow(d)
 
 def show_help(event=None):
-    pass
+    formats = {'h1': [('1.0', '1.end')],
+               'h2': [('2.0', '2.end'),
+                      ('9.0', '9.end'),
+                      ('12.0', '12.end'),
+                      ('15.0', '15.end')]
+              }
+    windows.show_splash("About Key-BNC", "Help.txt", **formats)
+
+def show_about(event=None):
+    formats = {'h1': [('1.0', '1.end')],
+               'h2': [('2.0', '2.end'),
+                      ('5.0', '5.end'),
+                      ('8.0', '8.end'),
+                      ('11.0', '11.end'),
+                      ('14.0', '14.end'),
+                      ('18.0', '18.end')],
+               'bold': [('19.0', '19.end'),
+                        ('23.0', '23.end'),
+                        ('26.0', '26.end'),
+                        ('29.0', '29.end')]
+              }
+    windows.show_splash("About Key-BNC", "About.txt", **formats)
 
 def scrollResults(*args):
     for c in columns:
@@ -152,6 +138,7 @@ def sort_results(the_col):
 
 def quit(e=None):
     window.quit()
+
 
 # Type/Token information
 button_frame = tk.Frame(window, borderwidth=1)
@@ -226,17 +213,33 @@ window.bind("<Command-s>", save)
 
 filemenu.add_command(label="Clear files and results", command=clear_all)
 
-filemenu.add_command(label="Help (?)", command=show_help)
-window.bind("<Control-Key-?>", show_help)
-window.bind("<Command-?>", show_help)
-
 filemenu.add_command(label="Quit (q)", command=quit)
 window.bind("<Control-Key-q>", quit)
 window.bind("<Command-q>", quit)
 
 menubar.add_cascade(label="File", menu=filemenu)
+
+helpmenu = tk.Menu(menubar, tearoff=0)
+
+helpmenu.add_command(label="About", command=show_about)
+
+helpmenu.add_command(label="Help (?)", command=show_help)
+window.bind("<Control-Key-?>", show_help)
+window.bind("<Command-?>", show_help)
+
+menubar.add_cascade(label="Help", menu=helpmenu)
+
 # display the menu
 window.config(menu=menubar)
 
 #draw the window, and start the application
+splash_formats = {'h1': [('1.0', '1.end')],
+                 'h2': [('2.0', '2.end'),
+                        ('5.0', '5.end'),
+                        ('8.0', '8.end')],
+                 'bold': [('6.404', '6.463'),
+                          ('9.354', '9.407')]
+                }
+
+windows.show_splash("Introduction", "About Short.txt", **splash_formats)
 window.mainloop()

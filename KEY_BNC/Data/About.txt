@@ -1,0 +1,33 @@
+﻿Key-BNC
+What is a keyword?
+A keyword is a word whose frequency is significantly higher (or lower) in a corpus of interest than in a reference corpus. Keywords let us see what words can be considered important words in a  given text. For keyword analysis, Log-likelihood (LL) and Odds Ratio (OR) are statistical calculations which generate keyness values based on frequency of occurrence which are used to rank the words. The rankings of words based on LL and OR are likely to be in a different sequence. LL highlights words which are relatively common in general use, while OR highlights more specialised words which are peculiar to a target corpus.
+
+Who is this useful for?
+To calculate these statistics, a word list for a reference corpus is necessary to compare frequency values. Frequently, the reference corpus against which data are compared is “general English”. One of the best sources of “general English” data is the British National Corpus (BNC) which is a 100 million word corpus of English from a wide variety of sources. Unfortunately, not all researchers have access to the BNC, or they may not be able to create a word list from it, or calculate the relevant statistics. Therefore this program is a simple solution to those problems performing the calculations against a word list from the BNC.
+
+Log-likelihood (LL):
+LL, is a probability statistic which compares the frequency of occurrence of words in two corpora. High LL suggests a great difference between the relative frequencies of a word based on the sizes of the two corpora. When the relative proportions of word occurrences are the same, words with higher absolute frequencies, which are most likely common words, tend to have higher LL. This explains why more common words are highlighted in keyword lists ranked by LL.
+
+Odds ratio (OR):
+OR is an effect size statistic which measures relative proportions of word frequencies in the target corpus and the reference corpus and suggests how much the difference is between the word frequencies in the two corpora. When the relative proportions are the same, more frequent words tend to have slightly lower OR than less frequent words. Therefore, OR, is likely to rank less common words near the top of keyword lists.
+
+Warnings:
+1) Odds ratio is undefined for cases in which the word does not appear in the comparison corpus, as it involves division by zero. In that case, 0.5 is added to all values for calculation as per (MedCalc; Pagano & Gauvreau, 2000; Deeks & Higgins, 2010).
+2) The LL and OR values should be used for ranking purposes. These values fluctuate tremendously across corpora and should not be used for comparison across corpora, although comparing rankings would be appropriate.
+
+References:
+For more details on LL statistic:
+- Dunning, T. 1993. “Accurate methods for the statistics of surprise and coincidence”. Computational Lingusitics, 19 (1), 61–74.
+- Rayson, P. & Garside, R. 2000. “Comparing corpora using frequency profiling”. Proceedings of the Workshop on Comparing Corpora, held in conjunction with the 38th Annual Meeting of the Association for Computational Linguistics (ACL 2000), 1-8 October 2000, Hong Kong, 1–6. Available at: http://www.comp.lancs.ac.uk/~paul/publications/rg_acl2000.pdf
+
+Online wizard for LL calculation:
+- Rayson, P. 2008b: online. Log-likelihood calculator. UCREL web server. Available at: http://ucrel.lancs.ac.uk/llwizard.html
+
+Online wizard for OR calculation:
+- "Odds Ratio." Odds Ratio Calculator. MedCalc Software, Acacialaan 22, B-8400 Ostend, Belgium, 22 May 2014. Web. 29 May 2014. http://www.medcalc.org/calc/odds_ratio.php
+
+A detailed explanation of how to conduct OR:
+- Agresti, A. 2002. Categorical Data Analysis. 2nd edition. New York: Wiley.
+- Agresti, A. 2007. An Introduction to Categorical Data Analysis. 2nd edition. New York: Wiley.
+- Pagano M, Gauvreau K (2000) Principles of biostatistics. 2nd ed. Belmont, CA: Brooks/Cole.
+- Deeks JJ, Higgins JPT (2010) Statistical algorithms in Review Manager 5. Retrieved from http://ims.cochrane.org/revman/documentation/Statistical-methods-in-RevMan-5.pdf
