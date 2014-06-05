@@ -8,13 +8,16 @@ BNC_wordlist = r'BNC_wordlist.csv'
 class KEY_BNC(object):
 
     def __init__(self):
+        self.zero_adjustment = 0.5 # Default frequency for calculating OR which
+                                  # requires a non-zero frequency
+
         self.bnc_words = self.load_BNC_data()
         self.bnc_corpus_size = self.size_from_words(self.bnc_words)
 
-        self.sort_reverse = False
+        self.sort_reverse = True
         self.sort_col = None
         self.sort_key = None
-        self.set_sort(1)
+        self.set_sort(3)
 
         self.clear()
 
@@ -23,7 +26,12 @@ class KEY_BNC(object):
 
     def set_sort(self, col):
         if self.sort_col == col:
-            self.sort_reverse = not self.sort_reverse
+            self.sort_reverse = not self.sort_reverse # Reverse sort on 2nd click
+        else:
+            self.sort_reverse = True
+
+        if col == 0:
+            self.sort_reverse = not self.sort_reverse # Word sort needs a reverse
 
         self.sort_col = col
         self.sort_key = itemgetter(col)
@@ -161,7 +169,10 @@ class KEY_BNC(object):
 
     def OR(self, target_word):
         r"""
-        A convenience method to calculate LL
+        A convenience method to calculate OR
+
+        Replaces BNC F 0, with 10^-10
         """
         return OR(self.target_words[target_word], self.target_corpus_size,
-                  self.bnc_words.get(target_word, 0), self.bnc_corpus_size)
+                  self.bnc_words.get(target_word, 0), self.bnc_corpus_size,
+                  zero_adjustment = self.zero_adjustment)

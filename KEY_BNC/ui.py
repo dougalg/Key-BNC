@@ -150,6 +150,9 @@ def sort_results(the_col):
     calculator.set_sort(the_col)
     calculate()
 
+def quit(e=None):
+    window.quit()
+
 # Type/Token information
 button_frame = tk.Frame(window, borderwidth=1)
 # BNC
@@ -181,11 +184,11 @@ file_names.grid(row=1, column=0, sticky=tk.N+tk.E+tk.W+tk.S)
 scrollbar = tk.Scrollbar(right_frame)
 
 columns = []
-widths = [15, 11, 11, 11, 11]
+widths = [15, 8, 10, 10, 16]
 for i, col_header in enumerate(calculator.get_cols()):
     index = i+1 # Offset for the "file names" column
 
-    label = tk.Label(right_frame, text=col_header)
+    label = tk.Label(right_frame, text=col_header, fg="blue", cursor="hand2")
     label.grid(row=0, column=index, sticky=tk.W)
     label.bind('<Button-1>', lambda e,col=i:sort_results(col))
 
@@ -194,7 +197,7 @@ for i, col_header in enumerate(calculator.get_cols()):
     else:
         sticky=tk.N+tk.S
 
-    column = tk.Text(right_frame, relief=tk.RAISED, width=widths[i], yscrollcommand=scrollbar.set)
+    column = tk.Text(right_frame, relief=tk.RAISED, width=widths[i], yscrollcommand=scrollbar.set, wrap=tk.NONE)
     column.grid(row=1, column=index, sticky=sticky)
     column.bind("<Control-Key-a>", select_all)
     column.bind("<MouseWheel>", onMouseWheel)
@@ -227,9 +230,9 @@ filemenu.add_command(label="Help (?)", command=show_help)
 window.bind("<Control-Key-?>", show_help)
 window.bind("<Command-?>", show_help)
 
-filemenu.add_command(label="Quit (q)", command=window.quit)
-window.bind("<Control-Key-q>", window.quit)
-window.bind("<Command-q>", window.quit)
+filemenu.add_command(label="Quit (q)", command=quit)
+window.bind("<Control-Key-q>", quit)
+window.bind("<Command-q>", quit)
 
 menubar.add_cascade(label="File", menu=filemenu)
 # display the menu
