@@ -1,4 +1,4 @@
-from KEY_BNC.functions import *
+from functions import *
 from operator import itemgetter
 import os, csv, string, collections
 
@@ -48,7 +48,7 @@ class KEY_BNC(object):
         Counts total number of words
 
         >>> words = {'a': 12, 'b': 2, 'c': 0}
-        >>> o = LLORBNCer()
+        >>> o = KEY_BNC()
         >>> o.size_from_words(words)
         14
         """
@@ -109,35 +109,56 @@ class KEY_BNC(object):
         2) Add space before apostrophe
         3) Tokenize on spaces
 
-        >>> o = LLORBNCer()
+        >>> o = KEY_BNC()
         >>> list(o.words_from_text("You're fine, fire-truck!"))
         ['you', "'re", 'fine', ',', 'fire-truck', '!']
+
+        >>> list(o.words_from_text("This is a 'quotation'."))
+        ['this', 'is', 'a', "'", 'quotation', "'", '.']
+
+        # Note failure for 'tis
+        >>> list(o.words_from_text("\"'tis!\" replied Aunt Helga."))
+        ['"', "'", 'tis', '!', '"', 'replied', 'aunt', 'helga', '.']
         """
+
+        def is_end_char(i, data):
+            if i+1 == len(data):
+                return True
+            if data[i+1] in string.whitespace:
+                return True
+            return False
+
         word = ''
-        num_char = len(data)
         for i, c in enumerate(data):
             c = c.lower()
-            if c in ['"', '“', '”', '‘', '(', ')', '{', '}', '[', ']']:
-                if word != '':
+            if c in '"“”‘(){}[]<>!?.':
+                if not word == '':
                     yield word
                 yield c
                 word = ''
             elif c not in string.punctuation:
                 if c in string.whitespace:
-                    if word != '':
+                    if not word == '':
                         yield word
                     word = ''
                 else:
                     word += c
-            elif c in ["'", '’'] or (i+1 < num_char and data[i+1] in string.whitespace) or i+1 == num_char:
-                if word != '':
+            elif c in "'’":
+                if not word == '':
+                    yield word
+                    word = c
+                else:
+                    yield c
+            elif is_end_char(i, data):
+                if not word == '':
                     yield word
                 word = c
             else:
                 word += c
 
-            if i+1 == num_char and word != '':
+            if is_end_char(i, data) and not word == '':
                 yield word
+                word = ''
 
     def load_BNC_data(self):
         r"""
