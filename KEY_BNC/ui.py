@@ -241,5 +241,6 @@ splash_formats = {'h1': [('1.0', '1.end')],
                           ('9.354', '9.407')]
                 }
 
-windows.show_splash("Introduction", "About Short.txt", **splash_formats)
-window.mainloop()
+def run():
+    windows.show_splash("Introduction", "About Short.txt", **splash_formats)
+    window.mainloop()

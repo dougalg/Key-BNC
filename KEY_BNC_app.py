@@ -1,1 +1,2 @@
-import KEY_BNC
+from KEY_BNC import ui
+ui.run()

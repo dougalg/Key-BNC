@@ -4,9 +4,10 @@ This is a simple application to help researchers calculate Log Likelihood (LL) a
 
 ##Download##
 
-1. [Windows 32-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-win32-v1.0.zip)
-2. [Windows 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-amd64-v1.0.zip)
-3. [Mac OSX 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-mac-v1.0.zip)
+1. [Windows 32-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-win32.zip)
+2. [Windows 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-amd64.zip)
+3. [Mac OSX 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-mac.zip)
+4. [BNC Wordlist](https://github.com/dougalg/Key-BNC/blob/master/KEY_BNC/Data/BNC_wordlist.csv?raw=true)
 
 Compiled packages exist for both Windows and Mac OS. If you have Python-3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
 
@@ -37,3 +38,12 @@ EG:
 ###Word List###
 
 The BNC word list is a CSV file and can be located in LL_OR_BNC/Data directory. It is encoded in UTF8 which may cause some characters to display incorrectly in MS Excel.
+
+###Versions###
+
+v1.1
+- Minor changes to OR algorithm
+- Add sorting by all columns
+- UI enhancements
+- Updated wordlist and tokenization
+- Added proper help and about information

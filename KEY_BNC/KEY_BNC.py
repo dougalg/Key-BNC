@@ -1,4 +1,4 @@
-from functions import *
+from KEY_BNC.functions import *
 from operator import itemgetter
 import os, csv, string, collections
 
