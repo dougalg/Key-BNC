@@ -29,7 +29,6 @@ The tokenizer splits on spaces, and converts upper case letters to lower. For pu
 
 1. If it is followed by a space, the punctuation is separated from the word.
 2. Double-quotation marks, parentheses, and braces are ignored
-3. If it is a right single quote or apostrophe, it is separated from the preceding word
 
 EG:
 
