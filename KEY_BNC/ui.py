@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import filedialog
-from operator import itemgetter
 from KEY_BNC.KEY_BNC import KEY_BNC
 from KEY_BNC import windows
 import csv, platform
@@ -95,7 +94,7 @@ def show_help(event=None):
                       ('12.0', '12.end'),
                       ('15.0', '15.end')]
               }
-    windows.show_splash("About Key-BNC", "Help.txt", **formats)
+    windows.show_splash("Key-BNC Help", "Help.txt", **formats)
 
 def show_about(event=None):
     formats = {'h1': [('1.0', '1.end')],

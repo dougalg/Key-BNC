@@ -1,4 +1,4 @@
-﻿Key-BNC
+﻿About Key-BNC
 What is a keyword?
 A keyword is a word whose frequency is significantly higher (or lower) in a corpus of interest than in a reference corpus. Keywords let us see what words can be considered important words in a  given text. For keyword analysis, Log-likelihood (LL) and Odds Ratio (OR) are statistical calculations which generate keyness values based on frequency of occurrence which are used to rank the words. The rankings of words based on LL and OR are likely to be in a different sequence. LL highlights words which are relatively common in general use, while OR highlights more specialised words which are peculiar to a target corpus.
 

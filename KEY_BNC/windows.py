@@ -5,9 +5,9 @@ from KEY_BNC.KEY_BNC import data_dirs
 
 def show_splash(title, source_name, **formats):
     data_path = os.path.join(data_dirs[0], data_dirs[1], source_name)
-    f = ''
+    my_text = ''
     with open(data_path, encoding="utf8") as f:
-        text = f.read()
+        my_text = f.read()
 
     root = tk.Tk()
     root.title(title)
@@ -20,7 +20,8 @@ def show_splash(title, source_name, **formats):
     tscrollbar.config(command=textbox.yview)
 
     textbox.pack(fill=tk.BOTH, expand=tk.YES)
-    textbox.insert(tk.END, text)
+    textbox.delete(1.0, tk.END)
+    textbox.insert("1.0", my_text)
 
     # Formatting
     for format_name in formats:
