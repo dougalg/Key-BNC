@@ -69,11 +69,11 @@ class KEY_BNC(object):
             error = None
             try:
                 with open(file_name, encoding='utf8') as fh:
-                    results.update(self.words_from_text(fh.read()))
+                    results.update(tokenize(fh.read()))
             except UnicodeDecodeError:
                 try:
                     with open(file_name, encoding='latin-1', errors='surrogateescape') as fh:
-                        results.update(self.words_from_text(fh.read()))
+                        results.update(tokenize(fh.read()))
                         indecipherable_files['guessed'].append(f)
                 except UnicodeDecodeError:
                     indecipherable_files['ignored'].append(f)
@@ -101,64 +101,6 @@ class KEY_BNC(object):
         self.target_corpus_size = self.size_from_words(self.target_words)
 
         return indecipherable_files
-
-    def words_from_text(self, data):
-        r"""
-        Tokenize data into words
-        1) Add space before punct if space follows punct
-        2) Add space before apostrophe
-        3) Tokenize on spaces
-
-        >>> o = KEY_BNC()
-        >>> list(o.words_from_text("You're fine, fire-truck!"))
-        ['you', "'re", 'fine', ',', 'fire-truck', '!']
-
-        >>> list(o.words_from_text("This is a 'quotation'."))
-        ['this', 'is', 'a', "'", 'quotation', "'", '.']
-
-        # Note failure for 'tis
-        >>> list(o.words_from_text("\"'tis!\" replied Aunt Helga."))
-        ['"', "'", 'tis', '!', '"', 'replied', 'aunt', 'helga', '.']
-        """
-
-        def is_end_char(i, data):
-            if i+1 == len(data):
-                return True
-            if data[i+1] in string.whitespace:
-                return True
-            return False
-
-        word = ''
-        for i, c in enumerate(data):
-            c = c.lower()
-            if c in '"“”‘(){}[]<>!?.':
-                if not word == '':
-                    yield word
-                yield c
-                word = ''
-            elif c not in string.punctuation:
-                if c in string.whitespace:
-                    if not word == '':
-                        yield word
-                    word = ''
-                else:
-                    word += c
-            elif c in "'’":
-                if not word == '':
-                    yield word
-                    word = c
-                else:
-                    yield c
-            elif is_end_char(i, data):
-                if not word == '':
-                    yield word
-                word = c
-            else:
-                word += c
-
-            if is_end_char(i, data) and not word == '':
-                yield word
-                word = ''
 
     def load_BNC_data(self):
         r"""

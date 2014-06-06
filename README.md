@@ -33,7 +33,8 @@ The tokenizer splits on spaces, and converts upper case letters to lower. For pu
 
 EG:
 
-    "You're fine, fire-truck!" --> "You", "'re", "fine", ",", "fire-truck", "!"
+    You're fine, fire-truck! --> You're fine , fire-truck !
+    "'Tis", replied Aunt Helga. --> " ' tis ! " replied aunt helga .
 
 ###Word List###
 

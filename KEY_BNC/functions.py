@@ -1,6 +1,73 @@
 import math
 import string
 
+punctuation = string.punctuation+"“”‘’"
+def tokenize(data):
+    r"""
+    Tokenize data into words
+    1) Add space before punct if space follows punct
+    2) Add space before apostrophe
+    3) Tokenize on spaces
+
+    >>> list(tokenize("You're fine, fire-truck!"))
+    ["you're", 'fine', ',', 'fire-truck', '!']
+
+    >>> list(tokenize("This is a 'quotation'."))
+    ['this', 'is', 'a', "'", 'quotation', "'", '.']
+
+    # Note failure for 'tis
+    >>> list(tokenize("\"'tis!\" replied Aunt Helga."))
+    ['"', "'", 'tis', '!', '"', 'replied', 'aunt', 'helga', '.']
+    """
+    dlen = len(data)
+    def is_end_char(i, data):
+        if i+1 >= dlen:
+            return True
+        if data[i+1] in string.whitespace:
+            return True
+        return False
+
+    def next_char(i, data):
+        try:
+            return data[i+1]
+        except IndexError:
+            return ''
+
+    word = ''
+    for i, c in enumerate(data):
+        c = c.lower()
+        if c in '"“”‘(){}[]<>!?.':
+            if not word == '':
+                yield word
+            yield c
+            word = ''
+        elif c not in punctuation:
+            if c in string.whitespace:
+                if not word == '':
+                    yield word
+                word = ''
+            else:
+                word += c
+        elif c in "'’":
+            if word == '':
+                yield c
+            elif is_end_char(i, data) or next_char(i, data) in punctuation:
+                yield word
+                yield c
+                word = ''
+            else:
+                word += c
+        elif is_end_char(i, data):
+            if not word == '':
+                yield word
+            word = c
+        else:
+            word += c
+
+        if is_end_char(i, data) and not word == '':
+            yield word
+            word = ''
+
 def is_word(word):
     r"""
     >>> is_word('test')
