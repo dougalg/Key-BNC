@@ -41,6 +41,10 @@ The BNC word list is a CSV file and can be located in LL_OR_BNC/Data directory. 
 
 ###Versions###
 
+v1.2
+- Fix display bug on OSX for information windows
+- Increased font size
+
 v1.1
 - Minor changes to OR algorithm
 - Add sorting by all columns

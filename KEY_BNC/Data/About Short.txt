@@ -1,4 +1,4 @@
-﻿About Key-BNC
+About Key-BNC
 Who is this useful for?
 This application provides a simple interface for calculating comparative keyword statistics against a word list from the British National Corpus (BNC).
 

@@ -220,7 +220,7 @@ menubar.add_cascade(label="File", menu=filemenu)
 
 helpmenu = tk.Menu(menubar, tearoff=0)
 
-helpmenu.add_command(label="About", command=show_about)
+helpmenu.add_command(label="About & References", command=show_about)
 
 helpmenu.add_command(label="Help (?)", command=show_help)
 window.bind("<Control-Key-?>", show_help)

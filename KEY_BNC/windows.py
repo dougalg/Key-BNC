@@ -12,11 +12,10 @@ def show_splash(title, source_name, **formats):
     root = tk.Tk()
     root.title(title)
     root.geometry("500x300")
-    textbox = tk.Text(root, width=40, wrap=tk.WORD, font=("Times New Roman", 10))
+    textbox = tk.Text(root, width=40, wrap=tk.WORD, font=("Times New Roman", 12))
 
     tscrollbar = tk.Scrollbar(root)
     tscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    textbox.config(yscrollcommand=tscrollbar.set)
     tscrollbar.config(command=textbox.yview)
 
     textbox.pack(fill=tk.BOTH, expand=tk.YES)
@@ -29,8 +28,10 @@ def show_splash(title, source_name, **formats):
             textbox.tag_add(format_name, start, end)
 
     textbox.tag_config('h1', font=("Times New Roman", 14, font.BOLD), justify=tk.CENTER)
-    textbox.tag_config('h2', font=("Times New Roman", 11, font.BOLD))
-    textbox.tag_config('bold', font=("Times New Roman", 10, font.BOLD))
+    textbox.tag_config('h2', font=("Times New Roman", 13, font.BOLD))
+    textbox.tag_config('bold', font=("Times New Roman", 12, font.BOLD))
+
+    textbox.config(yscrollcommand=tscrollbar.set, state=tk.DISABLED)
 
     root.update_idletasks()
     root.wm_attributes("-topmost", 1)
