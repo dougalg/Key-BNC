@@ -13,14 +13,21 @@ class UI(Frame):
         self.pack(fill=tk.BOTH, expand=1)
 
         self.calculator = KEY_BNC()
+        self.data = []
+        self.init_options()
         self.init_menus()
         self.init_frames()
+
+    def init_options(self):
+        self.opt_ignore_numbers = tk.IntVar()
+        self.opt_min_f = tk.IntVar()
+        self.opt_min_f_bnc = tk.IntVar()
 
     def add_menu_option(self, parent, menu):
         parent.add_command(label=menu['label'], command=menu['command'])
         for k in menu['bind_keys']:
-            self.bind("<Control-Key-{}>".format(k), menu['command'])
-            self.bind("<Command-{}>".format(k), menu['command'])
+            self.master.bind("<Control-Key-{}>".format(k), menu['command'])
+            self.master.bind("<Command-{}>".format(k), menu['command'])
 
     def init_menus(self):
         # Menu Bar
@@ -77,9 +84,11 @@ class UI(Frame):
 
         # BNC
         tk.Label(top_frame, text="BNC Types:").grid(row=0, column=0, sticky=tk.W)
-        tk.Label(top_frame, text='{:,.0f}'.format(len(self.calculator.bnc_words))).grid(row=0, column=1, sticky=tk.E)
+        self.bnc_types = tk.Label(top_frame, text='{:,.0f}'.format(len(self.calculator.bnc_words)))
+        self.bnc_types.grid(row=0, column=1, sticky=tk.E)
         tk.Label(top_frame, text="BNC Tokens:").grid(row=1, column=0, sticky=tk.W)
-        tk.Label(top_frame, text='{:,.0f}'.format(self.calculator.bnc_corpus_size)).grid(row=1, column=1, sticky=tk.E)
+        self.bnc_tokens = tk.Label(top_frame, text='{:,.0f}'.format(self.calculator.bnc_corpus_size))
+        self.bnc_tokens.grid(row=1, column=1, sticky=tk.E)
 
         # User corpus
         tk.Label(top_frame, text="Your Types:").grid(row=0, column=2, sticky=tk.W)
@@ -89,7 +98,20 @@ class UI(Frame):
         self.user_tokens = tk.Label(top_frame, text='None')
         self.user_tokens.grid(row=1, column=3, sticky=tk.E)
 
+        # Additional toggles/options
+        # Allow hiding of #s
+        self.ignore_num = tk.Checkbutton(top_frame, variable=self.opt_ignore_numbers, command=self.calculate)
+        ignore_num_label = tk.Label(top_frame, text="Ignore Numbers:")
+        ignore_num_label.bind('<Button-1>', lambda e: self.toggle_number_ignore())
+
+        ignore_num_label.grid(row=0, column=4, sticky=tk.W)
+        self.ignore_num.grid(row=0, column=5, sticky=tk.W)
+
         top_frame.pack(side=tk.TOP, fill=tk.X)
+
+    def toggle_number_ignore(self):
+        self.ignore_num.toggle()
+        self.calculate()
 
     def init_bottom_frame(self):
         self.bottom_frame = bottom_frame = tk.Frame(self)
@@ -136,7 +158,7 @@ class UI(Frame):
         return columns
 
     def select_all(self, event):
-        for c in columns:
+        for c in self.columns:
             c.tag_add(tk.SEL, "1.0", tk.END)
             c.mark_set(tk.INSERT, "1.0")
             c.see(tk.INSERT)
@@ -158,7 +180,7 @@ class UI(Frame):
             bad_files = self.calculator.load_target_file(the_file, self.add_name)
             self.show_load_results(bad_files)
 
-    def load_corpus(event=None):
+    def load_corpus(self, event=None):
         the_dir = filedialog.askdirectory()
         if not (the_dir == ''):
             bad_files = self.calculator.load_target_data_dir(the_dir, self.add_name)
@@ -182,9 +204,17 @@ class UI(Frame):
         self.user_types['text'] = text1
         self.user_tokens['text'] = text2
 
+        text1 = '{:,.0f}'.format(len(self.calculator.bnc_words))
+        text2 = '{:,.0f}'.format(self.calculator.bnc_corpus_size)
+        self.bnc_types['text'] = text1
+        self.bnc_tokens['text'] = text2
+
     def calculate(self):
+        self.calculator.ignore_numbers = self.opt_ignore_numbers.get()
+
         data = self.calculator.get_stats()
 
+        self.update_labels()
         self.clear_results()
 
         formats = ["{}\n", "{:,.0f}\n", "{:,.0f}\n", "{:,.2f}\n", "{:,.2f}\n"]
@@ -236,7 +266,7 @@ class UI(Frame):
         windows.show_splash("About Key-BNC", "About.txt", **formats)
 
     def scroll_results(self, *args):
-        for c in columns:
+        for c in self.columns:
             c.yview(*args)
 
         return "break"

@@ -11,15 +11,64 @@ class KEY_BNC(object):
         self.zero_adjustment = 0.5 # Default frequency for calculating OR which
                                   # requires a non-zero frequency
 
-        self.bnc_words = self.load_BNC_data()
-        self.bnc_corpus_size = self.size_from_words(self.bnc_words)
+        # Do we want to ignore numbers?
+        # This will affect counts of types and tokens and therefore
+        # also the LL/OR values
+        self.ignore_numbers = False
+        self.min_f = 0
+
+        self.init_bnc_words()
+
+        self.target_words = {}
 
         self.sort_reverse = True
         self.sort_col = None
         self.sort_key = None
+
         self.set_sort(3)
 
         self.clear()
+
+    def init_bnc_words(self):
+        # With numbers
+        self.bnc_words_wn = self.load_BNC_data()
+        self.bnc_corpus_size_wn = self.size_from_words(self.bnc_words)
+
+        # No numbers
+        self.bnc_words_nn = {k:v for k, v in self.bnc_words_wn.items() if not is_number(k)}
+        self.bnc_corpus_size_nn = self.size_from_words(self.bnc_words_nn)
+
+    @property
+    def bnc_words(self):
+        if self.ignore_numbers:
+            return self.bnc_words_nn
+        return self.bnc_words_wn
+
+    @property
+    def bnc_corpus_size(self):
+        if self.ignore_numbers:
+            return self.bnc_corpus_size_nn
+        return self.bnc_corpus_size_wn
+
+    @property
+    def target_corpus_size(self):
+        if self.ignore_numbers:
+            return self.target_corpus_size_nn
+        return self.target_corpus_size_wn
+
+    @property
+    def target_words(self):
+        if self.ignore_numbers:
+            return self.target_words_nn
+        return self.target_words_wn
+
+    @target_words.setter
+    def target_words(self, value):
+        self.target_words_wn = value
+        self.target_words_nn = {k:v for k, v in self.target_words_wn.items() if not is_number(k)}
+
+        self.target_corpus_size_wn = self.size_from_words(self.target_words_wn)
+        self.target_corpus_size_nn = self.size_from_words(self.target_words_nn)
 
     def get_cols(self):
         return ["Word Type", "Frequency", "Frequency BNC", "Log Likelihood", "Odds Ratio"]
@@ -36,12 +85,15 @@ class KEY_BNC(object):
         self.sort_col = col
         self.sort_key = itemgetter(col)
 
+    def is_valid(self, word):
+        return True
+
     def get_stats(self):
         r"""
         Runs the statistics and returns the results as a list of tuples:
         [ (word, f, f_bnc, LL, OR), ... ] sorted by f
         """
-        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words], key=self.sort_key, reverse=self.sort_reverse)
+        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w)], key=self.sort_key, reverse=self.sort_reverse)
 
     def size_from_words(self, words):
         r"""
@@ -56,13 +108,12 @@ class KEY_BNC(object):
 
     def clear(self):
         self.target_words = collections.Counter()
-        self.target_corpus_size = 0
 
     def load_file(self, file_name, func=None, indecipherable_files=None):
         if indecipherable_files is None:
             indecipherable_files = {'ignored':[],'guessed':[]}
 
-        results = self.target_words
+        results = self.target_words_wn
         fn, f = os.path.split(file_name)
         fn, ext = os.path.splitext(file_name)
         if ext == '.txt':
@@ -82,13 +133,13 @@ class KEY_BNC(object):
         else:
             indecipherable_files['ignored'].append(f)
 
-        self.target_words = results
+        self.target_words_wn = results
         return indecipherable_files
 
     def load_target_file(self, file_name, func=None):
-        indecipherable_files = self.load_file(file_name, func)
-        self.target_corpus_size = self.size_from_words(self.target_words)
-        return indecipherable_files
+        results = self.load_file(file_name, func)
+        self.target_words = self.target_words_wn
+        return results
 
     def load_target_data_dir(self, dir_name, func=None):
         indecipherable_files = {'ignored':[],'guessed':[]}
@@ -98,8 +149,7 @@ class KEY_BNC(object):
                 fname = os.path.join(root, f)
                 indecipherable_files = self.load_file(fname, func, indecipherable_files)
 
-        self.target_corpus_size = self.size_from_words(self.target_words)
-
+        self.target_words = self.target_words_wn
         return indecipherable_files
 
     def load_BNC_data(self):

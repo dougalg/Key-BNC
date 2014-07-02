@@ -1,13 +1,33 @@
 import math
 import string
+import re
 
-word_breaks = string.whitespace+string.punctuation+'“”‘’…"–•—′'
+def is_number(word):
+    r"""
+    Returns True if it is a number
+
+    >>> is_number('1245')
+    True
+
+    >>> is_number('12:45')
+    True
+
+    >>> is_number('12a')
+    False
+    """
+    search=re.compile(r'[^0-9.,:]').search
+    return not bool(search(word))
+
+word_breaks = string.whitespace+string.punctuation+'“”‘’…"–•—′\x85'
 def tokenize(data):
     r"""
     Tokenize data into words
     1) Add space before punct if space follows punct
     2) Add space before apostrophe
     3) Tokenize on spaces
+
+    >>> list(tokenize("'adventure 2'adventure"))
+    ['adventure', '2', 'adventure']
 
     >>> list(tokenize("You're fine, fire-truck!"))
     ['you', "'re", 'fine', 'fire', 'truck']
@@ -40,10 +60,11 @@ def tokenize(data):
             do_yield = False
         # Split a single quote, unless it is between 2 letters
         elif curr_char in "'’":
-            if prev_char == '' or next_char in word_breaks:
+            if prev_char == '' or prev_char in word_breaks or prev_char in string.digits or next_char in word_breaks:
                 curr_char = ''
             else:
-                yield word
+                if not word == '':
+                    yield word
                 word = ''
                 curr_char = "'"
                 do_yield = False
