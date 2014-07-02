@@ -32,10 +32,17 @@ The tokenizer splits on spaces, and converts upper case letters to lower. For pu
 
 EG:
 
-    You're fine, fire-truck! --> you 're fine fire truck
-    "'Tis", replied Aunt Helga. --> tis replied aunt helga
-    Don't tell someone what they can or can't do --> don 't tell someone what they can or can 't do
-    There are 100,000,000,000.00 words in the BNC. --> there are 100,000,000,000.00 words in the bnc
+    You're fine, fire-truck!
+    you 're fine fire truck
+
+    "'Tis", replied Aunt Helga.
+    tis replied aunt helga
+
+    Don't tell someone what they can or can't do
+    don 't tell someone what they can or can 't do
+
+    There are 100,000,000,000.00 words in the BNC.
+    there are 100,000,000,000.00 words in the bnc
 
 
 ###Word List###
@@ -48,6 +55,7 @@ v1.2 (Forthcoming)
 - Fix display bug on OSX for information windows
 - Increase font size
 - Tokenization has been modified to be more similar to that of AntConc
+- Added option to filter out numbers
 
 v1.1
 - Minor changes to OR algorithm
