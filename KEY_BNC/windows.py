@@ -63,7 +63,7 @@ def encoding_warning(file_names):
 
     tscrollbar = tk.Scrollbar(root)
     tscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    textbox.config(yscrollcommand=tscrollbar.set)
+    textbox.config(yscrollcommand=tscrollbar.set, state=tk.DISABLED)
     tscrollbar.config(command=textbox.yview)
 
     textbox.pack(fill=tk.BOTH)

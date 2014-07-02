@@ -25,9 +25,16 @@ class UI(Frame):
 
     def add_menu_option(self, parent, menu):
         parent.add_command(label=menu['label'], command=menu['command'])
+
         for k in menu['bind_keys']:
-            self.master.bind("<Control-Key-{}>".format(k), menu['command'])
-            self.master.bind("<Command-{}>".format(k), menu['command'])
+            self.bind_key(self.master, k, menu['command'])
+
+    def bind_key(self, master, k, command):
+        system = platform.system()
+        if system == 'Windows':
+            master.bind("<Control-Key-{}>".format(k), command)
+        elif system == 'Darwin':
+            master.bind("<Command-{}>".format(k), command)
 
     def init_menus(self):
         # Menu Bar
@@ -65,7 +72,7 @@ class UI(Frame):
                      'bind_keys': ['/']}]
 
         for m in helpmenus:
-            self.add_menu_option(filemenu, m)
+            self.add_menu_option(helpmenu, m)
 
         menubar.add_cascade(label="Help", menu=helpmenu)
 
@@ -121,7 +128,7 @@ class UI(Frame):
 
         # Filename List
         tk.Label(bottom_frame, text="File Names").grid(row=0, column=0, sticky=tk.W)
-        self.file_names = tk.Text(bottom_frame, relief=tk.RAISED, width=20)
+        self.file_names = tk.Text(bottom_frame, relief=tk.RAISED, width=20, state=tk.DISABLED)
         self.file_names.grid(row=1, column=0, sticky=tk.N+tk.E+tk.W+tk.S)
 
         self.scrollbar = tk.Scrollbar(bottom_frame)
@@ -148,10 +155,9 @@ class UI(Frame):
             else:
                 sticky=tk.N+tk.S
 
-            column = tk.Text(self.bottom_frame, relief=tk.RAISED, width=widths[i], yscrollcommand=self.scrollbar.set, wrap=tk.NONE)
+            column = tk.Text(self.bottom_frame, relief=tk.RAISED, width=widths[i], yscrollcommand=self.scrollbar.set, wrap=tk.NONE, state=tk.DISABLED)
             column.grid(row=1, column=index, sticky=sticky)
-            column.bind("<Control-Key-a>", self.select_all)
-            column.bind("<Command-a>", self.select_all)
+            self.bind_key(column, 'a', self.select_all)
             column.bind("<MouseWheel>", self.on_mouse_wheel)
 
             columns.append(column)
@@ -290,14 +296,9 @@ class UI(Frame):
         self.calculate()
 
     def quit(self, e=None):
-        self.quit()
+        self.master.quit()
 
 def run():
-    #draw the window, and start the application
-    root = tk.Tk()
-    root.title("LL/OR vs. BNC Keyword Calculator")
-    root.geometry("700x500")
-
     splash_formats = {'h1': [('1.0', '1.end')],
                       'h2': [('2.0', '2.end'),
                              ('5.0', '5.end'),
@@ -305,6 +306,13 @@ def run():
                       'bold': [('6.404', '6.463'),
                                ('9.354', '9.407')]
                       }
-    #windows.show_splash("Introduction", "About Short.txt", **splash_formats)
+    windows.show_splash("Introduction", "About Short.txt", **splash_formats)
+
+    #draw the window, and start the application
+    root = tk.Tk()
+    root.title("LL/OR vs. BNC Keyword Calculator")
+    root.geometry("700x500")
+
     ui = UI(root)
     ui.mainloop()
+
