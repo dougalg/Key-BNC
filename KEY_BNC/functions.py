@@ -1,7 +1,7 @@
 import math
 import string
 
-punctuation = string.punctuation+"“”‘’"
+word_breaks = string.whitespace+string.punctuation+'“”‘’…"–•—′'
 def tokenize(data):
     r"""
     Tokenize data into words
@@ -10,63 +10,58 @@ def tokenize(data):
     3) Tokenize on spaces
 
     >>> list(tokenize("You're fine, fire-truck!"))
-    ["you're", 'fine', ',', 'fire-truck', '!']
+    ['you', "'re", 'fine', 'fire', 'truck']
 
     >>> list(tokenize("This is a 'quotation'."))
-    ['this', 'is', 'a', "'", 'quotation', "'", '.']
+    ['this', 'is', 'a', 'quotation']
 
-    # Note failure for 'tis
+    >>> list(tokenize('So is "this"'))
+    ['so', 'is', 'this']
+
+    >>> list(tokenize("There are 100,000,000,000.00 words in the BNC."))
+    ['there', 'are', '100,000,000,000.00', 'words', 'in', 'the', 'bnc']
+
     >>> list(tokenize("\"'tis!\" replied Aunt Helga."))
-    ['"', "'", 'tis', '!', '"', 'replied', 'aunt', 'helga', '.']
+    ['tis', 'replied', 'aunt', 'helga']
+
+    >>> list(tokenize("Don't tell someone what they can or can't do"))
+    ['don', "'t", 'tell', 'someone', 'what', 'they', 'can', 'or', 'can', "'t", 'do']
     """
-    dlen = len(data)
-    def is_end_char(i, data):
-        if i+1 >= dlen:
-            return True
-        if data[i+1] in string.whitespace:
-            return True
-        return False
-
-    def next_char(i, data):
-        try:
-            return data[i+1]
-        except IndexError:
-            return ''
-
+    data += '  '   # Append space to make sure we get the last character
+    prev_char = ''
+    curr_char = ''
+    next_char = ''
     word = ''
-    for i, c in enumerate(data):
-        c = c.lower()
-        if c in '"“”‘(){}[]<>!?.':
-            if not word == '':
-                yield word
-            yield c
-            word = ''
-        elif c not in punctuation:
-            if c in string.whitespace:
-                if not word == '':
-                    yield word
-                word = ''
-            else:
-                word += c
-        elif c in "'’":
-            if word == '':
-                yield c
-            elif is_end_char(i, data) or next_char(i, data) in punctuation:
-                yield word
-                yield c
-                word = ''
-            else:
-                word += c
-        elif is_end_char(i, data):
-            if not word == '':
-                yield word
-            word = c
-        else:
-            word += c
 
-        if is_end_char(i, data) and not word == '':
+    for next_char in data.lower():
+        do_yield = True
+        # If it is a colon/comma/period in a number, join
+        if curr_char in ',.:' and prev_char in string.digits and next_char in string.digits:
+            do_yield = False
+        # Split a single quote, unless it is between 2 letters
+        elif curr_char in "'’":
+            if prev_char == '' or next_char in word_breaks:
+                curr_char = ''
+            else:
+                yield word
+                word = ''
+                curr_char = "'"
+                do_yield = False
+        # Word breaks are easy...
+        elif curr_char in word_breaks:
+            curr_char = ''
+        else:
+            do_yield = False
+
+        # Yield'em boys
+        if do_yield and not word == '':
             yield word
             word = ''
+        else:
+            word += curr_char
+
+        # At end...
+        prev_char, curr_char = curr_char, next_char
 
 def is_word(word):
     r"""

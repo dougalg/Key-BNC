@@ -1,12 +1,16 @@
 import unittest
 
-class WordcountTests(unittest.TestCase):
+def doctests():
+    from doctest import testmod
+    from KEY_BNC import functions
+    testmod(functions)
 
 # Check BNC wordcounts
-# Check BNC wordcounts when ignoring non-words
 
 # Test LL values against the BNC
-# Test Values with ignoring non-words
 
 # Test OR values against the BNC
-# Test Values with ignoring non-words
+
+if __name__ == '__main__':
+    doctests()
+    unittest.main()
