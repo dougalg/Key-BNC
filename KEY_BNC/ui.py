@@ -30,11 +30,17 @@ class UI(Frame):
             self.bind_key(self.master, k, menu['command'])
 
     def bind_key(self, master, k, command):
+        """
+        Custom key binding method to support cross-platform
+        key bindings for command/ctrl keys
+        """
         system = platform.system()
         if system == 'Windows':
             master.bind("<Control-Key-{}>".format(k), command)
         elif system == 'Darwin':
             master.bind("<Command-{}>".format(k), command)
+        else:
+            master.bind("<Control-Key-{}>".format(k), command)
 
     def init_menus(self):
         # Menu Bar
@@ -159,6 +165,10 @@ class UI(Frame):
             column.grid(row=1, column=index, sticky=sticky)
             self.bind_key(column, 'a', self.select_all)
             column.bind("<MouseWheel>", self.on_mouse_wheel)
+            column.bind('<Home>', self.to_home)
+            column.bind('<End>', self.to_end)
+            column.bind('<Prior>', self.to_page_up)
+            column.bind('<Next>', self.to_page_down)
 
             columns.append(column)
         return columns
@@ -174,11 +184,18 @@ class UI(Frame):
         self.calculator.clear()
         self.update_labels()
         self.clear_results()
+        self.clear_files()
+
+    def clear_files(self):
+        self.file_names.config(state=tk.NORMAL)
         self.file_names.delete(1.0, tk.END)
+        self.file_names.config(state=tk.DISABLED)
 
     def clear_results(self):
         for c in self.columns:
+            c.config(state=tk.NORMAL)
             c.delete(1.0, tk.END)
+            c.config(state=tk.DISABLED)
 
     def load_corpus_file(self, event=None):
         the_file = filedialog.askopenfilename()
@@ -202,7 +219,9 @@ class UI(Frame):
         """
         Adds a filename to the file_frame
         """
+        self.file_names.config(state=tk.NORMAL)
         self.file_names.insert(tk.END, "{}\n".format(file_name))
+        self.file_names.config(state=tk.DISABLED)
 
     def update_labels(self):
         text1 = '{:,.0f}'.format(len(self.calculator.target_words))
@@ -223,6 +242,10 @@ class UI(Frame):
         self.update_labels()
         self.clear_results()
 
+        # Make sure writing is enabled
+        for c in self.columns:
+            c.config(state=tk.NORMAL)
+
         formats = ["{}\n", "{:,.0f}\n", "{:,.0f}\n", "{:,.2f}\n", "{:,.2f}\n"]
         inf = float('inf')
         for d in data:
@@ -232,9 +255,14 @@ class UI(Frame):
                 else:
                     self.columns[i].insert(tk.END, formats[i].format(datum))
 
+        # Format text and disable writing so users don't accidentally edit
+        # results
         for c in self.columns[1:]:
             c.tag_configure("right", justify='right')
             c.tag_add("right", 1.0, "end")
+            c.config(state=tk.DISABLED)
+
+        self.columns[0].config(state=tk.DISABLED)
 
     def save(self, event=None):
         file_name = filedialog.asksaveasfilename(initialfile='BNC_LL_OR.csv')
@@ -272,12 +300,49 @@ class UI(Frame):
         windows.show_splash("About Key-BNC", "About.txt", **formats)
 
     def scroll_results(self, *args):
+        """
+        Scrolls all columns
+        """
         for c in self.columns:
             c.yview(*args)
+        return "break"
 
+    def to_page_up(self, event):
+        """
+        Scrolls all columns up one page
+        """
+        for c in self.columns:
+            c.yview_scroll(-1, tk.PAGES)
+        return "break"
+
+    def to_page_down(self, event):
+        """
+        Scrolls all columns down one page
+        """
+        for c in self.columns:
+            c.yview_scroll(1, tk.PAGES)
+        return "break"
+
+    def to_end(self, event):
+        """
+        Scrolls all columns to bottom
+        """
+        for c in self.columns:
+            c.see("end")
+        return "break"
+
+    def to_home(self, event):
+        """
+        Scrolls all columns to top
+        """
+        for c in self.columns:
+            c.see("1.0")
         return "break"
 
     def on_mouse_wheel(self, event):
+        """
+        Scrolls all columns on mousewheel
+        """
         system = platform.system()
         if system == 'Windows':
             scroll_dist = int((event.delta/120)*(-1))
@@ -288,10 +353,12 @@ class UI(Frame):
 
         for c in self.columns:
             c.yview("scroll", scroll_dist, "units")
-
         return "break"
 
     def sort_results(self, the_col):
+        """
+        Sets the current sort option and refreshes the view
+        """
         self.calculator.set_sort(the_col)
         self.calculate()
 

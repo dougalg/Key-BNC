@@ -48,9 +48,9 @@ def encoding_warning(file_names):
         text += "\n{} files were opened but may contain errors as they are not encoded as UTF8.".format(num_opened)
     if num_skipped > 0:
         text += "\n{} files were skipped. Please make sure that they are TXT files.".format(num_skipped)
-    if num_opened >0 :
+    if num_opened > 0 :
         text += "\n\nOpened files:\n{}".format("\n".join(file_names['guessed']))
-    if num_skipped >0 :
+    if num_skipped > 0 :
         text += "\n\nSkipped files:\n{}".format("\n".join(file_names['ignored']))
 
     root = tk.Tk()
@@ -63,11 +63,11 @@ def encoding_warning(file_names):
 
     tscrollbar = tk.Scrollbar(root)
     tscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    textbox.config(yscrollcommand=tscrollbar.set, state=tk.DISABLED)
     tscrollbar.config(command=textbox.yview)
 
     textbox.pack(fill=tk.BOTH)
     textbox.insert(tk.END, text)
+    textbox.config(yscrollcommand=tscrollbar.set, state=tk.DISABLED)
 
     root.update_idletasks()
     root.wm_attributes("-topmost", 1)

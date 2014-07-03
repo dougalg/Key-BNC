@@ -56,6 +56,7 @@ v1.2 (Forthcoming)
 - Increase font size
 - Tokenization has been modified to be more similar to that of AntConc
 - Added option to filter out numbers
+- Added support for Home, End, Page Up, and Page Down keys
 
 v1.1
 - Minor changes to OR algorithm
