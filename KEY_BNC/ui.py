@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, Frame
 from KEY_BNC.KEY_BNC import KEY_BNC
 from KEY_BNC import windows
-from math import floor, ceil
+from math import floor
 import csv, platform, string
 
 #create a new window
@@ -468,7 +468,7 @@ def run():
     #draw the window, and start the application
     root = tk.Tk()
     root.title("LL/OR vs. BNC Keyword Calculator")
-    root.geometry("700x500")
+    root.geometry("750x500")
 
     ui = UI(root)
     ui.mainloop()

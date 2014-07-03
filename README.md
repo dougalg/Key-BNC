@@ -6,7 +6,7 @@ This is a simple application to help researchers calculate Log Likelihood (LL) a
 
 1. [Windows 32-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-win32.zip) (v1.2)
 2. [Windows 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-amd64.zip) (v1.2)
-3. [Mac OSX 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-mac.zip) (v1.1)
+3. [Mac OSX 64-Bit](https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-mac.zip) (v1.2)
 4. [BNC Wordlist](https://github.com/dougalg/Key-BNC/blob/master/KEY_BNC/Data/BNC_wordlist.csv?raw=true)
 
 Compiled packages exist for both Windows and Mac OS. If you have Python-3 installed, you can run the source code directly on any platform. Just navigate to the source directory and run:
