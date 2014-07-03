@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, Frame
 from KEY_BNC.KEY_BNC import KEY_BNC
 from KEY_BNC import windows
-import csv, platform
+from math import floor, ceil
+import csv, platform, string
 
 #create a new window
 class UI(Frame):
@@ -17,13 +18,28 @@ class UI(Frame):
         self.init_options()
         self.init_menus()
         self.init_frames()
+        self.show_intro()
+
+    def show_intro(self):
+        splash_formats = {'h1': [('1.0', '1.end')],
+                      'h2': [('2.0', '2.end'),
+                             ('5.0', '5.end'),
+                             ('8.0', '8.end')],
+                      'bold': [('6.404', '6.463'),
+                               ('9.354', '9.407')]
+                      }
+        windows.show_splash("Introduction", "About Short.txt", **splash_formats)
 
     def init_options(self):
         self.opt_ignore_numbers = tk.IntVar()
-        self.opt_min_f = tk.IntVar()
-        self.opt_min_f_bnc = tk.IntVar()
+        self.opt_min_f = None
+        self.opt_min_f_bnc = None
 
     def add_menu_option(self, parent, menu):
+        """
+        Simplifies the addition of a menu to its parent. Also binds keys
+        as specified
+        """
         parent.add_command(label=menu['label'], command=menu['command'])
 
         for k in menu['bind_keys']:
@@ -93,36 +109,89 @@ class UI(Frame):
         self.init_bottom_frame()
 
     def init_top_frame(self):
+        """
+        Broken into 2 main parts
+
+        1) Data about types and tokens in the BNC and user corpus
+        2) Additional toggles and options
+        """
         top_frame = tk.Frame(self, borderwidth=1)
 
-        # BNC
-        tk.Label(top_frame, text="BNC Types:").grid(row=0, column=0, sticky=tk.W)
-        self.bnc_types = tk.Label(top_frame, text='{:,.0f}'.format(len(self.calculator.bnc_words)))
-        self.bnc_types.grid(row=0, column=1, sticky=tk.E)
-        tk.Label(top_frame, text="BNC Tokens:").grid(row=1, column=0, sticky=tk.W)
-        self.bnc_tokens = tk.Label(top_frame, text='{:,.0f}'.format(self.calculator.bnc_corpus_size))
-        self.bnc_tokens.grid(row=1, column=1, sticky=tk.E)
+        labels = self.init_top_data_labels(top_frame)
+        labels += self.init_top_options(top_frame)
 
-        # User corpus
-        tk.Label(top_frame, text="Your Types:").grid(row=0, column=2, sticky=tk.W)
-        self.user_types = tk.Label(top_frame, text='None')
-        self.user_types.grid(row=0, column=3, sticky=tk.E)
-        tk.Label(top_frame, text="Your Tokens:").grid(row=1, column=2, sticky=tk.W)
-        self.user_tokens = tk.Label(top_frame, text='None')
-        self.user_tokens.grid(row=1, column=3, sticky=tk.E)
+        for i, l in enumerate(labels):
+            r = floor(i/2)%2
+            c = i%2+floor(i/4)*2
 
-        # Additional toggles/options
-        # Allow hiding of #s
-        self.ignore_num = tk.Checkbutton(top_frame, variable=self.opt_ignore_numbers, command=self.calculate)
-        ignore_num_label = tk.Label(top_frame, text="Ignore Numbers:")
-        ignore_num_label.bind('<Button-1>', lambda e: self.toggle_number_ignore())
+            s = tk.W
+            if c%2:
+                s = tk.E
 
-        ignore_num_label.grid(row=0, column=4, sticky=tk.W)
-        self.ignore_num.grid(row=0, column=5, sticky=tk.W)
+            l.grid(row=r, column=c, sticky=s)
 
         top_frame.pack(side=tk.TOP, fill=tk.X)
 
+    def init_top_data_labels(self, top_frame):
+        """
+        Creates data labels for showing #s of types and tokens
+        """
+        # BNC
+        l1 = tk.Label(top_frame, text="BNC Types:", anchor=tk.W)
+        self.bnc_types = tk.Label(top_frame, text='{:,.0f}'.format(len(self.calculator.bnc_words)), width=13, anchor=tk.E)
+
+        l2 = tk.Label(top_frame, text="BNC Tokens:", anchor=tk.W)
+        self.bnc_tokens = tk.Label(top_frame, text='{:,.0f}'.format(self.calculator.bnc_corpus_size), width=13, anchor=tk.E)
+
+        # User corpus
+        l3 = tk.Label(top_frame, text="Your Types:", anchor=tk.W)
+        self.user_types = tk.Label(top_frame, text='0', width=13, anchor=tk.E)
+
+        l4 = tk.Label(top_frame, text="Your Tokens:", anchor=tk.W)
+        self.user_tokens = tk.Label(top_frame, text='0', width=13, anchor=tk.E)
+
+        return [l1, self.bnc_types,
+                l2, self.bnc_tokens,
+                l3, self.user_types,
+                l4, self.user_tokens]
+
+    def init_top_options(self, top_frame):
+        # Allow a minimum frequency cutoff
+        vcmd = (self.register(self.validate_spinbox), '%d', '%S')
+
+        l1 = tk.Label(top_frame, text="Min. Frequency", anchor=tk.W)
+        self.opt_min_f = tk.Spinbox(top_frame, width=4, from_=0, to=10000000, validate="key", validatecommand=vcmd)
+
+        l2 = tk.Label(top_frame, text="Min. Freq. BNC", anchor=tk.W)
+        self.opt_min_f_bnc = tk.Spinbox(top_frame, width=4, from_=0, to=10000000, validate="key", validatecommand=vcmd)
+
+        # Allow hiding of numbers
+        self.ignore_num = tk.Checkbutton(top_frame, variable=self.opt_ignore_numbers, command=self.calculate)
+        ignore_num_label = tk.Label(top_frame, text="Ignore Numbers:", anchor=tk.W)
+        ignore_num_label.bind('<Button-1>', lambda e: self.toggle_number_ignore())
+
+        # Add a refresh button
+        refresh_btn = tk.Button(top_frame, text="Refresh", command=self.calculate)
+
+        return [l1, self.opt_min_f,
+                l2, self.opt_min_f_bnc,
+                ignore_num_label, self.ignore_num,
+                refresh_btn]
+
+    def validate_spinbox(self, action, s):
+        """
+        We only allow digits in the spinbox
+        """
+        if action == '1' and not (s in string.digits):
+            print('false')
+            return False
+        return True
+
     def toggle_number_ignore(self):
+        """
+        Toggle the option of ignoring numbers in calculations,
+        and refresh results
+        """
         self.ignore_num.toggle()
         self.calculate()
 
@@ -234,7 +303,25 @@ class UI(Frame):
         self.bnc_types['text'] = text1
         self.bnc_tokens['text'] = text2
 
-    def calculate(self):
+    def check_filters(self, d):
+        """
+        Compares a datapoint against the filters to see if it should be printed/saved
+        """
+        # Frequency too low
+        if d[1] < int(self.opt_min_f.get()):
+            return False
+
+        # BNC frequency too low
+        if d[2] < int(self.opt_min_f_bnc.get()):
+            return False
+
+        return True
+
+    def calculate(self, e=None):
+        """
+        Primary function responsible for getting data from KEY_BNC and
+        writing it out to the columns
+        """
         self.calculator.ignore_numbers = self.opt_ignore_numbers.get()
 
         data = self.calculator.get_stats()
@@ -249,11 +336,12 @@ class UI(Frame):
         formats = ["{}\n", "{:,.0f}\n", "{:,.0f}\n", "{:,.2f}\n", "{:,.2f}\n"]
         inf = float('inf')
         for d in data:
-            for i, datum in enumerate(d):
-                if i == 4 and datum == inf:
-                    self.columns[i].insert(tk.END, "∞\n")
-                else:
-                    self.columns[i].insert(tk.END, formats[i].format(datum))
+            if self.check_filters(d):
+                for i, datum in enumerate(d):
+                    if i == 4 and datum == inf:
+                        self.columns[i].insert(tk.END, "∞\n")
+                    else:
+                        self.columns[i].insert(tk.END, formats[i].format(datum))
 
         # Format text and disable writing so users don't accidentally edit
         # results
@@ -265,6 +353,12 @@ class UI(Frame):
         self.columns[0].config(state=tk.DISABLED)
 
     def save(self, event=None):
+        """
+        Saves results to a CSV file
+
+        Applies current filters (eg frequency, ignore numbers...) before
+        saving
+        """
         file_name = filedialog.asksaveasfilename(initialfile='BNC_LL_OR.csv')
 
         if file_name != None and file_name != '':
@@ -273,7 +367,8 @@ class UI(Frame):
                 writer = csv.writer(file_handle)
                 writer.writerow(calculator.get_cols())
                 for d in data:
-                    writer.writerow(d)
+                    if self.check_filters(d):
+                        writer.writerow(d)
 
     def show_help(self, event=None):
         formats = {'h1': [('1.0', '1.end')],
@@ -366,15 +461,6 @@ class UI(Frame):
         self.master.quit()
 
 def run():
-    splash_formats = {'h1': [('1.0', '1.end')],
-                      'h2': [('2.0', '2.end'),
-                             ('5.0', '5.end'),
-                             ('8.0', '8.end')],
-                      'bold': [('6.404', '6.463'),
-                               ('9.354', '9.407')]
-                      }
-    windows.show_splash("Introduction", "About Short.txt", **splash_formats)
-
     #draw the window, and start the application
     root = tk.Tk()
     root.title("LL/OR vs. BNC Keyword Calculator")

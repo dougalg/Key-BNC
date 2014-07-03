@@ -15,7 +15,6 @@ class KEY_BNC(object):
         # This will affect counts of types and tokens and therefore
         # also the LL/OR values
         self.ignore_numbers = False
-        self.min_f = 0
 
         self.init_bnc_words()
 
