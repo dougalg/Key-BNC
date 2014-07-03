@@ -28,7 +28,9 @@ Compiled packages exist for both Windows and Mac OS. If you have Python-3 instal
 The tokenizer splits on spaces, and converts upper case letters to lower. For punctuation, the rules are:
 
 1. If it is followed by a space, the punctuation is separated from the word.
-2. Double-quotation marks, parentheses, and braces are ignored
+2. Most punctuation counts as a word boundary (but is not included in words).
+3. Numbers may contain: 0-9, commans, periods, and semi-colors (eg: 12:45, or 1,300.00).
+4. Single quotes split a word in two and are attached to the second word.
 
 EG:
 
@@ -51,14 +53,15 @@ The BNC word list is a CSV file and can be located in LL_OR_BNC/Data directory. 
 
 ###Versions###
 
-v1.2 (Forthcoming)
+v1.2 - July 3<sup>rd</sup>, 2014
 - Fix display bug on OSX for information windows
 - Increase font size
 - Tokenization has been modified to be more similar to that of AntConc
 - Added option to filter out numbers
+- Added option to filter by minimum frequency
 - Added support for Home, End, Page Up, and Page Down keys
 
-v1.1
+v1.1 - June 6<sup>th</sup>, 2014
 - Minor changes to OR algorithm
 - Add sorting by all columns
 - UI enhancements

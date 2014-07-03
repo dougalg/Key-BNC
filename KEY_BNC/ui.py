@@ -365,7 +365,7 @@ class UI(Frame):
             data = self.calculator.get_stats()
             with open(file_name, mode='w', encoding='utf8', newline='') as file_handle:
                 writer = csv.writer(file_handle)
-                writer.writerow(calculator.get_cols())
+                writer.writerow(self.calculator.get_cols())
                 for d in data:
                     if self.check_filters(d):
                         writer.writerow(d)
@@ -374,8 +374,12 @@ class UI(Frame):
         formats = {'h1': [('1.0', '1.end')],
                    'h2': [('2.0', '2.end'),
                           ('9.0', '9.end'),
-                          ('12.0', '12.end'),
-                          ('15.0', '15.end')]
+                          ('15.0', '15.end'),
+                          ('21.0', '21.end'),
+                          ('24.0', '24.end'),
+                          ('29.0', '29.end')],
+                   'bold': [('11.59', '11.93'),
+                            ('17.138', '17.170')]
                   }
         windows.show_splash("Key-BNC Help", "Help.txt", **formats)
 
