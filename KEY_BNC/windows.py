@@ -36,7 +36,7 @@ def show_splash(title, source_name, **formats):
     root.update_idletasks()
     root.wm_attributes("-topmost", 1)
 
-    ## Run appliction
+    ## Run application
     root.mainloop()
 
 def encoding_warning(file_names):
