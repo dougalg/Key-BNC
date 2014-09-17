@@ -7,7 +7,7 @@ BNC_wordlist = r'BNC_wordlist.csv'
 
 class KEY_BNC(object):
 
-    def __init__(self):
+    def __init__(self, file_basepath=None):
         self.zero_adjustment = 0.5 # Default frequency for calculating OR which
                                   # requires a non-zero frequency
 
@@ -15,6 +15,7 @@ class KEY_BNC(object):
         # This will affect counts of types and tokens and therefore
         # also the LL/OR values
         self.ignore_numbers = False
+        self.file_basepath = file_basepath or '.'
 
         self.init_bnc_words()
 
@@ -163,7 +164,7 @@ class KEY_BNC(object):
             ...
         }
         """
-        BNC_wordlist_path = os.path.join(data_dirs[0], data_dirs[1], BNC_wordlist)
+        BNC_wordlist_path = os.path.join(self.file_basepath, data_dirs[0], data_dirs[1], BNC_wordlist)
         data = {}
         with open(BNC_wordlist_path, encoding='utf8') as bnc_data:
             reader = csv.reader(bnc_data)
