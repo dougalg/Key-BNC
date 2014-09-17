@@ -25,6 +25,7 @@ class KEY_BNC(object):
         self.sort_col = None
         self.sort_key = None
 
+        # Set default sort key to LL
         self.set_sort(3)
 
         self.clear()
@@ -88,12 +89,16 @@ class KEY_BNC(object):
     def is_valid(self, word):
         return True
 
-    def get_stats(self):
+    def get_stats(self, for_words=None):
         r"""
         Runs the statistics and returns the results as a list of tuples:
-        [ (word, f, f_bnc, LL, OR), ... ] sorted by f
+        [ (word, f, f_bnc, LL, OR), ... ] sorted by self.sort_key
+
+        filter to specific words with a list: KEY_BNC.get_stats(for_words=['and', 'the'])
+        will return only 2 results
         """
-        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w)], key=self.sort_key, reverse=self.sort_reverse)
+        target_words = for_words or []
+        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w) and w in target_words], key=self.sort_key, reverse=self.sort_reverse)
 
     def size_from_words(self, words):
         r"""
