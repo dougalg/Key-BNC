@@ -86,8 +86,8 @@ class KEY_BNC(object):
         self.sort_col = col
         self.sort_key = itemgetter(col)
 
-    def is_valid(self, word):
-        return True
+    def is_valid(self, word, target_words):
+        return target_words == [] or word in target_words
 
     def get_stats(self, for_words=None):
         r"""
@@ -98,7 +98,7 @@ class KEY_BNC(object):
         will return only 2 results
         """
         target_words = for_words or []
-        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w) and w in target_words], key=self.sort_key, reverse=self.sort_reverse)
+        return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w, target_words)], key=self.sort_key, reverse=self.sort_reverse)
 
     def size_from_words(self, words):
         r"""
