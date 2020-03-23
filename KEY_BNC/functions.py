@@ -58,7 +58,6 @@ def tokenize(data):
         # If it is a colon/comma/period in a number, join
         if curr_char in ',.:' and prev_char in string.digits and next_char in string.digits:
             do_yield = False
-        # Split a single quote, unless it is between 2 letters
         elif curr_char in "'’":
             if prev_char == '' or prev_char in word_breaks or prev_char in string.digits or next_char in word_breaks:
                 curr_char = ''
@@ -68,20 +67,17 @@ def tokenize(data):
                 word = ''
                 curr_char = "'"
                 do_yield = False
-        # Word breaks are easy...
         elif curr_char in word_breaks:
             curr_char = ''
         else:
             do_yield = False
 
-        # Yield'em boys
         if do_yield and not word == '':
             yield word
             word = ''
         else:
             word += curr_char
 
-        # At end...
         prev_char, curr_char = curr_char, next_char
 
 def is_word(word):
@@ -99,9 +95,13 @@ def is_word(word):
         return False
     return True
 
-def OR(target_freq, target_corpus_size,
-       comparison_freq, comparison_corpus_size,
-       zero_adjustment=None):
+def OR(
+        target_freq,
+        target_corpus_size,
+        comparison_freq,
+        comparison_corpus_size,
+        zero_adjustment=None
+    ):
     r"""
     Based on the definition found at:
     http://www.medcalc.org/manual/relativerisk_oddsratio.php
@@ -137,8 +137,7 @@ def OR(target_freq, target_corpus_size,
     except (FloatingPointError, ZeroDivisionError):
         return float('inf')
 
-def LL(target_freq, target_corpus_size,
-       comparison_freq, comparison_corpus_size):
+def LL(target_freq, target_corpus_size, comparison_freq, comparison_corpus_size):
     r"""
     Calculates Log Likelihood for a pair of words, given the corpus sizes
     and word frequencies
