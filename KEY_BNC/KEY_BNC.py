@@ -8,8 +8,8 @@ BNC_wordlist = r'BNC_wordlist.csv'
 class KEY_BNC(object):
 
     def __init__(self, file_basepath=None):
-        self.zero_adjustment = 0.5 # Default frequency for calculating OR which
-                                  # requires a non-zero frequency
+        self.zero_adjustment = 0.5  # Default frequency for calculating OR which
+                                    # requires a non-zero frequency
 
         # Do we want to ignore numbers?
         # This will affect counts of types and tokens and therefore

@@ -21,13 +21,20 @@ class UI(Frame):
         self.show_intro()
 
     def show_intro(self):
-        splash_formats = {'h1': [('1.0', '1.end')],
-                      'h2': [('2.0', '2.end'),
-                             ('5.0', '5.end'),
-                             ('8.0', '8.end')],
-                      'bold': [('6.404', '6.463'),
-                               ('9.354', '9.407')]
-                      }
+        splash_formats = {
+            'h1': [
+                ('1.0', '1.end')
+            ],
+            'h2': [
+                ('2.0', '2.end'),
+                ('5.0', '5.end'),
+                ('8.0', '8.end')
+            ],
+            'bold': [
+                ('6.404', '6.463'),
+                ('9.354', '9.407')
+            ]
+        }
         windows.show_splash("Introduction", "About Short.txt", **splash_formats)
 
     def init_options(self):
@@ -62,22 +69,33 @@ class UI(Frame):
         # Menu Bar
         menubar = tk.Menu(self.master)
         filemenu = tk.Menu(menubar, tearoff=0)
-        filemenus = [{'label': "Load directory (d)",
-                      'command': self.load_corpus,
-                      'bind_keys': ["d"]},
-                     {'label': "Load file (f)",
-                      'command': self.load_corpus_file,
-                      'bind_keys': ["f"]},
-                     {'label': "Save Results (s)",
-                      'command': self.save,
-                      'bind_keys': ["s"]},
-                     {'label': "Clear files and results",
-                     'command': self.clear_all,
-                     'bind_keys': []},
-                     {'label': "Quit (q)",
-                     'command': self.quit,
-                     'bind_keys': ['q']}
-                    ]
+        filemenus = [
+            {
+                'label': "Load directory (d)",
+                'command': self.load_corpus,
+                'bind_keys': ["d"]
+            },
+            {
+                'label': "Load file (f)",
+                'command': self.load_corpus_file,
+                'bind_keys': ["f"]
+            },
+            {
+                'label': "Save Results (s)",
+                'command': self.save,
+                'bind_keys': ["s"]
+            },
+            {
+                'label': "Clear files and results",
+                'command': self.clear_all,
+                'bind_keys': []
+            },
+            {
+                'label': "Quit (q)",
+                'command': self.quit,
+                'bind_keys': ['q']
+            }
+        ]
 
         for m in filemenus:
             self.add_menu_option(filemenu, m)
@@ -86,12 +104,18 @@ class UI(Frame):
 
         helpmenu = tk.Menu(menubar, tearoff=0)
 
-        helpmenus = [{'label': "About & References",
-                     'command': self.show_about,
-                     'bind_keys': []},
-                     {'label': "Help (/)",
-                     'command': self.show_help,
-                     'bind_keys': ['/']}]
+        helpmenus = [
+            {
+                'label': "About & References",
+                'command': self.show_about,
+                'bind_keys': []
+            },
+            {
+                'label': "Help (/)",
+                'command': self.show_help,
+                'bind_keys': ['/']
+            }
+        ]
 
         for m in helpmenus:
             self.add_menu_option(helpmenu, m)
@@ -371,31 +395,45 @@ class UI(Frame):
                         writer.writerow(d)
 
     def show_help(self, event=None):
-        formats = {'h1': [('1.0', '1.end')],
-                   'h2': [('2.0', '2.end'),
-                          ('9.0', '9.end'),
-                          ('15.0', '15.end'),
-                          ('21.0', '21.end'),
-                          ('24.0', '24.end'),
-                          ('29.0', '29.end')],
-                   'bold': [('11.59', '11.93'),
-                            ('17.138', '17.170')]
-                  }
+        formats = {
+            'h1': [
+                ('1.0', '1.end')
+            ],
+            'h2': [
+                ('2.0', '2.end'),
+                ('9.0', '9.end'),
+                ('15.0', '15.end'),
+                ('21.0', '21.end'),
+                ('24.0', '24.end'),
+                ('29.0', '29.end')
+            ],
+            'bold': [
+                ('11.59', '11.93'),
+                ('17.138', '17.170')
+            ]
+        }
         windows.show_splash("Key-BNC Help", "Help.txt", **formats)
 
     def show_about(self, event=None):
-        formats = {'h1': [('1.0', '1.end')],
-                   'h2': [('2.0', '2.end'),
-                          ('5.0', '5.end'),
-                          ('8.0', '8.end'),
-                          ('11.0', '11.end'),
-                          ('14.0', '14.end'),
-                          ('18.0', '18.end')],
-                   'bold': [('19.0', '19.end'),
-                            ('23.0', '23.end'),
-                            ('26.0', '26.end'),
-                            ('29.0', '29.end')]
-                  }
+        formats = {
+            'h1': [
+                ('1.0', '1.end')
+            ],
+            'h2': [
+                ('2.0', '2.end'),
+                ('5.0', '5.end'),
+                ('8.0', '8.end'),
+                ('11.0', '11.end'),
+                ('14.0', '14.end'),
+                ('18.0', '18.end')
+            ],
+            'bold': [
+                ('19.0', '19.end'),
+                ('23.0', '23.end'),
+                ('26.0', '26.end'),
+                ('29.0', '29.end')
+            ]
+        }
         windows.show_splash("About Key-BNC", "About.txt", **formats)
 
     def scroll_results(self, *args):
