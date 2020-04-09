@@ -1,4 +1,10 @@
+venv
+.DS_Store
+.eggs
+.vscode
 *.pyc
 About.docx
 ~$About.docx
 About Short.docx
+dist
+__pycache__

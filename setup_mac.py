@@ -5,15 +5,16 @@ Usage:
     python setup.py py2app
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 APP = ['KEY_BNC_app.py']
-DATA_FILES = ['KEY_BNC/Data']
+DATA_FILES = ['KEY_BNC']
 OPTIONS = {'argv_emulation': True}
 
 setup(
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
+    packages=find_packages(),
     setup_requires=['py2app'],
 )
