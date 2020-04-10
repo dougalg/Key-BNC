@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, Frame
-from KEY_BNC.KEY_BNC import KEY_BNC
+from KEY_BNC.corpus import Corpus
 from KEY_BNC import windows
 from math import floor
 import csv, platform, string
@@ -13,7 +13,7 @@ class UI(Frame):
 
 		self.pack(fill=tk.BOTH, expand=1)
 
-		self.calculator = KEY_BNC()
+		self.calculator = Corpus()
 		self.data = []
 		self.init_options()
 		self.init_menus()

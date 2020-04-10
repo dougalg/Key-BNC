@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import font
-from KEY_BNC.KEY_BNC import data_dirs
+from KEY_BNC.constants import data_dirs
 
 def show_splash(title, source_name, **formats):
 	data_path = os.path.join(data_dirs[0], data_dirs[1], source_name)

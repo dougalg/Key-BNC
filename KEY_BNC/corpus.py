@@ -1,14 +1,15 @@
+from KEY_BNC.constants import data_dirs, BNC_wordlist
 from KEY_BNC.functions import *
+from KEY_BNC.corpus_part import CorpusPart
 from KEY_BNC.stats.dispersion import dp_norm
 from KEY_BNC.stats.odds_ratio import OR
 from KEY_BNC.stats.log_likelyhood import LL
 from operator import itemgetter
 import os, csv, string, collections
+from collections import Counter
 
-data_dirs = ['KEY_BNC', 'Data']
-BNC_wordlist = r'BNC_wordlist.csv'
 
-class KEY_BNC(object):
+class Corpus(object):
 
 	def __init__(self, file_basepath=None):
 		self.zero_adjustment = 0.5  # Default frequency for calculating OR which
@@ -22,7 +23,7 @@ class KEY_BNC(object):
 
 		self.init_bnc_words()
 
-		self.target_words = {}
+		self.corpus_parts = []
 
 		self.sort_reverse = True
 		self.sort_col = None
@@ -56,23 +57,13 @@ class KEY_BNC(object):
 
 	@property
 	def target_corpus_size(self):
-		if self.ignore_numbers:
-			return self.target_corpus_size_nn
-		return self.target_corpus_size_wn
+		counts = [part.getSize(self.ignore_numbers) for part in self.corpus_parts]
+		return sum(counts)
 
 	@property
 	def target_words(self):
-		if self.ignore_numbers:
-			return self.target_words_nn
-		return self.target_words_wn
-
-	@target_words.setter
-	def target_words(self, value):
-		self.target_words_wn = value
-		self.target_words_nn = {k:v for k, v in self.target_words_wn.items() if not is_number(k)}
-
-		self.target_corpus_size_wn = self.size_from_words(self.target_words_wn)
-		self.target_corpus_size_nn = self.size_from_words(self.target_words_nn)
+		counts = [part.getWords(self.ignore_numbers) for part in self.corpus_parts]
+		return sum(counts, Counter())
 
 	def get_cols(self):
 		return ["Word Type", "Frequency", "Frequency BNC", "Log Likelihood", "Odds Ratio"]
@@ -115,24 +106,23 @@ class KEY_BNC(object):
 		return sum(words.values())
 
 	def clear(self):
-		self.target_words = collections.Counter()
+		self.corpus_parts = []
 
 	def load_file(self, file_name, func=None, indecipherable_files=None):
 		if indecipherable_files is None:
 			indecipherable_files = {'ignored':[],'guessed':[]}
 
-		results = self.target_words_wn
 		fn, f = os.path.split(file_name)
 		fn, ext = os.path.splitext(file_name)
 		if ext == '.txt':
 			error = None
 			try:
 				with open(file_name, encoding='utf8') as fh:
-					results.update(tokenize(fh.read()))
+					self.corpus_parts.append(CorpusPart(tokenize(fh.read())))
 			except UnicodeDecodeError:
 				try:
 					with open(file_name, encoding='latin-1', errors='surrogateescape') as fh:
-						results.update(tokenize(fh.read()))
+						self.corpus_parts.append(CorpusPart(tokenize(fh.read())))
 						indecipherable_files['guessed'].append(f)
 				except UnicodeDecodeError:
 					indecipherable_files['ignored'].append(f)
@@ -141,13 +131,10 @@ class KEY_BNC(object):
 		else:
 			indecipherable_files['ignored'].append(f)
 
-		self.target_words_wn = results
 		return indecipherable_files
 
 	def load_target_file(self, file_name, func=None):
-		results = self.load_file(file_name, func)
-		self.target_words = self.target_words_wn
-		return results
+		return self.load_file(file_name, func)
 
 	def load_target_data_dir(self, dir_name, func=None):
 		indecipherable_files = {'ignored':[],'guessed':[]}
@@ -157,7 +144,6 @@ class KEY_BNC(object):
 				fname = os.path.join(root, f)
 				indecipherable_files = self.load_file(fname, func, indecipherable_files)
 
-		self.target_words = self.target_words_wn
 		return indecipherable_files
 
 	def load_BNC_data(self):

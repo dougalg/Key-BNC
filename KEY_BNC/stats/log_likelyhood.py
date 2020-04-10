@@ -1,3 +1,5 @@
+import math
+
 def LL(target_freq, target_corpus_size, comparison_freq, comparison_corpus_size):
 	r"""
 	Calculates Log Likelihood for a pair of words, given the corpus sizes
