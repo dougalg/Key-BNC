@@ -1,7 +1,7 @@
-# dp_norm(DP, min_s)
 def dp_norm(s, v, f):
 	r"""
-	Calculates the normalized dispersion based:
+	Based on Gries (201?)
+	Calculates the normalized dispersion based on:
 	s: An array of the percentages of the n corpus part sizes
 	v: An array of the frequencies of the target word in each corpus part
 	f: The overall frequency of the target word in the corpus

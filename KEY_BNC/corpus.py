@@ -21,9 +21,8 @@ class Corpus(object):
 		self.ignore_numbers = False
 		self.file_basepath = file_basepath or '.'
 
-		self.init_bnc_words()
-
 		self.corpus_parts = []
+		self.bnc_corpus = CorpusPart(self.load_BNC_data())
 
 		self.sort_reverse = True
 		self.sort_col = None
@@ -34,26 +33,13 @@ class Corpus(object):
 
 		self.clear()
 
-	def init_bnc_words(self):
-		# With numbers
-		self.bnc_words_wn = self.load_BNC_data()
-		self.bnc_corpus_size_wn = self.size_from_words(self.bnc_words)
-
-		# No numbers
-		self.bnc_words_nn = {k:v for k, v in self.bnc_words_wn.items() if not is_number(k)}
-		self.bnc_corpus_size_nn = self.size_from_words(self.bnc_words_nn)
-
 	@property
 	def bnc_words(self):
-		if self.ignore_numbers:
-			return self.bnc_words_nn
-		return self.bnc_words_wn
+		return self.bnc_corpus.getWords(self.ignore_numbers)
 
 	@property
 	def bnc_corpus_size(self):
-		if self.ignore_numbers:
-			return self.bnc_corpus_size_nn
-		return self.bnc_corpus_size_wn
+		return self.bnc_corpus.getSize(self.ignore_numbers)
 
 	@property
 	def target_corpus_size(self):
@@ -107,17 +93,6 @@ class Corpus(object):
 			self.OR(w),
 			self.dp_norm(w)
 		)
-
-	def size_from_words(self, words):
-		r"""
-		Counts total number of words
-
-		>>> words = {'a': 12, 'b': 2, 'c': 0}
-		>>> o = KEY_BNC()
-		>>> o.size_from_words(words)
-		14
-		"""
-		return sum(words.values())
 
 	def clear(self):
 		self.corpus_parts = []
