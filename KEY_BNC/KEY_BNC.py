@@ -1,4 +1,7 @@
 from KEY_BNC.functions import *
+from KEY_BNC.stats.dispersion import dp_norm
+from KEY_BNC.stats.odds_ratio import OR
+from KEY_BNC.stats.log_likelyhood import LL
 from operator import itemgetter
 import os, csv, string, collections
 
@@ -182,8 +185,12 @@ class KEY_BNC(object):
         r"""
         A convenience method to calculate LL
         """
-        return LL(self.target_words[target_word], self.target_corpus_size,
-                  self.bnc_words.get(target_word, 0), self.bnc_corpus_size)
+        return LL(
+            self.target_words[target_word],
+            self.target_corpus_size,
+            self.bnc_words.get(target_word, 0),
+            self.bnc_corpus_size
+        )
 
     def OR(self, target_word):
         r"""
@@ -191,6 +198,16 @@ class KEY_BNC(object):
 
         Replaces BNC F 0, with 10^-10
         """
-        return OR(self.target_words[target_word], self.target_corpus_size,
-                  self.bnc_words.get(target_word, 0), self.bnc_corpus_size,
-                  zero_adjustment = self.zero_adjustment)
+        return OR(
+            self.target_words[target_word],
+            self.target_corpus_size,
+            self.bnc_words.get(target_word, 0),
+            self.bnc_corpus_size,
+            zero_adjustment = self.zero_adjustment
+        )
+
+    def dp_norm(self, target_word):
+        r"""
+        A convenience method to calculate normalized dispersion for a word
+        """
+        return dp_norm(s, v, f)

@@ -11,6 +11,31 @@ def dp_norm(s, v, f):
    >>> f = 15
    >>> dp_norm(s, v, f)
    0.2195121951219512
+
+   >>> s = (0.9,0.1)
+   >>> v = (9,1)
+   >>> f = 10
+   >>> dp_norm(s, v, f)
+   0.0
+
+   >>> s = (0.9,0.1)
+   >>> v = (10,0)
+   >>> f = 10
+   >>> dp_norm(s, v, f)
+   0.1111111111111111
+
+   >>> s = (1,)
+   >>> v = (10,)
+   >>> f = 10
+   >>> dp_norm(s, v, f)
+   Traceback (most recent call last):
+     File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/doctest.py", line 1330, in __run
+       compileflags, 1), test.globs)
+     File "<doctest dispersion.dp_norm[15]>", line 1, in <module>
+       dp_norm(s, v, f)
+     File "KEY_BNC/stats/dispersion.py", line 40, in dp_norm
+       return dp(s, v, f) / (1 - min(s))
+   ZeroDivisionError: float division by zero
    """
    return dp(s, v, f) / (1 - min(s))
 
@@ -27,7 +52,7 @@ def dp(s, v, f):
    >>> dp(s, v, f)
    0.18
    """
-   assert(len(s) == len(v), "The number of part sizes, and frequencies must be the same.")
+   assert len(s) == len(v), "The number of part sizes, and frequencies must be the same."
 
    calculated_parts = map(calculate_part_value, s, v, [f for i in v])
 
