@@ -28,16 +28,12 @@ def dp_norm(s, v, f):
 	>>> v = (10,)
 	>>> f = 10
 	>>> dp_norm(s, v, f)
-	Traceback (most recent call last):
-	 File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/doctest.py", line 1330, in __run
-		compileflags, 1), test.globs)
-	 File "<doctest dispersion.dp_norm[15]>", line 1, in <module>
-		dp_norm(s, v, f)
-	 File "KEY_BNC/stats/dispersion.py", line 40, in dp_norm
-		return dp(s, v, f) / (1 - min(s))
-	ZeroDivisionError: float division by zero
+	0.0
 	"""
-	return dp(s, v, f) / (1 - min(s))
+	try:
+		return dp(s, v, f) / (1 - min(s))
+	except (FloatingPointError, ZeroDivisionError):
+		return float(0)
 
 def dp(s, v, f):
 	r"""

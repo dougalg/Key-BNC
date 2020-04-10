@@ -174,10 +174,12 @@ class UI(Frame):
 		l4 = tk.Label(top_frame, text="Your Tokens:", anchor=tk.W)
 		self.user_tokens = tk.Label(top_frame, text='0', width=13, anchor=tk.E)
 
-		return [l1, self.bnc_types,
-				l2, self.bnc_tokens,
-				l3, self.user_types,
-				l4, self.user_tokens]
+		return [
+			l1, self.bnc_types,
+			l2, self.bnc_tokens,
+			l3, self.user_types,
+			l4, self.user_tokens
+		]
 
 	def init_top_options(self, top_frame):
 		# Allow a minimum frequency cutoff
@@ -197,10 +199,12 @@ class UI(Frame):
 		# Add a refresh button
 		refresh_btn = tk.Button(top_frame, text="Refresh", command=self.calculate)
 
-		return [l1, self.opt_min_f,
-				l2, self.opt_min_f_bnc,
-				ignore_num_label, self.ignore_num,
-				refresh_btn]
+		return [
+			l1, self.opt_min_f,
+			l2, self.opt_min_f_bnc,
+			ignore_num_label, self.ignore_num,
+			refresh_btn
+		]
 
 	def validate_spinbox(self, action, s):
 		"""
@@ -241,7 +245,7 @@ class UI(Frame):
 
 	def init_columns(self):
 		columns = []
-		widths = [15, 8, 10, 10, 16]
+		widths = [15, 8, 10, 10, 16, 16]
 		for i, col_header in enumerate(self.calculator.get_cols()):
 			index = i+1 # Offset for the "file names" column
 
@@ -357,7 +361,7 @@ class UI(Frame):
 		for c in self.columns:
 			c.config(state=tk.NORMAL)
 
-		formats = ["{}\n", "{:,.0f}\n", "{:,.0f}\n", "{:,.2f}\n", "{:,.2f}\n"]
+		formats = ["{}\n", "{:,.0f}\n", "{:,.0f}\n", "{:,.2f}\n", "{:,.2f}\n", "{:,.2f}\n"]
 		inf = float('inf')
 		for d in data:
 			if self.check_filters(d):

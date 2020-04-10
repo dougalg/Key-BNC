@@ -66,7 +66,7 @@ class Corpus(object):
 		return sum(counts, Counter())
 
 	def get_cols(self):
-		return ["Word Type", "Frequency", "Frequency BNC", "Log Likelihood", "Odds Ratio"]
+		return ["Word Type", "Frequency", "Frequency BNC", "Log Likelihood", "Odds Ratio", "Dispersion"]
 
 	def set_sort(self, col):
 		if self.sort_col == col:
@@ -92,7 +92,21 @@ class Corpus(object):
 		will return only 2 results
 		"""
 		target_words = for_words or []
-		return sorted([(w, self.target_words[w], self.bnc_words.get(w, 0), self.LL(w), self.OR(w)) for w in self.target_words if self.is_valid(w, target_words)], key=self.sort_key, reverse=self.sort_reverse)
+		return sorted([
+			self.get_stats_for_word(w) for w in self.target_words if self.is_valid(w, target_words)],
+			key=self.sort_key,
+			reverse=self.sort_reverse
+		)
+
+	def get_stats_for_word(self, w):
+		return (
+			w,
+			self.target_words[w],
+			self.bnc_words.get(w, 0),
+			self.LL(w),
+			self.OR(w),
+			self.dp_norm(w)
+		)
 
 	def size_from_words(self, words):
 		r"""
@@ -196,4 +210,6 @@ class Corpus(object):
 		r"""
 		A convenience method to calculate normalized dispersion for a word
 		"""
-		return dp_norm(s, v, f)
+		s = [ part.getSize(self.ignore_numbers) / self.target_corpus_size for part in self.corpus_parts ]
+		v = [ part.getWords(self.ignore_numbers)[target_word] for part in self.corpus_parts ]
+		return dp_norm(s, v, self.target_words[target_word])
