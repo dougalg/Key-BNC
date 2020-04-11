@@ -1,1 +1,2 @@
+cx-Freeze==6.1
 py2app==0.21

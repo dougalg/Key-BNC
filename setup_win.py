@@ -21,5 +21,5 @@ setup(
 	version = "1.3",
 	description = "Key BNC",
 	options = {"build_exe": build_exe_options},
-	executables = [Executable("KEY_BNC_app.py", base=base)]
+	executables = [Executable("KEY_BNC_app.py", base=base, targetName = 'Key-BNC')]
 )
