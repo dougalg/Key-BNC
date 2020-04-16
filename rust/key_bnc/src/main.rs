@@ -1,3 +1,4 @@
+#![feature(test)]
 mod pre_tokenizer;
 
 use std::collections::HashMap;
