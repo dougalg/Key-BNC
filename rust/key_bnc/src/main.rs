@@ -35,7 +35,7 @@ fn process_file(entry: &DirEntry) {
 	let mut tokenizer = Tokenizer::new(Box::new(wl));
 	tokenizer.with_pre_tokenizer(Box::new(KeyBNCPreTokenizer::new()));
 
-	match tokenizer.encode(EncodeInput::Single(contents), false) {
+	match tokenizer.encode(EncodeInput::Single(contents.to_lowercase()), false) {
 		Ok(encoding) => {
 			println!("{:#?}", encoding.get_tokens().iter().collect::<Counter<_>>());
 		},

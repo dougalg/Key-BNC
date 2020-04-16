@@ -2,24 +2,6 @@ use crate::KeyBNCPreTokenizer;
 use tokenizers::tokenizer::{NormalizedString, PreTokenizer};
 
 #[test]
-fn it_lowercases_text() {
-	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("uWu wHAt's this?");
-	match pt.pre_tokenize(&mut normalized) {
-		Ok(v) => {
-			assert_eq!(v.len(), 4);
-			assert_eq!(v[0].0, "uwu");
-			assert_eq!(v[1].0, "what");
-			assert_eq!(v[2].0, "'s");
-			assert_eq!(v[3].0, "this");
-		},
-		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
-		}
-	}
-}
-
-#[test]
 fn it_splits_single_quotes_after_numbers() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = NormalizedString::from("'adventure 2'adventure");
@@ -39,7 +21,7 @@ fn it_splits_single_quotes_after_numbers() {
 #[test]
 fn it_keeps_single_quotes_inside_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("You're fine, fire-truck!");
+	let mut normalized = NormalizedString::from("you're fine, fire-truck!");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 5);
@@ -57,7 +39,7 @@ fn it_keeps_single_quotes_inside_strings() {
 #[test]
 fn it_keeps_single_quotes_at_the_end_of_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("This is a 'quotation'.");
+	let mut normalized = NormalizedString::from("this is a 'quotation'.");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 4);
@@ -75,7 +57,7 @@ fn it_keeps_single_quotes_at_the_end_of_strings() {
 #[test]
 fn it_removes_double_quotes_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("So is \"this\".");
+	let mut normalized = NormalizedString::from("so is \"this\".");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 3);
@@ -92,7 +74,7 @@ fn it_removes_double_quotes_strings() {
 #[test]
 fn it_keeps_numbers_together() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("There are 100,000,000,000.00 words in the BNC.");
+	let mut normalized = NormalizedString::from("there are 100,000,000,000.00 words in the bnc.");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 7);
@@ -113,7 +95,7 @@ fn it_keeps_numbers_together() {
 #[test]
 fn it_still_removes_punctuation() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("\"'tis!\" replied Aunt Helga.");
+	let mut normalized = NormalizedString::from("\"'tis!\" replied aunt helga.");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 4);
@@ -131,7 +113,7 @@ fn it_still_removes_punctuation() {
 #[test]
 fn it_still_continues_to_remove_punctuation() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
-	let mut normalized = NormalizedString::from("Don't tell someone what they can or can't do");
+	let mut normalized = NormalizedString::from("don't tell someone what they can or can't do");
 	match pt.pre_tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 11);

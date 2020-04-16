@@ -40,9 +40,7 @@ impl PreTokenizer for KeyBNCPreTokenizer {
 			};
 
 			if should_push_char {
-				for c in curr_char.to_lowercase() {
-					word.push(c);
-				}
+				word.push(curr_char);
 			}
 
 			if should_end_word && !word.is_empty() {
@@ -50,7 +48,7 @@ impl PreTokenizer for KeyBNCPreTokenizer {
 				for w in get_finalized_words(&word) {
 					words.push((w, (0, 0)));
 				}
-				word.drain(0..);
+				word.clear();
 			}
 		});
 
