@@ -1,15 +1,14 @@
 #![feature(test)]
 mod pre_tokenizer;
 
-use std::collections::HashMap;
-use std::fs::{read_to_string, read_dir, DirEntry};
+use std::fs::{read_dir, DirEntry};
 use std::io;
 use std::path::Path;
 use std::env;
 use pre_tokenizer::key_bnc_split::KeyBNCPreTokenizer;
-use tokenizers::tokenizer::{Tokenizer, EncodeInput};
-use tokenizers::models::wordlevel::WordLevelBuilder;
 use counter::Counter;
+use std::fs::{read_to_string};
+use unicase::UniCase;
 
 fn main() {
 	let args: Vec<String> = env::args().collect();
@@ -22,22 +21,16 @@ fn main() {
 
 fn process_file(entry: &DirEntry) {
 	println!("Attempting to read {:#?}", entry.path());
-	let contents = read_to_string(entry.path())
+	let mut contents = read_to_string(entry.path())
 		.expect("Could not load contents.");
 
-	let mut vocab = HashMap::new();
-	vocab.insert("[UNK]".into(), 0);
-	let wl = WordLevelBuilder::new()
-		.vocab(vocab)
-		.unk_token("[UNK]".into())
-		.build();
+	let tokenizer = KeyBNCPreTokenizer::new();
 
-	let mut tokenizer = Tokenizer::new(Box::new(wl));
-	tokenizer.with_pre_tokenizer(Box::new(KeyBNCPreTokenizer::new()));
-
-	match tokenizer.encode(EncodeInput::Single(contents.to_lowercase()), false) {
-		Ok(encoding) => {
-			println!("{:#?}", encoding.get_tokens().iter().collect::<Counter<_>>());
+	match tokenizer.pre_tokenize(&mut contents) {
+		Ok(results) => {
+			println!("{:#?}", results.iter()
+				.map(|w| UniCase::new(w))
+				.collect::<Counter<_>>());
 		},
 		Err(e) => {
 			println!("b {:?}", e);

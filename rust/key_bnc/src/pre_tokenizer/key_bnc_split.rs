@@ -1,4 +1,4 @@
-use tokenizers::tokenizer::{NormalizedString, Offsets, PreTokenizer, Result};
+use std::result::Result;
 
 pub struct KeyBNCPreTokenizer {}
 
@@ -8,22 +8,20 @@ enum WordType {
 	Number,
 }
 
+const ADDITIONAL_VALID_NUMERIC_CHARS: [char; 3] = [ ':', ',', '.' ];
+const STRING_WORD_BREAKS: [char; 10] = [ '“', '”', '‘', '’', '…', '"', '–', '•', '—', '′' ];
+
 impl KeyBNCPreTokenizer {
 	pub fn new() -> Self {
 		KeyBNCPreTokenizer {}
 	}
-}
 
-const ADDITIONAL_VALID_NUMERIC_CHARS: [char; 3] = [ ':', ',', '.' ];
-const STRING_WORD_BREAKS: [char; 10] = [ '“', '”', '‘', '’', '…', '"', '–', '•', '—', '′' ];
-
-impl PreTokenizer for KeyBNCPreTokenizer {
-	fn pre_tokenize(&self, normalized: &mut NormalizedString) -> Result<Vec<(String, Offsets)>> {
+	pub fn pre_tokenize(&self, normalized: &mut String) -> Result<Vec<String>, &'static str> {
 		let mut words = vec![];
 		let mut word = Vec::with_capacity(1000);
 		let mut current_word_type = WordType::String;
 
-		normalized.get().chars().for_each(|curr_char| {
+		normalized.chars().for_each(|curr_char| {
 			let is_new_word = word.is_empty();
 			if is_new_word && curr_char.is_digit(10) {
 				current_word_type = WordType::Number;
@@ -46,7 +44,7 @@ impl PreTokenizer for KeyBNCPreTokenizer {
 			if should_end_word && !word.is_empty() {
 				current_word_type = WordType::String;
 				for w in get_finalized_words(&word) {
-					words.push((w, (0, 0)));
+					words.push(w);
 				}
 				word.clear();
 			}
@@ -54,7 +52,7 @@ impl PreTokenizer for KeyBNCPreTokenizer {
 
 		if !word.is_empty() {
 			for w in get_finalized_words(&word) {
-				words.push((w, (0, 0)));
+				words.push(w);
 			}
 		}
 
