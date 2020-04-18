@@ -10,6 +10,13 @@ use counter::Counter;
 use std::fs::{read_to_string};
 use unicase::UniCase;
 
+#[derive(Debug)]
+struct CorpusPart<'a> {
+	percent_of_total: f32,
+	word_count: usize,
+	words: Counter<UniCase<&'a String>>
+}
+
 fn main() {
 	let args: Vec<String> = env::args().collect();
 	let root_dir = &args[1];
@@ -28,9 +35,14 @@ fn process_file(entry: &DirEntry) {
 
 	match tokenizer.pre_tokenize(&mut contents) {
 		Ok(results) => {
-			println!("{:#?}", results.iter()
-				.map(|w| UniCase::new(w))
-				.collect::<Counter<_>>());
+			let cp = CorpusPart {
+				percent_of_total: 0.0,
+				word_count: results.len(),
+				words: results.iter()
+					.map(|w| UniCase::new(w))
+					.collect::<Counter<_>>()
+			};
+			println!("{:#?}", cp);
 		},
 		Err(e) => {
 			println!("b {:?}", e);
