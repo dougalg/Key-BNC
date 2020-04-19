@@ -36,7 +36,7 @@ impl KeyBNCPreTokenizer {
 		};
 	}
 
-	pub fn pre_tokenize(&self, normalized: &mut String) -> Result<Vec<String>, &'static str> {
+	pub fn tokenize(&self, normalized: &mut String) -> Result<Vec<String>, &'static str> {
 		let mut words = vec![];
 		let mut word = Vec::with_capacity(1000);
 		let mut current_word_type = WordType::String;
@@ -67,7 +67,7 @@ impl KeyBNCPreTokenizer {
 			if should_end_word && !word.is_empty() {
 				current_word_type = WordType::String;
 				if had_single_quote {
-					for w in get_finalized_words(&word) {
+					for w in clean_single_quotes(&word) {
 						words.push(w);
 					}
 				}
@@ -80,7 +80,7 @@ impl KeyBNCPreTokenizer {
 		});
 
 		if !word.is_empty() {
-			for w in get_finalized_words(&word) {
+			for w in clean_single_quotes(&word) {
 				words.push(w);
 			}
 		}
@@ -89,7 +89,7 @@ impl KeyBNCPreTokenizer {
 	}
 }
 
-fn get_finalized_words(orig_word: &[char]) -> Vec<String> {
+fn clean_single_quotes(orig_word: &[char]) -> Vec<String> {
 	let mut result = vec![];
 	let mut word = Vec::with_capacity(1000);
 	orig_word.iter().rev().for_each(|curr_char| {

@@ -1,11 +1,11 @@
 #![feature(test)]
-mod pre_tokenizer;
+mod tokenizer;
 
 use std::fs::{read_dir, DirEntry};
 use std::io;
 use std::path::Path;
 use std::env;
-use pre_tokenizer::key_bnc_split::KeyBNCPreTokenizer;
+use tokenizer::key_bnc_split::KeyBNCPreTokenizer;
 use counter::Counter;
 use std::fs::{read_to_string};
 use unicase::UniCase;
@@ -33,7 +33,7 @@ fn process_file(entry: &DirEntry) {
 
 	let tokenizer = KeyBNCPreTokenizer::new();
 
-	match tokenizer.pre_tokenize(&mut contents) {
+	match tokenizer.tokenize(&mut contents) {
 		Ok(results) => {
 			let cp = CorpusPart {
 				percent_of_total: 0.0,
@@ -42,10 +42,10 @@ fn process_file(entry: &DirEntry) {
 					.map(|w| UniCase::new(w))
 					.collect::<Counter<_>>()
 			};
-			println!("{:#?}", cp);
+			// println!("{:#?}", cp);
 		},
 		Err(e) => {
-			println!("b {:?}", e);
+			// println!("b {:?}", e);
 		}
 	}
 }

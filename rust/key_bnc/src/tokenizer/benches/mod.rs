@@ -9,10 +9,10 @@ mod tests {
     use test::Bencher;
 
 	fn tokenize(pt: &KeyBNCPreTokenizer, mut normalized: &mut String) {
-		match pt.pre_tokenize(&mut normalized) {
+		match pt.tokenize(&mut normalized) {
 			Ok(_v) => {},
 			Err(_e) => {
-				unreachable!("The pre_tokenizer should not error out here.");
+				unreachable!("The tokenizer should not error out here.");
 			}
 		}
 	}
@@ -32,12 +32,12 @@ mod tests {
 			.expect("Could not load contents.");
 		let pt = KeyBNCPreTokenizer::new();
 		let mut normalized = String::from(&contents);
-		match pt.pre_tokenize(&mut normalized) {
+		match pt.tokenize(&mut normalized) {
 			Ok(v) => {
 				b.iter(|| pt.collect(&v));
 			},
 			Err(_e) => {
-				unreachable!("The pre_tokenizer should not error out here.");
+				unreachable!("The tokenizer should not error out here.");
 			}
 		}
 	}

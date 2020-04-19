@@ -6,7 +6,7 @@ use tokenizers::tokenizer::{NormalizedString, PreTokenizer};
 fn it_lowercases_text() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = NormalizedString::from("uWu wHAt's this?");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 4);
 			assert_eq!(v[0].0, "uwu");
@@ -15,7 +15,7 @@ fn it_lowercases_text() {
 			assert_eq!(v[3].0, "this");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }

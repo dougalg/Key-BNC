@@ -4,7 +4,7 @@ use crate::KeyBNCPreTokenizer;
 fn it_splits_single_quotes_after_numbers() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("'adventure 2'adventure");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 3);
 			assert_eq!(v[0], "adventure");
@@ -12,7 +12,7 @@ fn it_splits_single_quotes_after_numbers() {
 			assert_eq!(v[2], "adventure");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -21,7 +21,7 @@ fn it_splits_single_quotes_after_numbers() {
 fn it_keeps_single_quotes_inside_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("you're fine, fire-truck!");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 5);
 			assert_eq!(v[0], "you");
@@ -31,7 +31,7 @@ fn it_keeps_single_quotes_inside_strings() {
 			assert_eq!(v[4], "truck");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -39,7 +39,7 @@ fn it_keeps_single_quotes_inside_strings() {
 fn it_keeps_single_quotes_at_the_end_of_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("this is a 'quotation'.");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 4);
 			assert_eq!(v[0], "this");
@@ -48,7 +48,7 @@ fn it_keeps_single_quotes_at_the_end_of_strings() {
 			assert_eq!(v[3], "quotation");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -57,7 +57,7 @@ fn it_keeps_single_quotes_at_the_end_of_strings() {
 fn it_removes_double_quotes_strings() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("so is \"this\".");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 3);
 			assert_eq!(v[0], "so");
@@ -65,7 +65,7 @@ fn it_removes_double_quotes_strings() {
 			assert_eq!(v[2], "this");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -74,7 +74,7 @@ fn it_removes_double_quotes_strings() {
 fn it_keeps_numbers_together() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("there are 100,000,000,0000 words in the bnc.");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 7);
 			assert_eq!(v[0], "there");
@@ -86,7 +86,7 @@ fn it_keeps_numbers_together() {
 			assert_eq!(v[6], "bnc");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -95,7 +95,7 @@ fn it_keeps_numbers_together() {
 fn it_still_removes_punctuation() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("\"'tis!\" replied aunt helga.");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 4);
 			assert_eq!(v[0], "tis");
@@ -104,7 +104,7 @@ fn it_still_removes_punctuation() {
 			assert_eq!(v[3], "helga");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
@@ -113,7 +113,7 @@ fn it_still_removes_punctuation() {
 fn it_still_continues_to_remove_punctuation() {
 	let pt = Box::new(KeyBNCPreTokenizer::new());
 	let mut normalized = String::from("don't tell someone what they can or can't do");
-	match pt.pre_tokenize(&mut normalized) {
+	match pt.tokenize(&mut normalized) {
 		Ok(v) => {
 			assert_eq!(v.len(), 11);
 			assert_eq!(v[0], "don");
@@ -129,7 +129,7 @@ fn it_still_continues_to_remove_punctuation() {
 			assert_eq!(v[10], "do");
 		},
 		Err(_e) => {
-			unreachable!("The pre_tokenizer should not error out here.");
+			unreachable!("The tokenizer should not error out here.");
 		}
 	}
 }
