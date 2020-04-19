@@ -1,4 +1,14 @@
 use std::result::Result;
+use unicase::UniCase;
+use counter::Counter;
+
+
+#[derive(Debug)]
+struct CorpusPart<'a> {
+	percent_of_total: f32,
+	word_count: usize,
+	words: Counter<UniCase<&'a String>>
+}
 
 pub struct KeyBNCPreTokenizer {}
 
@@ -14,6 +24,16 @@ const STRING_WORD_BREAKS: [char; 10] = [ '“', '”', '‘', '’', '…', '"',
 impl KeyBNCPreTokenizer {
 	pub fn new() -> Self {
 		KeyBNCPreTokenizer {}
+	}
+
+	pub fn collect(&self, results: &Vec<String>) {
+		let cp = CorpusPart {
+			percent_of_total: 0.0,
+			word_count: results.len(),
+			words: results.iter()
+				.map(|w| UniCase::new(w))
+				.collect::<Counter<_>>()
+		};
 	}
 
 	pub fn pre_tokenize(&self, normalized: &mut String) -> Result<Vec<String>, &'static str> {
