@@ -20,9 +20,12 @@ impl KeyBNCPreTokenizer {
 		let mut words = vec![];
 		let mut word = Vec::with_capacity(1000);
 		let mut current_word_type = WordType::String;
+		let mut had_single_quote = false;
 
 		normalized.chars().for_each(|curr_char| {
 			let is_new_word = word.is_empty();
+			had_single_quote = had_single_quote || curr_char == '\'';
+
 			if is_new_word && curr_char.is_digit(10) {
 				current_word_type = WordType::Number;
 			}
@@ -43,10 +46,16 @@ impl KeyBNCPreTokenizer {
 
 			if should_end_word && !word.is_empty() {
 				current_word_type = WordType::String;
-				for w in get_finalized_words(&word) {
-					words.push(w);
+				if had_single_quote {
+					for w in get_finalized_words(&word) {
+						words.push(w);
+					}
+				}
+				else {
+					words.push(word.drain(0..).collect::<String>());
 				}
 				word.clear();
+				had_single_quote = false;
 			}
 		});
 
