@@ -5,17 +5,8 @@ use std::fs::{read_dir, DirEntry};
 use std::io;
 use std::path::Path;
 use std::env;
-use tokenizer::key_bnc_split::KeyBNCPreTokenizer;
-use counter::Counter;
+use tokenizer::key_bnc_split::{tokenize, collect};
 use std::fs::{read_to_string};
-use unicase::UniCase;
-
-#[derive(Debug)]
-struct CorpusPart<'a> {
-	percent_of_total: f32,
-	word_count: usize,
-	words: Counter<UniCase<&'a String>>
-}
 
 fn main() {
 	let args: Vec<String> = env::args().collect();
@@ -31,17 +22,9 @@ fn process_file(entry: &DirEntry) {
 	let mut contents = read_to_string(entry.path())
 		.expect("Could not load contents.");
 
-	let tokenizer = KeyBNCPreTokenizer::new();
-
-	match tokenizer.tokenize(&mut contents) {
+	match tokenize(&mut contents) {
 		Ok(results) => {
-			let cp = CorpusPart {
-				percent_of_total: 0.0,
-				word_count: results.len(),
-				words: results.iter()
-					.map(|w| UniCase::new(w))
-					.collect::<Counter<_>>()
-			};
+			let cp = collect(&results);
 			// println!("{:#?}", cp);
 		},
 		Err(e) => {
