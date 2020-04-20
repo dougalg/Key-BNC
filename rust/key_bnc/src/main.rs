@@ -1,49 +1,61 @@
 #![feature(test)]
 mod tokenizer;
 
-use std::fs::{read_dir, DirEntry};
+extern crate walkdir;
+
+// use std::fs::{read_dir, DirEntry};
 use std::io;
 use std::path::Path;
 use std::env;
 use tokenizer::key_bnc_split::{tokenize, collect};
 use std::fs::{read_to_string};
+use unicase::UniCase;
+use counter::Counter;
+use walkdir::{WalkDir, DirEntry};
+
+#[derive(Debug)]
+struct Corpus<'a> {
+	words: Counter<UniCase<&'a String>>,
+	parts: Vec<CorpusPart>
+}
+
+#[derive(Debug)]
+pub struct CorpusPart {
+	percent_of_total: f32,
+	word_count: usize,
+	words: Counter<UniCase<String>>
+}
 
 fn main() {
 	let args: Vec<String> = env::args().collect();
 	let root_dir = &args[1];
 	println!("Reading {:#?}", root_dir);
 	let dir = Path::new(root_dir);
-	visit_dirs(dir, &process_file)
-		.expect("fffuuuu");
+
+	// visit_dirs(dir, &process_file)
+	// 	.expect("fffuuuu");
+
+	for entry in WalkDir::new(dir)
+		.follow_links(true)
+		.into_iter()
+		.filter_map(|e| e.ok()) {
+
+		process_file(&entry);
+	}
 }
 
-fn process_file(entry: &DirEntry) {
+fn process_file(entry: &DirEntry) -> CorpusPart {
 	println!("Attempting to read {:#?}", entry.path());
 	let mut contents = read_to_string(entry.path())
 		.expect("Could not load contents.");
 
-	match tokenize(&mut contents) {
-		Ok(results) => {
-			let cp = collect(&results);
-			// println!("{:#?}", cp);
-		},
-		Err(e) => {
-			// println!("b {:?}", e);
-		}
-	}
-}
+	let tokens = tokenize(&mut contents);
+	let word_count = tokens.len();
+	let counted_words = collect(tokens);
 
-fn visit_dirs(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
-	if dir.is_dir() {
-		for entry in read_dir(dir)? {
-			let entry = entry?;
-			let path = entry.path();
-			if path.is_dir() {
-				visit_dirs(&path, cb)?;
-			} else {
-				cb(&entry);
-			}
-		}
+	CorpusPart {
+		word_count,
+		words: counted_words,
+		percent_of_total: 0.0
 	}
-	Ok(())
 }

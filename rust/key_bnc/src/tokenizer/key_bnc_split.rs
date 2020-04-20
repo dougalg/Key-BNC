@@ -4,13 +4,6 @@ use counter::Counter;
 
 
 #[derive(Debug)]
-struct CorpusPart<'a> {
-	percent_of_total: f32,
-	word_count: usize,
-	words: Counter<UniCase<&'a String>>
-}
-
-#[derive(Debug)]
 enum WordType {
 	String,
 	Number,
@@ -19,17 +12,13 @@ enum WordType {
 const ADDITIONAL_VALID_NUMERIC_CHARS: [char; 3] = [ ':', ',', '.' ];
 const STRING_WORD_BREAKS: [char; 10] = [ '“', '”', '‘', '’', '…', '"', '–', '•', '—', '′' ];
 
-pub fn collect(results: &Vec<String>) {
-	let cp = CorpusPart {
-		percent_of_total: 0.0,
-		word_count: results.len(),
-		words: results.iter()
-			.map(|w| UniCase::new(w))
-			.collect::<Counter<_>>()
-	};
+pub fn collect(results: Vec<String>) -> Counter<UniCase<String>> {
+	results.into_iter()
+		.map(|w| UniCase::new(w))
+		.collect::<Counter<_>>()
 }
 
-pub fn tokenize(normalized: &mut String) -> Result<Vec<String>, &'static str> {
+pub fn tokenize(normalized: &mut String) -> Vec<String> {
 	let mut words = vec![];
 	let mut word = Vec::with_capacity(1000);
 	let mut current_word_type = WordType::String;
@@ -78,7 +67,7 @@ pub fn tokenize(normalized: &mut String) -> Result<Vec<String>, &'static str> {
 		}
 	}
 
-	Ok(words)
+	words
 }
 
 fn clean_single_quotes(orig_word: &[char]) -> Vec<String> {
