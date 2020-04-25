@@ -1,4 +1,3 @@
-use std::result::Result;
 use unicase::UniCase;
 use counter::Counter;
 
@@ -14,7 +13,7 @@ const STRING_WORD_BREAKS: [char; 10] = [ '“', '”', '‘', '’', '…', '"',
 
 pub fn collect(results: Vec<String>) -> Counter<UniCase<String>> {
 	results.into_iter()
-		.map(|w| UniCase::new(w))
+		.map(UniCase::new)
 		.collect::<Counter<_>>()
 }
 
@@ -71,20 +70,20 @@ pub fn tokenize(normalized: &mut String) -> Vec<String> {
 }
 
 fn clean_single_quotes(orig_word: &[char]) -> Vec<String> {
-let mut result = vec![];
-let mut word = Vec::with_capacity(1000);
-orig_word.iter().rev().for_each(|curr_char| {
-	if result.is_empty() && word.is_empty() && (STRING_WORD_BREAKS.contains(&curr_char) || curr_char.is_ascii_punctuation()) {
-		return;
-	}
-	word.push(curr_char);
-	if curr_char == &'\'' && !word.is_empty() {
-		word.reverse();
-		result.push(word.drain(0..).collect::<String>());
-	}
-});
-word.reverse();
-result.push(word.drain(0..).collect::<String>());
-result.reverse();
-result
+	let mut result = vec![];
+	let mut word = Vec::with_capacity(1000);
+	orig_word.iter().rev().for_each(|curr_char| {
+		if result.is_empty() && word.is_empty() && (STRING_WORD_BREAKS.contains(&curr_char) || curr_char.is_ascii_punctuation()) {
+			return;
+		}
+		word.push(curr_char);
+		if curr_char == &'\'' && !word.is_empty() {
+			word.reverse();
+			result.push(word.drain(0..).collect::<String>());
+		}
+	});
+	word.reverse();
+	result.push(word.drain(0..).collect::<String>());
+	result.reverse();
+	result
 }

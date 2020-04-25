@@ -1,6 +1,6 @@
 [package]
-name = "key_bnc"
-version = "1.3.0"
+name = "wasm-test-project"
+version = "0.1.0"
 authors = ["dougalg <dougalg@gmail.com>"]
 edition = "2018"
 
@@ -12,9 +12,6 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 wasm-bindgen = "0.2"
-counter = "0.4.3"
-unicase = "2.6.0"
-key_bnc_utils = { path = "../key_bnc_utils" }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
