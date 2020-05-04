@@ -1,3 +1,5 @@
+use std::f64::{INFINITY};
+
 pub fn log_likelyhood(target_freq: f64, target_corpus_size: f64, comparison_freq: f64, comparison_corpus_size: f64) -> f64 {
 	let f1mil_1 = target_freq / target_corpus_size * 1_000_000.0;
 	let f1mil_2 = comparison_freq / comparison_corpus_size * 1_000_000.0;
@@ -19,8 +21,29 @@ pub fn log_likelyhood(target_freq: f64, target_corpus_size: f64, comparison_freq
 	ll
 }
 
-pub fn odds_ratio() -> f64 {
-	123.0
+pub fn odds_ratio(
+	target_freq: f64,
+	target_corpus_size: f64,
+	comparison_freq: f64,
+	comparison_corpus_size: f64,
+	zero_adjustment: f64,
+) -> f64 {
+	let mut a = target_freq;
+	let mut b = target_corpus_size - target_freq;
+	let mut c = comparison_freq;
+	let mut d = comparison_corpus_size - comparison_freq;
+
+	if b == 0.0 || c == 0.0 || d == 0.0 {
+		a += zero_adjustment;
+		b += zero_adjustment;
+		c += zero_adjustment;
+		d += zero_adjustment;
+	}
+
+	if b == 0.0 || c == 0.0 || d == 0.0 {
+		return INFINITY
+	}
+	(a/b)/(c/d)
 }
 
 pub fn dispersion() -> f64 {
