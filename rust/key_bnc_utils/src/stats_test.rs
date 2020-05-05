@@ -2,8 +2,8 @@ use std::f64::{INFINITY};
 use crate::stats::{
 	log_likelyhood,
 	odds_ratio,
+	dispersion_normalized,
 	dispersion,
-	dp,
 	logdivision,
 };
 
@@ -63,5 +63,47 @@ fn dp_1() {
 		(0.22, 5.0),
 	];
 	let f = 15.0;
-	assert_eq!(dp(&s_v, f), 0.18);
+	assert_eq!(dispersion(&s_v, f), 0.18);
+}
+
+#[test]
+fn dispersion_normalized_1() {
+	let s_v = vec![
+		(0.18, 1.0),
+		(0.2, 2.0),
+		(0.2, 3.0),
+		(0.2, 4.0),
+		(0.22, 5.0),
+	];
+	let f = 15.0;
+	assert_eq!(dispersion_normalized(&s_v, f), 0.219_512_195_121_951_2);
+}
+
+#[test]
+fn dispersion_normalized_2() {
+	let s_v = vec![
+		(0.9, 9.0),
+		(0.1, 1.0),
+	];
+	let f = 10.0;
+	assert_eq!(dispersion_normalized(&s_v, f), 0.0);
+}
+
+#[test]
+fn dispersion_normalized_3() {
+	let s_v = vec![
+		(0.9, 10.0),
+		(0.1, 0.0),
+	];
+	let f = 10.0;
+	assert_eq!(dispersion_normalized(&s_v, f), 0.111_111_111_111_111_1);
+}
+
+#[test]
+fn dispersion_normalized_4() {
+	let s_v = vec![
+		(1.0, 10.0),
+	];
+	let f = 10.0;
+	assert_eq!(dispersion_normalized(&s_v, f), 0.0);
 }

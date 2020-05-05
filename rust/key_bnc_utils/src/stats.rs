@@ -46,10 +46,6 @@ pub fn odds_ratio(
 	(a/b)/(c/d)
 }
 
-pub fn dispersion() -> f64 {
-	123.0
-}
-
 pub fn logdivision(target_freq: f64, expected_freq: f64) -> f64 {
 	if expected_freq == 0.0 {
 		return 0.0
@@ -58,11 +54,23 @@ pub fn logdivision(target_freq: f64, expected_freq: f64) -> f64 {
 	res.ln()
 }
 
-pub fn dp(s_v: &[(f64, f64)], f: f64) -> f64 {
+pub fn dispersion_normalized(s_v: &[(f64, f64)], f: f64) -> f64 {
+	let min_s = s_v.iter()
+		.map(|(s, _v)| s)
+		.cloned()
+		.fold(1.0, f64::min);
+
+	if min_s >= 1.0 {
+		return 0.0;
+	}
+
+	dispersion(s_v, f) / (1.0 - min_s)
+}
+
+
+pub fn dispersion(s_v: &[(f64, f64)], f: f64) -> f64 {
 	let calculated_parts: f64 = s_v.iter()
-		.map(|(s, v)| {
-			calculate_part_value(*s, *v, f)
-		})
+		.map(|(s, v)| calculate_part_value(*s, *v, f))
 		.sum();
 
 	0.5 * calculated_parts
