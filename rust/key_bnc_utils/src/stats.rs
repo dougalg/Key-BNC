@@ -57,3 +57,17 @@ pub fn logdivision(target_freq: f64, expected_freq: f64) -> f64 {
 	let res = target_freq / expected_freq;
 	res.ln()
 }
+
+pub fn dp(s_v: &[(f64, f64)], f: f64) -> f64 {
+	let calculated_parts: f64 = s_v.iter()
+		.map(|(s, v)| {
+			calculate_part_value(*s, *v, f)
+		})
+		.sum();
+
+	0.5 * calculated_parts
+}
+
+fn calculate_part_value(size_percentage: f64, frequency: f64, overall_frequency: f64) -> f64 {
+	((frequency / overall_frequency) - size_percentage).abs()
+}

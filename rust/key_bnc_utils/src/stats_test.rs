@@ -3,6 +3,7 @@ use crate::stats::{
 	log_likelyhood,
 	odds_ratio,
 	dispersion,
+	dp,
 	logdivision,
 };
 
@@ -50,4 +51,17 @@ fn odds_ratio_4_zero_adjustment() {
 fn odds_ratio_5() {
 	let ten: f64 = 10.0;
 	assert_eq!(odds_ratio(1.0, 10_000_000.0, ten.powi(-9), 1_000_000_000_000.0, 0.0), 100_000_010_000_000.98);
+}
+
+#[test]
+fn dp_1() {
+	let s_v = vec![
+		(0.18, 1.0),
+		(0.2, 2.0),
+		(0.2, 3.0),
+		(0.2, 4.0),
+		(0.22, 5.0),
+	];
+	let f = 15.0;
+	assert_eq!(dp(&s_v, f), 0.18);
 }
