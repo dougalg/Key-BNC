@@ -84,9 +84,9 @@ fn main() {
 		})
 		.collect();
 
-	// println!("{:#?}", results);
-	// println!("{:#?}", total_num_tokens);
-	// println!("{:#?}", bnc_counts.len());
+	println!("{:#?}", total_num_tokens);
+	println!("{:#?}", bnc_counts.len());
+	println!("{:#?}", results);
 }
 
 #[derive(Debug)]

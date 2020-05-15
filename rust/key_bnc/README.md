@@ -2,10 +2,11 @@
 
 ## Installing
 
-????
+1. Install wasm-pack
+2. Install dependencies: `cargo update`
 
 ## Building
 
 ```sh
-cargo +nightly run wasm-pack build
+wasm-pack build
 ```

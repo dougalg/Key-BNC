@@ -1,0 +1,6 @@
+Reading "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/"
+Attempting to read "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/5.txt"
+Attempting to read "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/4.txt"
+Attempting to read "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/3.txt"
+Attempting to read "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/2.txt"
+Attempting to read "/Users/dougal/Projects/Key-BNC/rust/key_bnc_utils/sample_data/parts/1.txt"

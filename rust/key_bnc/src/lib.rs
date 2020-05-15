@@ -6,7 +6,7 @@ use web_sys::FileReader;
 use key_bnc_utils::utils::{tokenize, collect};
 // use js_sys::Array;
 // use unicase::UniCase;
-use counter::Counter;
+// use counter::Counter;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -22,21 +22,6 @@ pub struct CorpusPart {
 	word_count: usize,
 	word_counter: HashMap<String, usize>
 }
-
-// #[wasm_bindgen]
-// impl CorpusPart {
-// 	pub fn get_percent_of_total(&self) -> f32 {
-// 		self.percent_of_total
-// 	}
-
-// 	pub fn get_word_count(&self) -> usize {
-// 		self.word_count
-// 	}
-
-// 	pub fn get_word_counter(&self) -> Vec<(String, usize)> {
-// 		self.word_counter
-// 	}
-// }
 
 #[wasm_bindgen]
 pub fn count_file(file: FileReader) -> JsValue {
