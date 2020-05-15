@@ -12,6 +12,7 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 counter = "0.4.3"
+csv = "1.1.3"
 unicase = "2.6.0"
 js-sys = "0.3.37"
 unicase_serde = "0.1.0"

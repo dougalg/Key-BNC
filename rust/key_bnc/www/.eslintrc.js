@@ -12,10 +12,18 @@ module.exports = {
 		ecmaVersion: 2020
 	},
 	rules: {
-			indent: ['error', 'tab'],
-			'no-tabs': ['error', { allowIndentationTabs: true }],
-			'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-			'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+		'comma-dangle': ['error', {
+			arrays: 'always-multiline',
+			objects: 'always-multiline',
+			imports: 'always-multiline',
+			exports: 'always-multiline',
+			functions: 'always-multiline',
+		}],
+		'operator-linebreak': ['error', "before"],
+		indent: ['error', 'tab'],
+		'no-tabs': ['error', { allowIndentationTabs: true }],
+		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
 	},
 	ignorePatterns: ['../pkg/**/*'],
 }
