@@ -18,6 +18,11 @@ fn ll_2() {
 }
 
 #[test]
+fn ll_3() {
+	assert_eq!(log_likelyhood(9.0, 1_929.0, 0.0, 99_827_948.0), 0.0);
+}
+
+#[test]
 fn logdivision_1() {
 	assert_eq!(logdivision(12.0, 4.0), 1.098_612_288_668_109_8);
 }
@@ -51,6 +56,11 @@ fn odds_ratio_4_zero_adjustment() {
 fn odds_ratio_5() {
 	let ten: f64 = 10.0;
 	assert_eq!(odds_ratio(1.0, 10_000_000.0, ten.powi(-9), 1_000_000_000_000.0, 0.0), 100_000_010_000_000.98);
+}
+
+#[test]
+fn odds_ratio_6() {
+	assert_eq!(odds_ratio(9.0, 1_929.0, 0.0, 99_827_948.0, 0.0), INFINITY);
 }
 
 #[test]

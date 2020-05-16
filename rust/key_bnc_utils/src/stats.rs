@@ -14,6 +14,10 @@ pub fn log_likelyhood(target_freq: f64, target_corpus_size: f64, comparison_freq
 
 	let ll = 2.0 * ((target_freq * log1) + (comparison_freq * log2));
 
+	if f64::is_nan(ll) {
+		return 0.0
+	}
+
 	if f1mil_1 < f1mil_2 {
 		return -ll
 	}
@@ -40,7 +44,7 @@ pub fn odds_ratio(
 		d += zero_adjustment;
 	}
 
-	if b == 0.0 || c == 0.0 || d == 0.0 {
+	if a == 0.0 || b == 0.0 || c == 0.0 || d == 0.0 {
 		return INFINITY
 	}
 	(a/b)/(c/d)

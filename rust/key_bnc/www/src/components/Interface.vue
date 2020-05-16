@@ -9,6 +9,25 @@
 		<button @click="updateStats">
 			Update Stats
 		</button>
+		<table>
+			<tr>
+				<th>Word</th>
+				<th>Count</th>
+				<th>Log Likelyhood</th>
+				<th>Odds Ratio</th>
+				<th>Dispersion</th>
+			</tr>
+			<tr
+				v-for="d in data"
+				:key="d.word"
+			>
+				<td>{{ d.word }}</td>
+				<td>{{ d.count }}</td>
+				<td>{{ trunc(d.log_likelyhood) }}</td>
+				<td>{{ formatOr(d.odds_ratio) }}</td>
+				<td>{{ trunc(d.dispersion) }}</td>
+			</tr>
+		</table>
 	</div>
 </template>
 
@@ -16,10 +35,22 @@
 import { Component, Prop, Vue, Ref } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
 
+const MAX_ITEMS = 1000
+
+interface WordStats {
+	word: string;
+	count: number;
+	log_likelyhood: number;
+	odds_ratio: number;
+	dispersion: number;
+}
+
 @Component
 export default class HelloWorld extends Vue {
 	@Ref() readonly input!: HTMLInputElement
 	@Prop() private keyBnc!: KeyBnc
+
+	data: Array<WordStats> = []
 
 	onFileChange () {
 		if (this.input.files === null) {
@@ -45,24 +76,31 @@ export default class HelloWorld extends Vue {
 
 	updateStats () {
 		console.log(this.keyBnc.get_stats())
+		const data = (this.keyBnc.get_stats() as Array<WordStats>)
+			.sort((a, b) => b.count - a.count)
+		data.splice(MAX_ITEMS)
+		this.data = data
+	}
+
+	formatOr (n: number | null) {
+		if (n == null) {
+			return '∞'
+		}
+		return this.trunc(n)
+	}
+
+	trunc (n: number) {
+		return n.toFixed(4)
 	}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+tr > td {
+	text-align: left;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+tr > td:nth-child(2) {
+	text-align: right;
 }
 </style>

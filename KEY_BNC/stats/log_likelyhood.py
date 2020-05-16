@@ -18,6 +18,9 @@ def LL(target_freq, target_corpus_size, comparison_freq, comparison_corpus_size)
 
 	>>> LL(200, 80000, 2546, 10000000)
 	542.1871524060532
+
+	>>> LL(9.0, 1_929.0, 0.0, 99_827_948.0)
+	0.0
 	"""
 
 	target_freq, target_corpus_size, comparison_freq, comparison_corpus_size = float(target_freq), float(target_corpus_size), float(comparison_freq), float(comparison_corpus_size)
