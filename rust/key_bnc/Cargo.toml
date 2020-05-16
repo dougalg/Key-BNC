@@ -20,7 +20,7 @@ key_bnc_utils = { path = "../key_bnc_utils" }
 serde = "^1.0.59"
 serde_derive = "^1.0.59"
 wasm-bindgen = { version = "0.2", features = [ "serde-serialize" ] }
-web-sys = { version = "0.3", features = [ "FileReader", "Blob" ] }
+web-sys = { version = "0.3", features = [ "FileReader", "Blob", "console" ] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires

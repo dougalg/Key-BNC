@@ -4,6 +4,7 @@ use serde_derive::{Serialize};
 use wasm_bindgen::prelude::*;
 use web_sys::FileReader;
 use key_bnc_utils::utils::{tokenize, collect};
+use key_bnc_utils::stats::{odds_ratio, log_likelyhood, dispersion_normalized};
 use unicase::UniCase;
 use counter::Counter;
 use csv::Reader;
@@ -45,12 +46,12 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[derive(Debug)]
 pub struct CorpusPart {
-	percent_of_total: f64,
 	token_count: usize,
 	word_counts: Counter<UniCase<String>>,
 }
 
 #[derive(Debug)]
+#[derive(Serialize)]
 pub struct WordStats {
 	word: String,
 	count: usize,
@@ -132,9 +133,40 @@ impl KeyBnc {
 		self.has_loaded_bnc_data = true;
 	}
 
-	// pub fn get_stats(&mut self) -> JsValue {
-
-	// }
+	pub fn get_stats(&mut self) -> JsValue {
+		// calculate percentages for each entry into a hashMap by entry id
+		let entry_percentages: HashMap<&i32, f64> = self.entries.iter()
+			.map(|(id, entry)| (id, entry.token_count as f64 / self.total_num_tokens_in_user_corpus as f64))
+			.collect();
+		let res: Vec<WordStats> = self.user_corpus_words_counts
+			.iter()
+			.map(|(word, count)| {
+				let count_in_bnc = match self.bnc_counts.get(&word) {
+					Some(val) => *val as f64,
+					None => 0.0,
+				};
+				// [(part_percentage, part_freq)]
+				let part_data: Vec<(f64, f64)> = self.entries.iter()
+					.map(|(id, entry)| {
+						let count_for_part = match entry.word_counts.get(&word) {
+							Some(val) => *val as f64,
+							None => 0.0,
+						};
+						(*entry_percentages.get(id).unwrap(), count_for_part)
+					})
+					.collect();
+				web_sys::console::log_1(&JsValue::from_serde(&part_data).unwrap());
+				WordStats {
+					count: *count,
+					word: word.clone().into_inner(),
+					log_likelyhood: log_likelyhood(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64),
+					odds_ratio: odds_ratio(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64, 0.0),
+					dispersion: dispersion_normalized(&part_data, *count as f64),
+				}
+			})
+			.collect();
+		JsValue::from_serde(&res).unwrap()
+	}
 }
 
 fn process_file(tokens: Vec<String>) -> CorpusPart {
@@ -144,7 +176,6 @@ fn process_file(tokens: Vec<String>) -> CorpusPart {
 	CorpusPart {
 		token_count,
 		word_counts: counted_words,
-		percent_of_total: 0.0
 	}
 }
 

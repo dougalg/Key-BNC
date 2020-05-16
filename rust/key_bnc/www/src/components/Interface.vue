@@ -1,10 +1,15 @@
 <template>
-	<input
-		ref="input"
-		type="file"
-		multiple
-		@change="onFileChange"
-	/>
+	<div>
+		<input
+			ref="input"
+			type="file"
+			multiple
+			@change="onFileChange"
+		/>
+		<button @click="updateStats">
+			Update Stats
+		</button>
+	</div>
 </template>
 
 <script lang="ts">
@@ -36,6 +41,10 @@ export default class HelloWorld extends Vue {
 			console.log(this.keyBnc.get_token_count(), someId)
 		}
 		fileReader.readAsText(f)
+	}
+
+	updateStats () {
+		console.log(this.keyBnc.get_stats())
 	}
 }
 </script>
