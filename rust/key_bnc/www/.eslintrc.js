@@ -1,15 +1,15 @@
 module.exports = {
 	root: true,
 	env: {
-		node: true
+		node: true,
 	},
 	extends: [
 		'plugin:vue/essential',
 		'@vue/standard',
-		'@vue/typescript/recommended'
+		'@vue/typescript/recommended',
 	],
 	parserOptions: {
-		ecmaVersion: 2020
+		ecmaVersion: 2020,
 	},
 	rules: {
 		'comma-dangle': ['error', {
@@ -19,11 +19,11 @@ module.exports = {
 			exports: 'always-multiline',
 			functions: 'always-multiline',
 		}],
-		'operator-linebreak': ['error', "before"],
+		'operator-linebreak': ['error', 'before'],
 		indent: ['error', 'tab'],
 		'no-tabs': ['error', { allowIndentationTabs: true }],
 		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 	},
 	ignorePatterns: ['../pkg/**/*'],
 }

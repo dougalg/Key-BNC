@@ -4,7 +4,7 @@ module.exports = {
 			.rule('csv')
 			.test(/\.csv$/)
 			.use('raw-loader')
-				.loader('raw-loader')
-				.end()
-	}
+			.loader('raw-loader')
+			.end()
+	},
 }
