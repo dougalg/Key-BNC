@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../key_bnc_cli"
+		},
+		{
+			"path": "../key_bnc_utils"
+		},
+		{
+			"path": "../public"
+		}
+	]
+}
