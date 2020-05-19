@@ -25,13 +25,15 @@ pub struct CorpusPart {
 #[derive(Serialize)]
 pub struct WordStats {
 	word: String,
-	count: usize,
+	frequency: usize,
+	frequency_bnc: usize,
 	log_likelyhood: f64,
 	odds_ratio: f64,
 	dispersion: f64,
 }
 
 #[wasm_bindgen]
+#[derive(Default)]
 pub struct KeyBnc {
 	last_id: i32,
 	has_loaded_bnc_data: bool,
@@ -45,15 +47,7 @@ pub struct KeyBnc {
 #[wasm_bindgen]
 impl KeyBnc {
 	pub fn new() -> KeyBnc {
-		KeyBnc {
-			last_id: 0,
-			has_loaded_bnc_data: false,
-			entries: HashMap::new(),
-			bnc_counts: HashMap::new(),
-			total_num_tokens_in_bnc: 0,
-			total_num_tokens_in_user_corpus: 0,
-			user_corpus_words_counts: Counter::new(),
-		}
+		Default::default()
 	}
 
 	fn get_next_id(&mut self) -> i32 {
@@ -127,7 +121,8 @@ impl KeyBnc {
 					})
 					.collect();
 				WordStats {
-					count: *count,
+					frequency: *count,
+					frequency_bnc: count_in_bnc as usize,
 					word: word.clone().into_inner(),
 					log_likelyhood: log_likelyhood(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64),
 					odds_ratio: odds_ratio(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64, 0.0),

@@ -1,10 +1,10 @@
 <template>
-	<div id="app">
+	<main id="app">
 		<key-bnc-interface
 			v-if="isReady"
 			:key-bnc="keyBnc"
 		/>
-	</div>
+	</main>
 </template>
 
 <script lang="ts">
@@ -53,10 +53,29 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+html {
+	font-size: 62.5%;
+}
+
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
+
+	font-size: 1.6rem;
+}
+
+button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border: none;
+	padding: 1rem 2rem;
+	margin: 0;
+	text-decoration: none;
+	background: white;
+	color: black;
+	text-align: center;
+	cursor: pointer;
 }
 </style>

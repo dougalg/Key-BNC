@@ -1,0 +1,47 @@
+<template>
+	<button
+		type="button"
+		class="nav-tab"
+		:aria-selected="isSelected.toString()"
+		:class="{
+			'is-selected': isSelected,
+		}"
+	>
+		<slot />
+	</button>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
+
+@Component
+export default class NavButton extends Vue {
+	@Prop() readonly isSelected!: boolean
+}
+</script>
+
+<style lang="scss" scoped>
+.nav-tab + .nav-tab {
+	margin-left: 1rem;
+}
+.nav-tab {
+	background: none;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-color: black;
+	border-width: 1px;
+	border-style: solid;
+
+	&.is-selected {
+		position: relative;
+		z-index: 1;
+		border-bottom-color: white;
+	}
+
+	&:hover,
+	&:focus {
+		background-color: #eee;
+		border-bottom-color: #eee;
+	}
+}
+</style>

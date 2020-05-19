@@ -1,0 +1,76 @@
+<template>
+	<div>
+		<form ref="form">
+			<input
+				ref="input"
+				type="file"
+				multiple
+				@change="onFileChange"
+			/>
+		</form>
+		<ul>
+			<li
+				v-for="f in allFiles"
+				:key="f.id"
+			>
+				<span>{{ f.name }}</span>
+				<button @click="removeFile(f.id)">
+					Remove
+				</button>
+			</li>
+		</ul>
+	</div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue, Ref } from 'vue-property-decorator'
+import { KeyBnc } from '../../../pkg/key_bnc'
+
+interface FileObject {
+	name: string;
+	id: number;
+}
+
+@Component
+export default class ManageCorpus extends Vue {
+	@Ref() readonly form!: HTMLFormElement
+	@Ref() readonly input!: HTMLInputElement
+	@Prop() private keyBnc!: KeyBnc
+
+	private allFiles: Array<FileObject> = []
+
+	onFileChange () {
+		if (this.input.files === null) {
+			return
+		}
+
+		for (let i = 0; i < this.input.files.length; i++) {
+			const f = this.input.files[i]
+			if (f !== null) {
+				this.processFile(f)
+			}
+		}
+
+		this.form.reset()
+	}
+
+	processFile (f: File) {
+		const fileReader = new FileReader()
+		const name = f.name
+		fileReader.onloadend = () => {
+			const id = this.keyBnc.add_entry(fileReader)
+			this.allFiles.push({
+				id,
+				name,
+			})
+		}
+		fileReader.readAsText(f)
+		this.$emit('corpus-changed')
+	}
+
+	removeFile (toRemove: number) {
+		this.keyBnc.remove_entry(toRemove)
+		this.allFiles = this.allFiles.filter(({ id }) => id !== toRemove)
+	}
+}
+</script>
