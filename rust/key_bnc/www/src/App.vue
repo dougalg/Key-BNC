@@ -78,4 +78,13 @@ button {
 	text-align: center;
 	cursor: pointer;
 }
+
+.no-outline {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &::-moz-focus-inner {
+        border: 0;
+    }
+}
 </style>

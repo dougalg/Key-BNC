@@ -8,13 +8,17 @@
 				@change="onFileChange"
 			/>
 		</form>
-		<ul>
+		<ul class="file-list">
 			<li
 				v-for="f in allFiles"
 				:key="f.id"
+				class="file-list-item"
 			>
 				<span>{{ f.name }}</span>
-				<button @click="removeFile(f.id)">
+				<button
+					class="remove-button no-outline"
+					@click="removeFile(f.id)"
+				>
 					Remove
 				</button>
 			</li>
@@ -74,3 +78,25 @@ export default class ManageCorpus extends Vue {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.file-list {
+	> * + * {
+		margin-top: 1rem;
+	}
+}
+.file-list-item {
+	> * + * {
+		margin-left: 1rem;
+	}
+}
+.remove-button {
+	border-radius: 5px;
+	background-color: #eee;
+	border: 1px solid #eee;
+	&:hover,
+	&:focus {
+		border-color: #aaa;
+	}
+}
+</style>

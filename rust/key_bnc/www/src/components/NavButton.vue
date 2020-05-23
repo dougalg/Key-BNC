@@ -1,7 +1,7 @@
 <template>
 	<button
 		type="button"
-		class="nav-tab"
+		class="nav-tab no-outline"
 		:aria-selected="isSelected.toString()"
 		:class="{
 			'is-selected': isSelected,
