@@ -87,7 +87,6 @@ export default class Interface extends Vue {
 	}
 
 	showStatsView () {
-		console.log('clicked')
 		this.currentTab = Tabs.WORD_STATS
 		if (this.isDirty) {
 			this.isDirty = false
