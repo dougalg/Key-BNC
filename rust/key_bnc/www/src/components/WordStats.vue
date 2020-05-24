@@ -18,11 +18,11 @@
 				:key="d.word"
 			>
 				<td>{{ d.word }}</td>
-				<td>{{ d.frequency }}</td>
-				<td>{{ d.frequency_bnc }}</td>
-				<td>{{ trunc(d.log_likelyhood) }}</td>
+				<td>{{ numberFormat(d.frequency) }}</td>
+				<td>{{ numberFormat(d.frequency_bnc) }}</td>
+				<td>{{ numberFormat4(d.log_likelyhood) }}</td>
 				<td>{{ formatOddsRatio(d.odds_ratio) }}</td>
-				<td>{{ trunc(d.dispersion) }}</td>
+				<td>{{ numberFormat4(d.dispersion) }}</td>
 			</tr>
 		</table>
 	</div>
@@ -31,19 +31,31 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
+const formatter = (Intl && Intl.NumberFormat)
+	? new Intl.NumberFormat('en-CA')
+	: { format (n: number) { return n.toString() } }
+
+const formatter4 = (Intl && Intl.NumberFormat)
+	? new Intl.NumberFormat('en-CA', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
+	: { format (n: number) { return n.toFixed(4) } }
+
 @Component
 export default class WordStats extends Vue {
 	@Prop() wordStats!: Array<WordStats>
 
-	formatOddsRatio (n: number | null) {
+	formatOddsRatio (n: number | null): string {
 		if (n == null) {
 			return '∞'
 		}
-		return this.trunc(n)
+		return this.numberFormat4(n)
 	}
 
-	trunc (n: number) {
-		return n.toFixed(4)
+	numberFormat (n: number): string {
+		return formatter.format(n)
+	}
+
+	numberFormat4 (n: number): string {
+		return formatter4.format(n)
 	}
 }
 </script>

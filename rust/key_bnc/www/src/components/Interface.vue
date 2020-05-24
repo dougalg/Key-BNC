@@ -4,25 +4,27 @@
 			<header>
 				<h1>Key-BNC</h1>
 			</header>
-			<nav class="tab-nav">
-				<nav-button
-					:is-selected="currentTab === tabs.MANAGE_CORPUS"
-					@click.native="currentTab = tabs.MANAGE_CORPUS"
-				>
-					Manage Corpus
-				</nav-button>
-				<nav-button
-					:is-selected="currentTab === tabs.WORD_STATS"
-					@click.native="showStatsView"
-				>
-					Corpus Statistics
-				</nav-button>
-				<nav-button
-					:is-selected="currentTab === tabs.ABOUT"
-					@click.native="currentTab = tabs.ABOUT"
-				>
-					About
-				</nav-button>
+			<nav>
+				<div role="tablist" class="tab-nav">
+					<nav-button
+						:is-selected="currentTab === tabs.MANAGE_CORPUS"
+						@click.native="currentTab = tabs.MANAGE_CORPUS"
+					>
+						Manage Corpus
+					</nav-button>
+					<nav-button
+						:is-selected="currentTab === tabs.WORD_STATS"
+						@click.native="showStatsView"
+					>
+						Corpus Statistics
+					</nav-button>
+					<nav-button
+						:is-selected="currentTab === tabs.ABOUT"
+						@click.native="currentTab = tabs.ABOUT"
+					>
+						About
+					</nav-button>
+				</div>
 			</nav>
 		</div>
 		<div class="tab-container container">

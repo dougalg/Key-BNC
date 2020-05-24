@@ -1,5 +1,6 @@
 <template>
 	<button
+		role="tab"
 		type="button"
 		class="nav-tab no-outline"
 		:aria-selected="isSelected.toString()"

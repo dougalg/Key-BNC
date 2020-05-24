@@ -4,6 +4,7 @@
 			v-if="isReady"
 			:key-bnc="keyBnc"
 		/>
+		<bnc-loader v-else />
 	</main>
 </template>
 
@@ -11,8 +12,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { KeyBnc } from '../../pkg/key_bnc'
 import KeyBncInterface from '@/components/Interface.vue'
+import BncLoader from '@/components/BncLoader.vue'
 
-@Component({ components: { KeyBncInterface } })
+@Component({ components: { KeyBncInterface, BncLoader } })
 export default class App extends Vue {
 	keyBnc: KeyBnc | null = null
 	hasLoadedBncData = false

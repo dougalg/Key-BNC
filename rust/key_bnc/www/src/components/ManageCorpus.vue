@@ -2,9 +2,13 @@
 	<div>
 		<h2>Manage Corpus</h2>
 		<form ref="form">
+			<label for="fileinput">
+				Add files:
+			</label>
 			<input
 				ref="input"
 				type="file"
+				id="fileinput"
 				multiple
 				@change="onFileChange"
 			/>
