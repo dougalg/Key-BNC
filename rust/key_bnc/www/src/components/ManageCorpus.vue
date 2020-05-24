@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<h2>Manage Corpus</h2>
 		<form ref="form">
 			<input
 				ref="input"
@@ -8,6 +9,7 @@
 				@change="onFileChange"
 			/>
 		</form>
+		<p>{{ allFiles.length }} files loaded.</p>
 		<ul class="file-list">
 			<li
 				v-for="f in allFiles"

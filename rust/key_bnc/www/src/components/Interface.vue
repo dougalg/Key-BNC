@@ -15,7 +15,7 @@
 					:is-selected="currentTab === tabs.WORD_STATS"
 					@click.native="showStatsView"
 				>
-					View Statistics
+					Corpus Statistics
 				</nav-button>
 				<nav-button
 					:is-selected="currentTab === tabs.ABOUT"
@@ -118,6 +118,12 @@ h1 {
 	top: 2rem;
 	font-variant: small-caps;
 	pointer-events: none;
+
+	@media (max-width: 620px) {
+		font-size: 0.8em;
+		top: 0;
+		margin: 1rem 0 0 0;
+	}
 }
 
 .top {
@@ -129,6 +135,13 @@ h1 {
 	color: #fff;
 	font-size: 3em;
 	height: 2.85em;
+
+	@media (max-width: 620px) {
+		height: auto;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: end;
+	}
 }
 
 .container {
