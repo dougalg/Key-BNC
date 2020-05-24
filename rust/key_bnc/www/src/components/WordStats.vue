@@ -51,10 +51,9 @@ export default class WordStats extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 tr > td {
-	text-align: left;
-}
-tr > td:nth-child(2),
-tr > td:nth-child(3) {
 	text-align: right;
+}
+tr > td:first-child {
+	text-align: left;
 }
 </style>

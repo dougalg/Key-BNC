@@ -45,7 +45,7 @@ export default class App extends Vue {
 		window.setTimeout(pollFn, 20)
 	}
 
-	isReady (): boolean {
+	get isReady (): boolean {
 		return Boolean(this.keyBnc)
 			&& this.hasLoadedBncData
 	}

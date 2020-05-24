@@ -77,6 +77,7 @@ export default class ManageCorpus extends Vue {
 	removeFile (toRemove: number) {
 		this.keyBnc.remove_entry(toRemove)
 		this.allFiles = this.allFiles.filter(({ id }) => id !== toRemove)
+		this.$emit('corpus-changed')
 	}
 }
 </script>
