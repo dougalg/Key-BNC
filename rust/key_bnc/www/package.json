@@ -6,7 +6,7 @@
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",
-		"deploy": "scp dgraham@dougalgraham.ca "
+		"deploy": "scp -r ./dist/* dgraham@dougalgraham.ca:key-bnc/public/"
 	},
 	"dependencies": {
 		"core-js": "^3.6.4",
