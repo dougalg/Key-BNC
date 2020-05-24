@@ -50,10 +50,14 @@ export default class SortButton extends Vue {
 	}
 }
 
-.sort-button--active::after {
+.sort-button--active {
+	background-color: #efefef;
+}
+
+.sort-button--active::before {
 	content: '';
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	left: 0;
 	right: 0;
 	border-bottom: 2px solid black;

@@ -5,60 +5,64 @@
 			No data loaded. Load some files for your corpus to get started.
 		</div>
 		<table v-else>
-			<tr>
-				<th>Word Type</th>
-				<th>
-					<sort-button
-						:sort="getSortDirectionFor(SortBy.FREQUENCY)"
-						@click="setSort(SortBy.FREQUENCY)"
-					>
-						Frequency
-					</sort-button>
-				</th>
-				<th>
-					<sort-button
-						:sort="getSortDirectionFor(SortBy.FREQUENCY_BNC)"
-						@click="setSort(SortBy.FREQUENCY_BNC)"
-					>
-						Frequency BNC
-					</sort-button>
-				</th>
-				<th>
-					<sort-button
-						:sort="getSortDirectionFor(SortBy.LL)"
-						@click="setSort(SortBy.LL)"
-					>
-						Log Likelyhood
-					</sort-button>
-				</th>
-				<th>
-					<sort-button
-						:sort="getSortDirectionFor(SortBy.OR)"
-						@click="setSort(SortBy.OR)"
-					>
-						Odds Ratio
-					</sort-button>
-				</th>
-				<th>
-					<sort-button
-						:sort="getSortDirectionFor(SortBy.DISPERSION)"
-						@click="setSort(SortBy.DISPERSION)"
-					>
-						Dispersion
-					</sort-button>
-				</th>
-			</tr>
-			<tr
-				v-for="d in sortedStats"
-				:key="d.word"
-			>
-				<td>{{ d.word }}</td>
-				<td>{{ numberFormat(d.frequency) }}</td>
-				<td>{{ numberFormat(d.frequency_bnc) }}</td>
-				<td>{{ numberFormat4(d.log_likelyhood) }}</td>
-				<td>{{ formatOddsRatio(d.odds_ratio) }}</td>
-				<td>{{ numberFormat4(d.dispersion) }}</td>
-			</tr>
+			<thead>
+				<tr>
+					<th>Word Type</th>
+					<th>
+						<sort-button
+							:sort="getSortDirectionFor(SortBy.FREQUENCY)"
+							@click="setSort(SortBy.FREQUENCY)"
+						>
+							Frequency
+						</sort-button>
+					</th>
+					<th>
+						<sort-button
+							:sort="getSortDirectionFor(SortBy.FREQUENCY_BNC)"
+							@click="setSort(SortBy.FREQUENCY_BNC)"
+						>
+							Frequency BNC
+						</sort-button>
+					</th>
+					<th>
+						<sort-button
+							:sort="getSortDirectionFor(SortBy.LL)"
+							@click="setSort(SortBy.LL)"
+						>
+							Log Likelyhood
+						</sort-button>
+					</th>
+					<th>
+						<sort-button
+							:sort="getSortDirectionFor(SortBy.OR)"
+							@click="setSort(SortBy.OR)"
+						>
+							Odds Ratio
+						</sort-button>
+					</th>
+					<th>
+						<sort-button
+							:sort="getSortDirectionFor(SortBy.DISPERSION)"
+							@click="setSort(SortBy.DISPERSION)"
+						>
+							Dispersion
+						</sort-button>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					v-for="d in sortedStats"
+					:key="d.word"
+				>
+					<td>{{ d.word }}</td>
+					<td>{{ numberFormat(d.frequency) }}</td>
+					<td>{{ numberFormat(d.frequency_bnc) }}</td>
+					<td>{{ numberFormat4(d.log_likelyhood) }}</td>
+					<td>{{ formatOddsRatio(d.odds_ratio) }}</td>
+					<td>{{ numberFormat4(d.dispersion) }}</td>
+				</tr>
+			</tbody>
 		</table>
 	</div>
 </template>
@@ -146,6 +150,12 @@ export default class WordStatsView extends Vue {
 <style scoped lang="scss">
 table {
 	border-spacing: 1rem 0.5rem;
+}
+thead {
+	position: sticky;
+	top: 0;
+	background: white;
+	box-shadow: 0px 3px black;
 }
 tr > td {
 	text-align: right;
