@@ -93,10 +93,10 @@ export default class ManageCorpus extends Vue {
 .remove-button {
 	border-radius: 5px;
 	background-color: #eee;
-	border: 1px solid #eee;
+	border: 2px solid #eee;
 	&:hover,
 	&:focus {
-		border-color: #aaa;
+		border-color: #111;
 	}
 }
 </style>
