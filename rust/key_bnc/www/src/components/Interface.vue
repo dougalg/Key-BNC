@@ -47,21 +47,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
+import { WordStats } from '../models'
 import ManageCorpus from './ManageCorpus.vue'
 import WordStatsView from './WordStats.vue'
 import NavButton from './NavButton.vue'
 import AboutView from './About.vue'
 
 const MAX_ITEMS = 1000
-
-interface WordStats {
-	word: string;
-	frequency: number;
-	frequency_bnc: number;
-	log_likelyhood: number;
-	odds_ratio: number;
-	dispersion: number;
-}
 
 const components = {
 	ManageCorpus,
