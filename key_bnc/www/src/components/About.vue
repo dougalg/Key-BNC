@@ -5,16 +5,6 @@
 			<h1>What is this, and who is it useful for?</h1>
 
 			<p>This application provides a simple interface for calculating comparative keyword statistics against a word list from the British National Corpus (BNC) for linguists without access to the BNC.</p>
-		</section>
-
-		<section class="downloads">
-			<h1>Download</h1>
-			<ol class="task-list">
-				<li><a href="https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-win32.zip">Windows 32-Bit</a></li>
-				<li><a href="https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-amd64.zip">Windows 64-Bit</a></li>
-				<li><a href="https://github.com/dougalg/Key-BNC/raw/master/build/Key-BNC-current-mac.zip">Mac OSX 64-Bit</a></li>
-				<li><a href="https://github.com/dougalg/Key-BNC/blob/master/KEY_BNC/Data/BNC_wordlist.csv?raw=true">BNC Wordlist</a></li>
-			</ol>
 
 			<p>Source code and technical details are available on <a href="http://github.com/dougalg/Key-BNC">GitHub</a>.</p>
 		</section>

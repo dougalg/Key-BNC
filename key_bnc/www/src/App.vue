@@ -5,6 +5,7 @@
 			:key-bnc="keyBnc"
 		/>
 		<bnc-loader v-else />
+		<p class="version">{{ version }}</p>
 	</main>
 </template>
 
@@ -19,6 +20,7 @@ export default class App extends Vue {
 	keyBnc: KeyBnc | null = null
 	hasLoadedBncData = false
 	tid = -1
+	version = process.env.VUE_APP_VERSION
 
 	mounted () {
 		const csvImport = import('./assets/BNC_wordlist.csv').then((_) => _.default)
@@ -99,5 +101,14 @@ button {
     &::-moz-focus-inner {
         border: 0;
     }
+}
+
+.version {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: white;
+    padding: 0;
+    margin: 0;
 }
 </style>
