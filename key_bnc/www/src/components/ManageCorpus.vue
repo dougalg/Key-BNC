@@ -21,12 +21,9 @@
 				class="file-list-item"
 			>
 				<span>{{ f.name }}</span>
-				<button
-					class="remove-button no-outline"
-					@click="removeFile(f.id)"
-				>
+				<basic-button @click="removeFile(f.id)">
 					Remove
-				</button>
+				</basic-button>
 			</li>
 		</ul>
 	</div>
@@ -35,13 +32,14 @@
 <script lang="ts">
 import { Component, Prop, Vue, Ref } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
+import BasicButton from './BasicButton.vue'
 
 interface FileObject {
 	name: string;
 	id: number;
 }
 
-@Component
+@Component({ components: { BasicButton } })
 export default class ManageCorpus extends Vue {
 	@Ref() readonly form!: HTMLFormElement
 	@Ref() readonly input!: HTMLInputElement
@@ -95,15 +93,6 @@ export default class ManageCorpus extends Vue {
 .file-list-item {
 	> * + * {
 		margin-left: 1rem;
-	}
-}
-.remove-button {
-	border-radius: 5px;
-	background-color: #eee;
-	border: 2px solid #eee;
-	&:hover,
-	&:focus {
-		border-color: #111;
 	}
 }
 </style>
