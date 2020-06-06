@@ -139,11 +139,15 @@ h1 {
 
 .container {
 	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 .tab-nav {
 	position: relative;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
+
 .tab-nav::before {
 	position: absolute;
 	content: " ";

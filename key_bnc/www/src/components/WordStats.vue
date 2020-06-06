@@ -1,69 +1,21 @@
 <template>
-	<div>
-		<h2>Statistics</h2>
+	<div class="word-stats">
+		<div class="stats-header">
+			<h2>Statistics</h2>
+			<stat-filters
+				v-if="wordStats.length > 0"
+			/>
+		</div>
 		<div v-if="wordStats.length < 1">
 			No data loaded. Load some files for your corpus to get started.
 		</div>
-		<table v-else>
-			<thead>
-				<tr>
-					<th>Word Type</th>
-					<th>
-						<sort-button
-							:sort="getSortDirectionFor(SortBy.FREQUENCY)"
-							@click="setSort(SortBy.FREQUENCY)"
-						>
-							Frequency
-						</sort-button>
-					</th>
-					<th>
-						<sort-button
-							:sort="getSortDirectionFor(SortBy.FREQUENCY_BNC)"
-							@click="setSort(SortBy.FREQUENCY_BNC)"
-						>
-							Frequency BNC
-						</sort-button>
-					</th>
-					<th>
-						<sort-button
-							:sort="getSortDirectionFor(SortBy.LL)"
-							@click="setSort(SortBy.LL)"
-						>
-							Log Likelyhood
-						</sort-button>
-					</th>
-					<th>
-						<sort-button
-							:sort="getSortDirectionFor(SortBy.OR)"
-							@click="setSort(SortBy.OR)"
-						>
-							Odds Ratio
-						</sort-button>
-					</th>
-					<th>
-						<sort-button
-							:sort="getSortDirectionFor(SortBy.DISPERSION)"
-							@click="setSort(SortBy.DISPERSION)"
-						>
-							Dispersion
-						</sort-button>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr
-					v-for="d in sortedStats"
-					:key="d.word"
-				>
-					<td>{{ d.word }}</td>
-					<td>{{ numberFormat(d.frequency) }}</td>
-					<td>{{ numberFormat(d.frequency_bnc) }}</td>
-					<td>{{ numberFormat4(d.log_likelyhood) }}</td>
-					<td>{{ formatOddsRatio(d.odds_ratio) }}</td>
-					<td>{{ numberFormat4(d.dispersion) }}</td>
-				</tr>
-			</tbody>
-		</table>
+		<word-stats-table
+			v-else
+			:word-stats="sortedStats"
+			:sort-by="currentSort"
+			:sort-direction="currentSortDirection"
+			@set-sort="setSort"
+		/>
 	</div>
 </template>
 
@@ -71,6 +23,8 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { WordStats, SortBy, SortDirection } from '../models'
 import SortButton from './SortButton.vue'
+import StatFilters from './StatFilters.vue'
+import WordStatsTable from './WordStatsTable.vue'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
@@ -88,15 +42,7 @@ const SORTERS_DESC = {
 	[SortBy.DISPERSION]: (a: WordStats, b: WordStats) => b.dispersion - a.dispersion,
 }
 
-const formatter = (Intl && Intl.NumberFormat)
-	? new Intl.NumberFormat('en-CA')
-	: { format (n: number) { return n.toString() } }
-
-const formatter4 = (Intl && Intl.NumberFormat)
-	? new Intl.NumberFormat('en-CA', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
-	: { format (n: number) { return n.toFixed(4) } }
-
-@Component({ components: { SortButton } })
+@Component({ components: { SortButton, StatFilters, WordStatsTable } })
 export default class WordStatsView extends Vue {
 	@Prop() wordStats!: Array<WordStats>
 	private SortBy = SortBy
@@ -111,21 +57,6 @@ export default class WordStatsView extends Vue {
 			.sort(sortFn)
 	}
 
-	formatOddsRatio (n: number | null): string {
-		if (n == null) {
-			return '∞'
-		}
-		return this.numberFormat4(n)
-	}
-
-	numberFormat (n: number): string {
-		return formatter.format(n)
-	}
-
-	numberFormat4 (n: number): string {
-		return formatter4.format(n)
-	}
-
 	setSort (newSort: SortBy): void {
 		if (this.currentSort === newSort) {
 			this.currentSortDirection = this.currentSortDirection === SortDirection.ASC
@@ -136,20 +67,18 @@ export default class WordStatsView extends Vue {
 			this.currentSortDirection = SortDirection.DESC
 		}
 	}
-
-	getSortDirectionFor (sort: SortBy): SortDirection {
-		if (this.currentSort === sort) {
-			return this.currentSortDirection
-		}
-		return SortDirection.NONE
-	}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-table {
-	border-spacing: 1rem 0.5rem;
+table,
+thead,
+tbody {
+	$horiz-space: 1rem;
+	border-spacing: $horiz-space 0.5rem;
+	margin-left: -$horiz-space;
+	margin-right: -$horiz-space;
 }
 thead {
 	position: sticky;
@@ -162,5 +91,15 @@ tr > td {
 }
 tr > td:first-child {
 	text-align: left;
+}
+
+.word-stats {
+	display: grid;
+}
+
+.stats-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 </style>
