@@ -6,6 +6,9 @@
 
 			<p>This application provides a simple interface for calculating comparative keyword statistics against a word list from the British National Corpus (BNC) for linguists without access to the BNC.</p>
 
+			<p><strong>NOTE:</strong> <em>No data</em> is uploaded to any servers for this application. All data
+			processing happens only within your browser.</p>
+
 			<p>Source code and technical details are available on <a href="http://github.com/dougalg/Key-BNC">GitHub</a>.</p>
 		</section>
 

@@ -97,11 +97,11 @@ button {
 }
 
 .no-outline {
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
 
     &::-moz-focus-inner {
-        border: 0;
+        border: 0 !important;
     }
 }
 
