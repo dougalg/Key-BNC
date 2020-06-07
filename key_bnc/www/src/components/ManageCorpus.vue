@@ -36,7 +36,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Ref } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
-import BasicButton from './BasicButton.vue'
+import BasicButton from './buttons/BasicButton.vue'
 
 interface FileObject {
 	name: string;

@@ -4,6 +4,10 @@
 			<h2>Statistics</h2>
 			<stat-filters
 				v-if="wordStats.length > 0"
+				:filters="filters"
+				@add-filter="addFilter"
+				@filter-change="updateFilter"
+				@remove-filter="removeFilter"
 			/>
 		</div>
 		<div v-if="wordStats.length < 1">
@@ -11,7 +15,7 @@
 		</div>
 		<word-stats-table
 			v-else
-			:word-stats="sortedStats"
+			:words="sortedFilteredStats"
 			:sort-by="currentSort"
 			:sort-direction="currentSortDirection"
 			@set-sort="setSort"
@@ -21,10 +25,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { WordStats, SortBy, SortDirection } from '../models'
+import {
+	WordStats,
+	SortBy,
+	SortDirection,
+	FilterType,
+} from '@/models'
 import SortButton from './SortButton.vue'
 import StatFilters from './StatFilters.vue'
 import WordStatsTable from './WordStatsTable.vue'
+import { getFrequencyFilter, getFrequencyBncFilter, getLlFilter, getOrFilter, getDispersionFilter, Filter, FilterProps } from './filters'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
@@ -42,18 +52,33 @@ const SORTERS_DESC = {
 	[SortBy.DISPERSION]: (a: WordStats, b: WordStats) => b.dispersion - a.dispersion,
 }
 
+const FilterGetters = {
+	[FilterType.FREQUENCY]: getFrequencyFilter,
+	[FilterType.FREQUENCY_BNC]: getFrequencyBncFilter,
+	[FilterType.LL]: getLlFilter,
+	[FilterType.OR]: getOrFilter,
+	[FilterType.DISPERSION]: getDispersionFilter,
+}
+
 @Component({ components: { SortButton, StatFilters, WordStatsTable } })
 export default class WordStatsView extends Vue {
 	@Prop() wordStats!: Array<WordStats>
 	private SortBy = SortBy
 	private currentSort: SortBy = SortBy.FREQUENCY
 	private currentSortDirection: SortDirection = SortDirection.DESC
+	private filters: Filter[] = []
 
-	get sortedStats (): Array<WordStats> {
+	get sortedFilteredStats (): Array<WordStats> {
 		const sortFn = this.currentSortDirection === SortDirection.ASC
 			? SORTERS_ASC[this.currentSort]
 			: SORTERS_DESC[this.currentSort]
 		return this.wordStats
+			.filter((val) => {
+				if (this.filters.length === 0) {
+					return true
+				}
+				return this.filters.every((filter) => filter.test(val))
+			})
 			.sort(sortFn)
 	}
 
@@ -66,6 +91,23 @@ export default class WordStatsView extends Vue {
 			this.currentSort = newSort
 			this.currentSortDirection = SortDirection.DESC
 		}
+	}
+
+	addFilter (filterType: FilterType): void {
+		this.filters.push(FilterGetters[filterType]())
+	}
+
+	updateFilter (targetId: string, props: FilterProps): void {
+		const targetFilter = this.filters.find(({ id }) => targetId === id)
+		if (!targetFilter) {
+			console.error('Could not locate filter to update with id:', targetId)
+		} else {
+			targetFilter.props = props
+		}
+	}
+
+	removeFilter (targetId: string) {
+		this.filters = this.filters.filter(({ id }) => id !== targetId)
 	}
 }
 </script>

@@ -1,35 +1,37 @@
 <template>
 	<div class="stats-filters dropdown-wrapper">
-		<basic-button
-			:class="{
-				'dropdown-wrapper--active': isDropdownOpen,
-			}"
-			@click="isDropdownOpen = !isDropdownOpen"
-		>
-			Add Filter +
-		</basic-button>
 		<div
-			v-if="isDropdownOpen"
+			class="button-wrapper"
+			:class="{
+				'dropdown-wrapper--active': isOpen,
+			}"
+		>
+			<slot name="button">
+				<basic-button @click="$emit('toggle')">
+					<slot name="button-content" />
+				</basic-button>
+			</slot>
+		</div>
+		<div
+			v-if="isOpen"
 			class="dropdown-content"
 		>
-			<basic-button @click="addFrequencyFilter">
-				Frequency
-			</basic-button>
+			<slot name="dropdown-content" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import BasicButton from './BasicButton.vue'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import BasicButton from '@/components/buttons/BasicButton.vue'
 
 @Component({ components: { BasicButton } })
-export default class StatFilers extends Vue {
-	isDropdownOpen = false
+export default class Dropdown extends Vue {
+	@Prop() isOpen!: boolean;
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dropdown-wrapper {
 	position: relative;
 }
@@ -56,9 +58,16 @@ export default class StatFilers extends Vue {
 	z-index: 1;
 	margin-top: 1rem;
 
+	display: flex;
+	flex-direction: column;
+
 	border-radius: 5px;
 	border: 1px solid black;
 	padding: 0.6rem;
 	background-color: white;
+}
+
+.dropdown-content > * + * {
+	margin-top: 0.5em;
 }
 </style>

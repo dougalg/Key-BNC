@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { SortDirection } from '../models'
+import { SortDirection } from '@/models'
 
 @Component
 export default class SortButton extends Vue {

@@ -49,8 +49,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
 import { WordStats } from '../models'
 import ManageCorpus from './ManageCorpus.vue'
-import WordStatsView from './WordStats.vue'
-import NavButton from './NavButton.vue'
+import WordStatsView from './WordStats/WordStats.vue'
+import NavButton from './buttons/NavButton.vue'
 import AboutView from './About.vue'
 
 const MAX_ITEMS = 1000

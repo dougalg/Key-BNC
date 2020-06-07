@@ -47,7 +47,7 @@
 		</thead>
 		<tbody>
 			<tr
-				v-for="d in wordStats"
+				v-for="d in words"
 				:key="d.word"
 			>
 				<td>{{ d.word }}</td>
@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { WordStats, SortBy, SortDirection } from '../models'
+import { WordStats, SortBy, SortDirection } from '@/models'
 import SortButton from './SortButton.vue'
 import StatFilters from './StatFilters.vue'
 
@@ -77,7 +77,7 @@ const formatter4 = (Intl && Intl.NumberFormat)
 
 @Component({ components: { SortButton, StatFilters } })
 export default class WordStatsView extends Vue {
-	@Prop() wordStats!: Array<WordStats>
+	@Prop() words!: Array<WordStats>
 	@Prop() sortBy!: SortBy
 	@Prop() sortDirection!: SortDirection
 	private SortBy = SortBy
@@ -114,6 +114,7 @@ tbody {
 	border-spacing: $horiz-space 0.5rem;
 	margin-left: -$horiz-space;
 	margin-right: -$horiz-space;
+	height: max-content
 }
 thead {
 	position: sticky;
