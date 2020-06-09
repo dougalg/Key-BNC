@@ -15,6 +15,11 @@
 		<div
 			v-if="isOpen"
 			class="dropdown-content"
+			:class="{
+				'dropdown-content--right': position === Position.RIGHT,
+				'dropdown-content--center': position === Position.CENTER,
+				'dropdown-content--left': position === Position.LEFT,
+			}"
 		>
 			<slot name="dropdown-content" />
 		</div>
@@ -24,10 +29,13 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import BasicButton from '@/components/buttons/BasicButton.vue'
+import { Position } from './DropdownPosition'
 
 @Component({ components: { BasicButton } })
 export default class Dropdown extends Vue {
-	@Prop() isOpen!: boolean;
+	@Prop() isOpen!: boolean
+	@Prop({ default: Position.RIGHT }) position !: Position
+	Position = Position
 }
 </script>
 
@@ -41,8 +49,8 @@ export default class Dropdown extends Vue {
 	display: block;
 	width: 1rem;
 	height: 1rem;
-	border-top: 1px solid black;
-	border-right: 1px solid black;
+	border-top: 2px solid black;
+	border-right: 2px solid black;
 	transform: translateX(-50%) rotate(-45deg);
 	position: absolute;
 	top: calc(100% + 5px);
@@ -54,7 +62,6 @@ export default class Dropdown extends Vue {
 .dropdown-content {
 	position: absolute;
 	top: 100%;
-	right: 0;
 	z-index: 1;
 	margin-top: 1rem;
 
@@ -62,9 +69,20 @@ export default class Dropdown extends Vue {
 	flex-direction: column;
 
 	border-radius: 5px;
-	border: 1px solid black;
+	border: 2px solid black;
 	padding: 0.6rem;
 	background-color: white;
+
+	&--right {
+		right: 0;
+	}
+	&--center {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	&--left {
+		left: 0;
+	}
 }
 
 .dropdown-content > * + * {

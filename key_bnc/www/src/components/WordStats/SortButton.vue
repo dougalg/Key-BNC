@@ -51,7 +51,9 @@ export default class SortButton extends Vue {
 }
 
 .sort-button--active {
+	border-radius: 0;
 	background-color: #efefef;
+	transition: border-radius 0.3s;
 }
 
 .sort-button--active::before {

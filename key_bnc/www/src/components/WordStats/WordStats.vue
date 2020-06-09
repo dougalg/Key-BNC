@@ -5,6 +5,8 @@
 			<stat-filters
 				v-if="wordStats.length > 0"
 				:filters="filters"
+				:open-filter-dropdown="openFilterDropdown"
+				@toggle-filter-dropdown="toggleFilterDropdown"
 				@add-filter="addFilter"
 				@filter-change="updateFilter"
 				@remove-filter="removeFilter"
@@ -67,6 +69,7 @@ export default class WordStatsView extends Vue {
 	private currentSort: SortBy = SortBy.FREQUENCY
 	private currentSortDirection: SortDirection = SortDirection.DESC
 	private filters: Filter[] = []
+	private openFilterDropdown: string | null = null
 
 	get sortedFilteredStats (): Array<WordStats> {
 		const sortFn = this.currentSortDirection === SortDirection.ASC
@@ -82,6 +85,10 @@ export default class WordStatsView extends Vue {
 			.sort(sortFn)
 	}
 
+	toggleFilterDropdown (filterId: string) {
+		this.openFilterDropdown = this.openFilterDropdown === filterId ? null : filterId
+	}
+
 	setSort (newSort: SortBy): void {
 		if (this.currentSort === newSort) {
 			this.currentSortDirection = this.currentSortDirection === SortDirection.ASC
@@ -94,7 +101,9 @@ export default class WordStatsView extends Vue {
 	}
 
 	addFilter (filterType: FilterType): void {
-		this.filters.push(FilterGetters[filterType]())
+		const newFilter = FilterGetters[filterType]()
+		this.filters.push(newFilter)
+		this.openFilterDropdown = newFilter.id
 	}
 
 	updateFilter (targetId: string, props: FilterProps): void {
@@ -108,6 +117,9 @@ export default class WordStatsView extends Vue {
 
 	removeFilter (targetId: string) {
 		this.filters = this.filters.filter(({ id }) => id !== targetId)
+		if (this.openFilterDropdown === targetId) {
+			this.openFilterDropdown = null
+		}
 	}
 }
 </script>

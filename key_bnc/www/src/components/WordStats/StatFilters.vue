@@ -5,17 +5,19 @@
 			:key="filter.id"
 			:is="filter.component"
 			:name="getFilterName(filter.type)"
+			:is-dropdown-open="filter.id === openFilterDropdown"
 			v-bind="filter.props"
+			@toggle="$emit('toggle-filter-dropdown', filter.id)"
 			@input="$emit('filter-change', filter.id, $event)"
 			@remove-self="$emit('remove-filter', filter.id)"
 		/>
 		<dropdown
 			class="stats-filters"
-			:isOpen="isStatsDropdownOpen"
-			@toggle="isStatsDropdownOpen = !isStatsDropdownOpen"
+			:isOpen="id === openFilterDropdown"
+			@toggle="$emit('toggle-filter-dropdown', id)"
 		>
 			<template v-slot:button-content>
-				Add Filter +
+				Add Filter
 			</template>
 			<template v-slot:dropdown-content>
 				<basic-button
@@ -36,6 +38,7 @@ import { FilterType } from '@/models'
 import Dropdown from '@/components/Dropdown.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue'
 import { Filter } from './filters'
+import { v4 } from 'uuid'
 
 const buttons = [
 	{
@@ -71,8 +74,10 @@ const FilterNames = {
 @Component({ components: { Dropdown, BasicButton } })
 export default class StatFilers extends Vue {
 	@Prop() filters!: Filter[]
+	@Prop() openFilterDropdown!: string | null
 	isStatsDropdownOpen = false
 	buttons = buttons
+	id = v4()
 
 	getFilterName (type: FilterType): string {
 		return FilterNames[type]

@@ -33,6 +33,12 @@ export default class NavButton extends Vue {
 	border-color: black;
 	border-width: 1px;
 	border-style: solid;
+	font-weight: bold;
+	font-size: 1.5rem;
+
+	@media screen and (max-width: 740px) {
+		font-size: 1.1rem;
+	}
 
 	&.is-selected {
 		position: relative;

@@ -1,9 +1,12 @@
 <template>
-	<dropdown :isOpen="isDropdownOpen">
+	<dropdown
+		:isOpen="isDropdownOpen"
+		:position="Position.CENTER"
+	>
 		<template v-slot:button>
 			<basic-button
 				is-attached
-				@click="isDropdownOpen = !isDropdownOpen"
+				@click="$emit('toggle')"
 			>
 				{{ min }} &lt;= {{ name }} &lt;= {{ readableMax }}
 			</basic-button>
@@ -16,27 +19,32 @@
 			</basic-button>
 		</template>
 		<template v-slot:dropdown-content>
-			<div>
+			<div class="input-row">
 				<label :for="minId">
 					Min:
 				</label>
 				<input
-					:id="minId"
+					class="input no-outline"
 					type="number"
-					:value="min"
 					min="0"
+					:id="minId"
+					:value="min"
 					:max="max"
+					size="6"
 					@change="updateMin($event.target.value)"
 				/>
-				<br />
+			</div>
+			<div class="input-row">
 				<label :for="maxId">
 					Max:
 				</label>
 				<input
-					:id="maxId"
+					class="input no-outline"
 					type="number"
+					:id="maxId"
 					:value="max"
 					:min="min"
+					size="6"
 					@change="updateMax($event.target.value)"
 				/>
 			</div>
@@ -48,17 +56,19 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { v4 } from 'uuid'
 import { MinMaxFilterProps } from '../filters'
+import { Position } from '@/components/DropdownPosition'
 import Dropdown from '@/components/Dropdown.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue'
 
 @Component({ components: { Dropdown, BasicButton } })
 export default class StatFilers extends Vue {
-	@Prop() name!: string;
-	@Prop() min!: number;
-	@Prop() max!: number;
+	@Prop() name!: string
+	@Prop() min!: number
+	@Prop() max!: number
+	@Prop() isDropdownOpen!: boolean
 	minId = `min_${v4()}`
 	maxId = `max_${v4()}`
-	isDropdownOpen = false
+	Position = Position
 
 	get readableMax (): string {
 		return this.max === Infinity ? '∞' : this.max.toString()
@@ -78,3 +88,25 @@ export default class StatFilers extends Vue {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.input-row {
+	display: flex;
+
+	> input {
+		flex-grow: 1;
+	}
+}
+
+.input {
+	border: 0;
+	text-align: right;
+	font-weight: bold;
+	font-size: 1.5rem;
+	border-bottom: 2px solid white;
+	&:hover,
+	&:focus {
+		border-bottom: 2px solid black;
+	}
+}
+</style>

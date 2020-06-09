@@ -122,6 +122,9 @@ thead {
 	background: white;
 	box-shadow: 0px 3px black;
 }
+th {
+	padding: 0;
+}
 tr > td {
 	text-align: right;
 }
