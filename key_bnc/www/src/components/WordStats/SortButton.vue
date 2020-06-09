@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { SortDirection } from '../models'
+import { SortDirection } from '@/models'
 
 @Component
 export default class SortButton extends Vue {
@@ -51,7 +51,9 @@ export default class SortButton extends Vue {
 }
 
 .sort-button--active {
+	border-radius: 0;
 	background-color: #efefef;
+	transition: border-radius 0.3s;
 }
 
 .sort-button--active::before {

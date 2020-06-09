@@ -20,3 +20,11 @@ export enum SortDirection {
 	DESC,
 	NONE,
 }
+
+export enum FilterType {
+	FREQUENCY = 'frequency',
+	FREQUENCY_BNC = 'frequency_bnc',
+	LL = 'log_likelyhood',
+	OR = 'odds_ratio',
+	DISPERSION = 'dispersion',
+}

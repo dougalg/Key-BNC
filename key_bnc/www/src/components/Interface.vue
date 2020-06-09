@@ -49,8 +49,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { KeyBnc } from '../../../pkg/key_bnc'
 import { WordStats } from '../models'
 import ManageCorpus from './ManageCorpus.vue'
-import WordStatsView from './WordStats.vue'
-import NavButton from './NavButton.vue'
+import WordStatsView from './WordStats/WordStats.vue'
+import NavButton from './buttons/NavButton.vue'
 import AboutView from './About.vue'
 
 const MAX_ITEMS = 1000
@@ -139,11 +139,15 @@ h1 {
 
 .container {
 	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 .tab-nav {
 	position: relative;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
+
 .tab-nav::before {
 	position: absolute;
 	content: " ";

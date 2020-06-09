@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import BasicButton from '@/components/BasicButton.vue'
+import BasicButton from '@/components/buttons/BasicButton.vue'
 
 @Component({ components: { BasicButton } })
 export default class RefreshApp extends Vue {
