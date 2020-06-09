@@ -1,5 +1,14 @@
 # Changelog
 
+## V2.2
+
+June 9<sup>th</sup>, 2020
+- Add ability to filter data
+
+## v2.1
+June 1<sup>st</sup>, 2020
+- Add ability to refresh app with new updates
+
 ## V2.0
 
 April 11<sup>th</sup>, 2020
