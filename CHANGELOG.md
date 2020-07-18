@@ -1,5 +1,11 @@
 # Changelog
 
+## V2.3
+
+July 18<sup>th</sup>, 2020
+- Add CSV export
+- Add logo
+
 ## V2.2
 
 June 9<sup>th</sup>, 2020
