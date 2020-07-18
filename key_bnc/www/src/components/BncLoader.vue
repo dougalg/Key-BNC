@@ -1,5 +1,10 @@
 <template>
 	<div class="loader">
+		<img
+			class="logo"
+			src="@/assets/key-bnc-logo-225x278.png"
+			alt="A white key on black backgorund"
+		/>
 		<h2>Loading...</h2>
 		<div class="spinner">
 			<div class="bounce1"></div>
@@ -10,6 +15,10 @@
 </template>
 
 <style lang="scss" scoped>
+.logo {
+	height: 8rem;
+}
+
 .loader {
 	display: flex;
 	align-items: center;

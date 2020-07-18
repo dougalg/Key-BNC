@@ -6,7 +6,15 @@
 			:key-bnc="keyBnc"
 		/>
 		<bnc-loader v-else />
-		<p class="version">{{ version }}</p>
+
+		<div class="version">
+			<p>{{ version }}</p>
+			<img
+				class="logo"
+				src="@/assets/key-bnc-logo-white-225x278.png"
+				alt="A black key on a white backgorund"
+			/>
+		</div>
 	</main>
 </template>
 
@@ -106,11 +114,23 @@ button {
 }
 
 .version {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: white;
-    padding: 0;
-    margin: 0;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	top: 0.5rem;
+	right: 0.5rem;
+	color: white;
+	padding: 0;
+	margin: 0;
+	font-size: 1.2rem;
+
+	& p {
+		margin: 0;
+	}
+}
+
+.logo {
+	height: 5rem;
 }
 </style>
