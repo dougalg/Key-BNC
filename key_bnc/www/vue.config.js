@@ -8,6 +8,13 @@ const gitRevisionPlugin = new GitRevisionPlugin({
 process.env.VUE_APP_VERSION = gitRevisionPlugin.version()
 
 module.exports = {
+	pwa: {
+		name: 'Key BNC',
+		themeColor: '#000000',
+		msTileColor: '#000000',
+		appleMobileWebAppCapable: 'yes',
+		appleMobileWebAppStatusBarStyle: 'black',
+	},
 	chainWebpack: config => {
 		config.module
 			.rule('csv')

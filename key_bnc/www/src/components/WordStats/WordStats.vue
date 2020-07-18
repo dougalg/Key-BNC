@@ -11,7 +11,10 @@
 				@filter-change="updateFilter"
 				@remove-filter="removeFilter"
 			/>
-			<basic-button @click="downloadCsv">
+			<basic-button
+				v-if="wordStats.length > 0"
+				@click="downloadCsv"
+			>
 				Export CSV
 			</basic-button>
 		</div>

@@ -1,20 +1,27 @@
 <template>
 	<main id="app">
 		<refresh-app />
-		<key-bnc-interface
-			v-if="isReady"
-			:key-bnc="keyBnc"
-		/>
-		<bnc-loader v-else />
-
-		<div class="version">
-			<p>{{ version }}</p>
-			<img
-				class="logo"
-				src="@/assets/key-bnc-logo-white-225x278.png"
-				alt="A black key on a white backgorund"
+		<transition name="fade" mode="out-in">
+			<key-bnc-interface
+				v-if="isReady"
+				:key-bnc="keyBnc"
 			/>
-		</div>
+			<bnc-loader v-else />
+		</transition>
+
+		<transition name="fade">
+			<div
+				v-if="isReady"
+				class="version"
+			>
+				<p>{{ version }}</p>
+				<img
+					class="logo"
+					src="@/assets/key-bnc-logo-white-225x278.png"
+					alt="A black key on a white backgorund"
+				/>
+			</div>
+		</transition>
 	</main>
 </template>
 
@@ -132,5 +139,19 @@ button {
 
 .logo {
 	height: 5rem;
+}
+
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave {
+	opacity: 1;
+}
+
+.fade-enter-active {
+	transition: opacity 0.5s;
 }
 </style>

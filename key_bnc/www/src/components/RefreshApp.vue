@@ -58,6 +58,7 @@ export default class RefreshApp extends Vue {
 	background-color: rgba(255, 255, 255, 0.9);
 	transform: translateY(0);
 	transition: transform 0.5s;
+	z-index: 1000000;
 }
 
 .slide-enter,
