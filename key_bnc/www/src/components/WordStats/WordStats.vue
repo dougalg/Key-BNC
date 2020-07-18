@@ -1,7 +1,7 @@
 <template>
 	<div class="word-stats">
 		<div class="stats-header">
-			<h2>Statistics</h2>
+			<h2 class="heading">Statistics</h2>
 			<stat-filters
 				v-if="wordStats.length > 0"
 				:filters="filters"
@@ -11,6 +11,9 @@
 				@filter-change="updateFilter"
 				@remove-filter="removeFilter"
 			/>
+			<basic-button @click="downloadCsv">
+				Export CSV
+			</basic-button>
 		</div>
 		<div v-if="wordStats.length < 1">
 			No data loaded. Load some files for your corpus to get started.
@@ -36,7 +39,17 @@ import {
 import SortButton from './SortButton.vue'
 import StatFilters from './StatFilters.vue'
 import WordStatsTable from './WordStatsTable.vue'
-import { getFrequencyFilter, getFrequencyBncFilter, getLlFilter, getOrFilter, getDispersionFilter, Filter, FilterProps } from './filters'
+import BasicButton from '@/components/buttons/BasicButton.vue'
+import {
+	getFrequencyFilter,
+	getFrequencyBncFilter,
+	getLlFilter,
+	getOrFilter,
+	getDispersionFilter,
+	Filter,
+	FilterProps,
+} from './filters'
+import { toCSV } from '@/services/csv'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
@@ -62,7 +75,7 @@ const FilterGetters = {
 	[FilterType.DISPERSION]: getDispersionFilter,
 }
 
-@Component({ components: { SortButton, StatFilters, WordStatsTable } })
+@Component({ components: { SortButton, StatFilters, WordStatsTable, BasicButton } })
 export default class WordStatsView extends Vue {
 	@Prop() wordStats!: Array<WordStats>
 	private SortBy = SortBy
@@ -121,11 +134,29 @@ export default class WordStatsView extends Vue {
 			this.openFilterDropdown = null
 		}
 	}
+
+	downloadCsv () {
+		const filename = 'Key-BNC.csv'
+		const element = document.createElement('a')
+		const text = toCSV(this.sortedFilteredStats)
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+		element.setAttribute('download', filename)
+
+		element.style.display = 'none'
+		document.body.appendChild(element)
+
+		element.click()
+
+		document.body.removeChild(element)
+	}
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.heading {
+	margin-right: auto;
+}
+
 table,
 thead,
 tbody {
@@ -155,5 +186,9 @@ tr > td:first-child {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+
+	& /deep/ > .basic-button {
+		margin-left: 1rem;
+	}
 }
 </style>

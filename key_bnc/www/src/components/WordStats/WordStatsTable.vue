@@ -2,13 +2,13 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Word Type</th>
+				<th>{{ headerText.word }}</th>
 				<th>
 					<sort-button
 						:sort="getSortDirectionFor(SortBy.FREQUENCY)"
 						@click="$emit('set-sort', SortBy.FREQUENCY)"
 					>
-						Frequency
+						{{ headerText.frequency }}
 					</sort-button>
 				</th>
 				<th>
@@ -16,7 +16,7 @@
 						:sort="getSortDirectionFor(SortBy.FREQUENCY_BNC)"
 						@click="$emit('set-sort', SortBy.FREQUENCY_BNC)"
 					>
-						Frequency BNC
+						{{ headerText.frequency_bnc }}
 					</sort-button>
 				</th>
 				<th>
@@ -24,7 +24,7 @@
 						:sort="getSortDirectionFor(SortBy.LL)"
 						@click="$emit('set-sort', SortBy.LL)"
 					>
-						Log Likelyhood
+						{{ headerText.log_likelyhood }}
 					</sort-button>
 				</th>
 				<th>
@@ -32,7 +32,7 @@
 						:sort="getSortDirectionFor(SortBy.OR)"
 						@click="$emit('set-sort', SortBy.OR)"
 					>
-						Odds Ratio
+						{{ headerText.odds_ratio }}
 					</sort-button>
 				</th>
 				<th>
@@ -40,7 +40,7 @@
 						:sort="getSortDirectionFor(SortBy.DISPERSION)"
 						@click="$emit('set-sort', SortBy.DISPERSION)"
 					>
-						Dispersion
+						{{ headerText.dispersion }}
 					</sort-button>
 				</th>
 			</tr>
@@ -64,6 +64,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { WordStats, SortBy, SortDirection } from '@/models'
+import { WORD_STAT_HEADERS } from '@/lang/wordStats'
 import SortButton from './SortButton.vue'
 import StatFilters from './StatFilters.vue'
 
@@ -81,6 +82,7 @@ export default class WordStatsView extends Vue {
 	@Prop() sortBy!: SortBy
 	@Prop() sortDirection!: SortDirection
 	private SortBy = SortBy
+	private headerText = WORD_STAT_HEADERS
 
 	formatOddsRatio (n: number | null): string {
 		if (n == null) {
