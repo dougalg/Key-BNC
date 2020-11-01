@@ -6,7 +6,7 @@ export const WORD_STAT_HEADERS = {
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	frequency_bnc: 'Frequency BNC',
 	// eslint-disable-next-line @typescript-eslint/camelcase
-	log_likelyhood: 'Log Likelyhood',
+	log_likelihood: 'Log-Likelihood',
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	odds_ratio: 'Odds Ratio',
 	dispersion: 'Dispersion',

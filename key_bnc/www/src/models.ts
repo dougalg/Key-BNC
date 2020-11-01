@@ -2,7 +2,7 @@ export interface WordStats {
 	word: string;
 	frequency: number;
 	frequency_bnc: number;
-	log_likelyhood: number;
+	log_likelihood: number;
 	odds_ratio: number;
 	dispersion: number;
 }
@@ -24,7 +24,7 @@ export enum SortDirection {
 export enum FilterType {
 	FREQUENCY = 'frequency',
 	FREQUENCY_BNC = 'frequency_bnc',
-	LL = 'log_likelyhood',
+	LL = 'log_likelihood',
 	OR = 'odds_ratio',
 	DISPERSION = 'dispersion',
 }

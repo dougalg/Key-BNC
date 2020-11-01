@@ -57,7 +57,7 @@ import { toCSV } from '@/services/csv'
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
 	[SortBy.FREQUENCY_BNC]: (a: WordStats, b: WordStats) => a.frequency_bnc - b.frequency_bnc,
-	[SortBy.LL]: (a: WordStats, b: WordStats) => a.log_likelyhood - b.log_likelyhood,
+	[SortBy.LL]: (a: WordStats, b: WordStats) => a.log_likelihood - b.log_likelihood,
 	[SortBy.OR]: (a: WordStats, b: WordStats) => a.odds_ratio - b.odds_ratio,
 	[SortBy.DISPERSION]: (a: WordStats, b: WordStats) => a.dispersion - b.dispersion,
 }
@@ -65,7 +65,7 @@ const SORTERS_ASC = {
 const SORTERS_DESC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => b.frequency - a.frequency,
 	[SortBy.FREQUENCY_BNC]: (a: WordStats, b: WordStats) => b.frequency_bnc - a.frequency_bnc,
-	[SortBy.LL]: (a: WordStats, b: WordStats) => b.log_likelyhood - a.log_likelyhood,
+	[SortBy.LL]: (a: WordStats, b: WordStats) => b.log_likelihood - a.log_likelihood,
 	[SortBy.OR]: (a: WordStats, b: WordStats) => b.odds_ratio - a.odds_ratio,
 	[SortBy.DISPERSION]: (a: WordStats, b: WordStats) => b.dispersion - a.dispersion,
 }

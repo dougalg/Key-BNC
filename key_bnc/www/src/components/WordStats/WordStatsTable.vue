@@ -24,7 +24,7 @@
 						:sort="getSortDirectionFor(SortBy.LL)"
 						@click="$emit('set-sort', SortBy.LL)"
 					>
-						{{ headerText.log_likelyhood }}
+						{{ headerText.log_likelihood }}
 					</sort-button>
 				</th>
 				<th>
@@ -53,7 +53,7 @@
 				<td>{{ d.word }}</td>
 				<td>{{ numberFormat(d.frequency) }}</td>
 				<td>{{ numberFormat(d.frequency_bnc) }}</td>
-				<td>{{ numberFormat4(d.log_likelyhood) }}</td>
+				<td>{{ numberFormat4(d.log_likelihood) }}</td>
 				<td>{{ formatOddsRatio(d.odds_ratio) }}</td>
 				<td>{{ numberFormat4(d.dispersion) }}</td>
 			</tr>

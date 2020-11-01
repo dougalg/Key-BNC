@@ -5,7 +5,7 @@ const ORDERED_FIELDS = [
 	'word',
 	'frequency',
 	'frequency_bnc',
-	'log_likelyhood',
+	'log_likelihood',
 	'odds_ratio',
 	'dispersion',
 ] as (keyof WordStats)[]
