@@ -1,6 +1,6 @@
 use std::f64::{INFINITY};
 
-pub fn log_likelyhood(target_freq: f64, target_corpus_size: f64, comparison_freq: f64, comparison_corpus_size: f64) -> f64 {
+pub fn log_likelihood(target_freq: f64, target_corpus_size: f64, comparison_freq: f64, comparison_corpus_size: f64) -> f64 {
 	let f1mil_1 = target_freq / target_corpus_size * 1_000_000.0;
 	let f1mil_2 = comparison_freq / comparison_corpus_size * 1_000_000.0;
 

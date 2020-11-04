@@ -1,7 +1,7 @@
 mod bnc_data;
 
 use key_bnc_utils::utils::{tokenize, collect};
-use key_bnc_utils::stats::{odds_ratio, log_likelyhood, dispersion_normalized};
+use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
 use bnc_data::get_bnc_count;
 use std::path::Path;
 use std::env;
@@ -77,7 +77,7 @@ fn main() {
 			WordStats {
 				count,
 				word,
-				log_likelyhood: log_likelyhood(count as f64, total_num_tokens as f64, count_in_bnc as f64, total_num_tokens_in_bnc as f64),
+				log_likelihood: log_likelihood(count as f64, total_num_tokens as f64, count_in_bnc as f64, total_num_tokens_in_bnc as f64),
 				odds_ratio: odds_ratio(count as f64, total_num_tokens as f64, count_in_bnc as f64, total_num_tokens_in_bnc as f64, 0.0),
 				dispersion: dispersion_normalized(&part_data, count as f64),
 			}
@@ -102,7 +102,7 @@ pub struct CorpusPart {
 pub struct WordStats {
 	word: UniCase<String>,
 	count: usize,
-	log_likelyhood: f64,
+	log_likelihood: f64,
 	odds_ratio: f64,
 	dispersion: f64,
 }

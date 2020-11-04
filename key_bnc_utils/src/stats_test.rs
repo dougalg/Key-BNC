@@ -1,6 +1,6 @@
 use std::f64::{INFINITY};
 use crate::stats::{
-	log_likelyhood,
+	log_likelihood,
 	odds_ratio,
 	dispersion_normalized,
 	dispersion,
@@ -9,17 +9,17 @@ use crate::stats::{
 
 #[test]
 fn ll_1() {
-	assert_eq!(log_likelyhood(1.0, 2.0, 3.0, 4.0), -0.131_334_069_034_738_88)
+	assert_eq!(log_likelihood(1.0, 2.0, 3.0, 4.0), -0.131_334_069_034_738_88)
 }
 
 #[test]
 fn ll_2() {
-	assert_eq!(log_likelyhood(200.0, 80_000.0, 2_546.0, 10_000_000.0), 542.187_152_406_053_2)
+	assert_eq!(log_likelihood(200.0, 80_000.0, 2_546.0, 10_000_000.0), 542.187_152_406_053_2)
 }
 
 #[test]
 fn ll_3() {
-	assert_eq!(log_likelyhood(9.0, 1_929.0, 0.0, 99_827_948.0), 0.0);
+	assert_eq!(log_likelihood(9.0, 1_929.0, 0.0, 99_827_948.0), 0.0);
 }
 
 #[test]

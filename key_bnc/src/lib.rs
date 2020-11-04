@@ -4,7 +4,7 @@ use serde_derive::{Serialize};
 use wasm_bindgen::prelude::*;
 use web_sys::FileReader;
 use key_bnc_utils::utils::{tokenize, collect};
-use key_bnc_utils::stats::{odds_ratio, log_likelyhood, dispersion_normalized};
+use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
 use unicase::UniCase;
 use counter::Counter;
 use csv::Reader;
@@ -27,7 +27,7 @@ pub struct WordStats {
 	word: String,
 	frequency: usize,
 	frequency_bnc: usize,
-	log_likelyhood: f64,
+	log_likelihood: f64,
 	odds_ratio: f64,
 	dispersion: f64,
 }
@@ -124,7 +124,7 @@ impl KeyBnc {
 					frequency: *count,
 					frequency_bnc: count_in_bnc as usize,
 					word: word.clone().into_inner(),
-					log_likelyhood: log_likelyhood(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64),
+					log_likelihood: log_likelihood(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64),
 					odds_ratio: odds_ratio(*count as f64, self.total_num_tokens_in_user_corpus as f64, count_in_bnc as f64, self.total_num_tokens_in_bnc as f64, 0.0),
 					dispersion: dispersion_normalized(&part_data, *count as f64),
 				}
