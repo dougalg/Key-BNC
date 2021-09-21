@@ -12,6 +12,16 @@
 		<strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 		</noscript>
 		<div id="app"></div>
+		<script async src="https://cdn.panelbear.com/analytics.js?site=<%= VUE_APP_ANALYTICS_ID %>"></script>
+		<script>
+			window.panelbear = window.panelbear || function() { (window.panelbear.q = window.panelbear.q || []).push(arguments); };
+			panelbear('config', {
+				site: '<%= VUE_APP_ANALYTICS_ID %>',
+				spaMode: 'history',
+				debug: <%= VUE_APP_ANALYTICS_ENABLE_DEBUG %>,
+				honorDNT: true,
+			});
+		</script>
 		<!-- built files will be auto injected -->
 	</body>
 </html>

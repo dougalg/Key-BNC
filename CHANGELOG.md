@@ -1,5 +1,10 @@
 # Changelog
 
+## V2.4
+
+Sept 21<sup>st</sup>, 2021
+- Add PanelBear analytics
+
 ## V2.3
 
 July 18<sup>th</sup>, 2020
