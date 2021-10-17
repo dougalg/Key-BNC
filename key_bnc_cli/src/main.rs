@@ -1,11 +1,12 @@
 mod bnc_data;
 
-use key_bnc_utils::utils::{tokenize, collect};
-use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
-use bnc_data::get_bnc_count;
+use std::fmt;
 use std::path::Path;
 use std::env;
 use std::fs::{read_to_string};
+use key_bnc_utils::utils::{tokenize, collect};
+use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
+use bnc_data::get_bnc_count;
 use walkdir::{WalkDir, DirEntry};
 use unicase::UniCase;
 use counter::Counter;
@@ -98,6 +99,12 @@ pub struct CorpusPart {
 	word_counts: Counter<UniCase<String>>,
 }
 
+impl fmt::Display for CorpusPart {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{1} <{0}>: {2} tokens, {3}% of total", self.id, self.name, self.percent_of_total, self.token_count)
+    }
+}
+
 #[derive(Debug)]
 pub struct WordStats {
 	word: UniCase<String>,
@@ -105,6 +112,12 @@ pub struct WordStats {
 	log_likelihood: f64,
 	odds_ratio: f64,
 	dispersion: f64,
+}
+
+impl fmt::Display for WordStats {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "{{ word: {0}, count: {1}, ll: {2}, or: {3}, dispersion: {4} }}", self.word, self.count, self.log_likelihood, self.odds_ratio, self.dispersion)
+	}
 }
 
 fn process_file(entry: &DirEntry, id: i32) -> CorpusPart {

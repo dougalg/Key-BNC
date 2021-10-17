@@ -24,7 +24,7 @@ yarn serve
 ## Build 
 
 ```
-yarn build
+yarn build --mode=production
 ```
 
 *NOTE*: Sometimes this needs to be run twice in a row, after a `Parsing error: The keyword 'import' is reserved` error.
