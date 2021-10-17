@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="icon" href="/favicon.ico">
+		<title>Key-BNC</title>
+		<meta name="description" content="Keyword analysis tool, using the British National Corpus (BNC) as comparison">
+		<link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="16x16">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+		<link rel="mask-icon" href="/favicon.ico" color="#000000">
+		<meta name="theme-color" content="#000000">
+	</head>
+	<body>
+		<noscript>
+		<strong>We're sorry but Key-BNC doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+		</noscript>
+		<div id="app"></div>
+		<script type="module" src="/src/main.ts"></script>
+		<script async src="https://cdn.panelbear.com/analytics.js?site=%VITE_APP_ANALYTICS_ID%"></script>
+		<script>
+			window.panelbear = window.panelbear || function() { (window.panelbear.q = window.panelbear.q || []).push(arguments); };
+			panelbear('config', {
+				site: '%VITE_APP_ANALYTICS_ID%',
+				spaMode: 'history',
+				debug: %VITE_APP_ANALYTICS_ENABLE_DEBUG%,
+				honorDNT: true,
+			});
+		</script>
+		<!-- built files will be auto injected -->
+	</body>
+</html>
