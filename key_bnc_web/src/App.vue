@@ -1,14 +1,74 @@
+<template>
+	<main id="app">
+		<refresh-app />
+		<transition
+			name="fade"
+			mode="out-in"
+		>
+			<key-bnc-interface
+				v-if="isReady && state.keyBnc"
+				:key-bnc="state.keyBnc"
+			/>
+			<bnc-loader v-else />
+		</transition>
+
+		<transition name="fade">
+			<button
+				v-if="isReady"
+				class="version"
+				@click="dialogHandlers.open()"
+			>
+				<p>{{ version }}</p>
+				<img
+					class="logo"
+					src="@/assets/key-bnc-logo-white-225x278.png"
+					alt="A black key on a white backgorund"
+				>
+			</button>
+		</transition>
+
+		<changelog-viewer
+			ref="changelogViewer"
+			@close="dialogHandlers.close()"
+		/>
+	</main>
+</template>
+
 <script setup lang="ts">
-import { computed, onMounted, reactive } from '@vue/runtime-core'
+import {
+	ref,
+	Ref,
+	computed,
+	onMounted,
+	reactive,
+	watch,
+} from '@vue/runtime-core'
 import init, { KeyBnc } from 'key_bnc_wasm'
 import KeyBncInterface from './components/Interface.vue'
 import BncLoader from './components/BncLoader.vue'
 import RefreshApp from './components/RefreshApp.vue'
+import ChangelogViewer from './components/changelog/ChangelogViewer.vue'
+import { lastViewedVersion, latestVersion } from './components/changelog/useChangelog'
+import { useDialog } from './hooks/useDialog'
+import { VueInstance } from '@vueuse/core'
+
+const changelogViewer: Ref<VueInstance | HTMLDialogElement | null> = ref(null);
+const dialogHandlers = useDialog(changelogViewer);
 
 const state = reactive({
 	keyBnc: null as KeyBnc | null,
 	hasLoadedBncData: false,
 })
+
+const isChangelogVisible = computed(() => lastViewedVersion.value !== latestVersion)
+
+watch(isChangelogVisible, (curr) => {
+	if (curr) {
+		dialogHandlers.open();
+	} else {
+		dialogHandlers.close();
+	}
+}, { immediate: true })
 
 const version = __APP_VERSION__;
 
@@ -35,36 +95,6 @@ onMounted(async () => {
 
 const isReady = computed(() => Boolean(state.keyBnc) && state.hasLoadedBncData)
 </script>
-
-<template>
-	<main id="app">
-		<refresh-app />
-		<transition
-			name="fade"
-			mode="out-in"
-		>
-			<key-bnc-interface
-				v-if="isReady && state.keyBnc"
-				:key-bnc="state.keyBnc"
-			/>
-			<bnc-loader v-else />
-		</transition>
-
-		<transition name="fade">
-			<div
-				v-if="isReady"
-				class="version"
-			>
-				<p>{{ version }}</p>
-				<img
-					class="logo"
-					src="@/assets/key-bnc-logo-white-225x278.png"
-					alt="A black key on a white backgorund"
-				>
-			</div>
-		</transition>
-	</main>
-</template>
 
 <style lang="scss">
 *,
@@ -112,19 +142,27 @@ button {
 }
 
 .version {
+	background: none;
+	text-decoration: underline;
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	color: #ddd;
 	top: 0.5rem;
 	right: 0.5rem;
-	color: white;
 	padding: 0;
 	margin: 0;
 	font-size: 1.2rem;
 
+	&:hover,
+	&:focus {
+		text-decoration: none;
+		color: white;
+	}
+
 	& p {
-		margin: 0;
+		margin: 0 0 0.5rem 0;
 	}
 }
 

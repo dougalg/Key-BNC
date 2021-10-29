@@ -56,6 +56,7 @@ export default defineComponent({
 	font-weight: 600;
 	padding: 0.5rem 1rem;
 	border-radius: 3px;
+	white-space: nowrap;
 
 	&:hover,
 	&:focus {

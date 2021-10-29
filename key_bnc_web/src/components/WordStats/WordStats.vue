@@ -53,7 +53,13 @@ import {
 	FilterProps,
 } from './filters'
 import { toCSV } from '@/services/csv'
-import { computed, defineComponent, PropType, toRefs } from '@vue/runtime-core'
+import {
+	computed,
+	reactive,
+	defineComponent,
+	PropType,
+	toRefs,
+} from '@vue/runtime-core'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
@@ -88,12 +94,12 @@ export default defineComponent({
 		},
 	},
 	setup (props) {
-		const state = {
+		const state = reactive({
 			currentSort: SortBy.FREQUENCY,
 			currentSortDirection: SortDirection.DESC,
 			filters: [] as Filter[],
 			openFilterDropdown: null as string | null,
-		}
+		})
 
 		const sortedFilteredStats = computed(() => {
 			const sortFn = state.currentSortDirection === SortDirection.ASC
@@ -110,7 +116,9 @@ export default defineComponent({
 		})
 
 		const toggleFilterDropdown = (filterId: string) => {
+			console.log(state.openFilterDropdown)
 			state.openFilterDropdown = state.openFilterDropdown === filterId ? null : filterId
+			console.log(state.openFilterDropdown)
 		}
 
 		const setSort = (newSort: SortBy): void => {
@@ -126,7 +134,7 @@ export default defineComponent({
 
 		const addFilter = (filterType: FilterType): void => {
 			const newFilter = FilterGetters[filterType]()
-			state.filters.push(newFilter)
+			state.filters = [ ...state.filters, newFilter ]
 			state.openFilterDropdown = newFilter.id
 		}
 
@@ -215,8 +223,8 @@ tr > td:first-child {
 	align-items: center;
 	justify-content: space-between;
 
-	&:deep(.basic-button) {
-		margin-left: 1rem;
+	&:deep(> .basic-button) {
+		margin-inline-start: 1rem;
 	}
 }
 </style>

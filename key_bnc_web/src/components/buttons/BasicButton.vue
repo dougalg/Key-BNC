@@ -24,9 +24,11 @@ export default defineComponent({
 	border-radius: 5px;
 	background-color: #eee;
 	border: 2px solid #eee;
+	color: #111;
 
 	&:hover,
 	&:focus {
+		color: #000;
 		border-color: #111;
 	}
 }

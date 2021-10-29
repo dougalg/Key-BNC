@@ -1,4 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { polyfillDialogIfNeeded } from './polyfills/dialog'
 
-createApp(App).mount('#app')
+const run = async () => {
+	await polyfillDialogIfNeeded();
+	createApp(App).mount('#app')
+};
+
+run();

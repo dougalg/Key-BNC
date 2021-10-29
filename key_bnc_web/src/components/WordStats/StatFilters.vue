@@ -23,6 +23,7 @@
 				<basic-button
 					v-for="{ type, text } in buttons"
 					:key="type"
+					class="stat-button"
 					@click="onSelection(type)"
 				>
 					{{ text }}
@@ -120,5 +121,9 @@ export default defineComponent({
 
 .stats-filters > * + * {
 	margin-left: 0.4rem;
+}
+
+.stat-button + .stat-button {
+	margin-block-start: 0.5rem;
 }
 </style>

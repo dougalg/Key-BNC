@@ -5,59 +5,69 @@
 			class="refresh-alert"
 		>
 			New content is available.
-			<basic-button @click="refreshApp">
+			<basic-button
+				class="refresh-button"
+				@click="refreshApp"
+			>
 				Refresh page
+			</basic-button>
+		</div>
+		<div
+			v-else-if="state.offlineReady"
+			class="refresh-alert"
+		>
+			<div class="offline-mode">
+				<p>
+					Ready to work offline
+				</p>
+				<p class="note">
+					(You are now ready visit this website without internet)
+				</p>
+			</div>
+			<basic-button
+				class="refresh-button"
+				@click="clearOfflineReady"
+			>
+				OK
 			</basic-button>
 		</div>
 	</transition>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from '@vue/runtime-core'
 import BasicButton from '@/components/buttons/BasicButton.vue'
+import { reactive } from '@vue/reactivity'
 import { registerSW } from 'virtual:pwa-register'
 
-const state = {
-	refreshing: false,
+const state = reactive({
 	updateExists: false,
+	offlineReady: false,
 	registration: undefined as ServiceWorkerRegistration | undefined,
-}
+})
 
 const updateSW = registerSW({
 	onNeedRefresh() {
 		state.updateExists = true
 	},
 	onOfflineReady() {
-		console.log('offline ready')
+		state.offlineReady = true
 	},
-})
-
-const showRefreshUI = (e: Event) => {
-	if ('detail' in e) {
-		state.registration = (e as CustomEvent).detail
-		state.updateExists = true
-	}
-}
-
-onMounted(() => {
-	document.addEventListener('swUpdated', showRefreshUI, { once: true })
-	navigator.serviceWorker.addEventListener('controllerchange', () => {
-		if (state.refreshing) {
-			return
-		}
-		state.refreshing = true
-		window.location.reload()
-	})
 })
 
 const refreshApp = () => {
 	updateSW()
 	state.updateExists = false
 }
+
+const clearOfflineReady = () => {
+	state.offlineReady = false
+}
 </script>
 
 <style lang="scss" scoped>
 .refresh-alert {
+	display: flex;
+	align-items: center;
 	position: absolute;
 	padding: 0.5rem 1rem;
 	top: 0;
@@ -72,5 +82,24 @@ const refreshApp = () => {
 .slide-enter,
 .slide-leave-to {
 	transform: translateY(-100%);
+}
+
+.refresh-button:not(:hover):not(:focus) {
+	border-color: #999;
+}
+
+.offline-mode {
+	display: flex;
+	flex-direction: column;
+	margin-inline-end: 2rem;
+
+	& > * {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.note {
+	font-size: 1rem;
 }
 </style>

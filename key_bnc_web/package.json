@@ -13,6 +13,8 @@
 		"deploy:staging": "scp -r ./dist/* dgraham@dougalgraham.ca:key-bnc-staging/public/"
 	},
 	"dependencies": {
+		"@vueuse/core": "^6.7.3",
+		"dialog-polyfill": "^0.5.6",
 		"postcss-scss": "^4.0.1",
 		"sass": "^1.43.3",
 		"uuid": "^8.3.2",
