@@ -2,8 +2,9 @@
 	"name": "key_bnc_web",
 	"version": "2.4.0",
 	"scripts": {
-		"wasm": "wasm-pack build ./key_bnc_wasm --target web",
-		"dev": "yarn wasm && vite",
+		"kbnc_wasm": "wasm-pack build ./key_bnc_wasm --target web",
+		"pdf_wasm": "wasm-pack build ./pdf_text_wasm --target web",
+		"dev": "yarn kbnc_wasm && yarn pdf_wasm && vite",
 		"build": "vue-tsc --noEmit && vite build",
 		"serve": "vite preview",
 		"lint:fix": "eslint \"./**/*.{vue,ts,js}\" --fix",

@@ -1,0 +1,37 @@
+[package]
+name = "pdf_text_wasm"
+version = "0.0.1"
+authors = ["dougalg <dougalg@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+pdf = { git = "https://github.com/pdf-rs/pdf", features = [ "euclid" ] }
+pdf_encoding = "*"
+euclid = "0.22.6"
+log = "*"
+serde = "^1.0.59"
+serde_derive = "^1.0.59"
+wasm-bindgen = { version = "0.2", features = [ "serde-serialize" ] }
+web-sys = { version = "0.3", features = [ "FileReader" ] }
+js-sys = "0.3"
+# Note that chrono is used internally by the PDF crate, so this
+# version number should be kept in sync with that...
+chrono = { version = "0.4.19", features = [ "wasmbind", "serde" ] }
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.7" }
+# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
+# compared to the default allocator's ~10K. It is slower than the default
+# allocator, however.
+#
+# Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
+wee_alloc = { version = "0.4.2", optional = true }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"

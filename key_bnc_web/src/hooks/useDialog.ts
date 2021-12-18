@@ -42,7 +42,6 @@ export const useDialog = (
 			if (isOpen.value) {
 				open();
 			} else {
-				console.log(curr);
 				close();
 			}
 		}, { immediate: true });

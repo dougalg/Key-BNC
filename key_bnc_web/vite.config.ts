@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
 			tsconfigPaths({
 				extensions: [ '.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.wasm'],
 			}),
-			wasmPack(['./key_bnc_wasm']),
+			wasmPack(['./key_bnc_wasm', './pdf_text_wasm']),
 			htmlPlugin(),
 		],
 		define: {
