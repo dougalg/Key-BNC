@@ -36,7 +36,6 @@
 <script lang="ts">
 import { defineComponent, PropType, reactive, Ref, ref, toRefs } from '@vue/runtime-core'
 import { KeyBnc } from 'key_bnc_wasm'
-import { PdfToText } from 'pdf_text_wasm';
 import BasicButton from './buttons/BasicButton.vue'
 
 interface FileObject {
@@ -68,10 +67,14 @@ export default defineComponent({
 					if (!event.target) {
 						return;
 					}
-					const result = PdfToText.new().read_file(new Uint8Array(event.target.result as ArrayBuffer));
-					console.log(result);
+					const id = props.keyBnc.add_pdf(new Uint8Array(event.target.result as ArrayBuffer));
+					state.allFiles.push({
+						id,
+						name,
+					})
 				}
 				fileReader.readAsArrayBuffer(f)
+				ctx.emit('corpus-changed')
 			} else {
 				const fileReader = new FileReader()
 				fileReader.onloadend = () => {

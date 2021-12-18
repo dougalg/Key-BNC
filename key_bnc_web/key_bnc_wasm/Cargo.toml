@@ -35,6 +35,16 @@ console_error_panic_hook = { version = "0.1.1", optional = true }
 # Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
 wee_alloc = { version = "0.4.2", optional = true }
 
+# For PDF reading
+pdf = { git = "https://github.com/pdf-rs/pdf", features = [ "euclid" ] }
+pdf_encoding = "*"
+euclid = "0.22.6"
+log = "*"
+# Note that chrono is used internally by the PDF crate, so this
+# version number should be kept in sync with that...
+chrono = { version = "0.4.19", features = [ "wasmbind", "serde" ] }
+
+
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
 

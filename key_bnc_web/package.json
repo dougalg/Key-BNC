@@ -3,8 +3,7 @@
 	"version": "2.4.0",
 	"scripts": {
 		"kbnc_wasm": "wasm-pack build ./key_bnc_wasm --target web",
-		"pdf_wasm": "wasm-pack build ./pdf_text_wasm --target web",
-		"dev": "yarn kbnc_wasm && yarn pdf_wasm && vite",
+		"dev": "yarn kbnc_wasm && vite",
 		"build": "vue-tsc --noEmit && vite build",
 		"serve": "vite preview",
 		"lint:fix": "eslint \"./**/*.{vue,ts,js}\" --fix",

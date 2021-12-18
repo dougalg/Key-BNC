@@ -1,3 +1,5 @@
+mod pdftotext;
+
 extern crate serde_derive;
 use std::collections::HashMap;
 use serde_derive::{Serialize};
@@ -8,6 +10,8 @@ use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
 use unicase::UniCase;
 use counter::Counter;
 use csv::Reader;
+use js_sys::Uint8Array;
+use pdf::file::File;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -63,12 +67,29 @@ impl KeyBnc {
 		self.has_loaded_bnc_data
 	}
 
+	/**
+	 * Add a text file to the corpus, as a JS FileReader
+	 */
 	pub fn add_entry(&mut self, file: FileReader) -> i32 {
 		let contents = file.result()
 			.expect("Could not read file");
-		let tokens = tokenize(&mut contents.into_serde().unwrap());
+
+		self.add_string(&mut contents.into_serde().unwrap())
+	}
+
+	/**
+	 * Add a PDF to the corpus as a Uint8Array
+	 */
+	pub fn add_pdf(&mut self, file: Uint8Array) -> i32 {
+		let mut t = String::new();
+		read_pdf_file(file, &mut t);
+
+		self.add_string(&mut t)
+	}
+
+	fn add_string(&mut self, text: &mut String) -> i32 {
 		let file_id = self.get_next_id();
-		let entry = process_file(tokens);
+		let entry = process_file(tokenize(text));
 
 		// Update the struct
 		self.total_num_tokens_in_user_corpus += entry.token_count;
@@ -152,4 +173,19 @@ pub fn get_bnc_count(bnc_raw_csv: String) -> HashMap<UniCase<String>, usize> {
 		.filter_map(|rec| rec.ok())
 		.map(|rec| (UniCase::new(rec[2].parse::<String>().unwrap()), rec[1].parse::<usize>().unwrap()))
 		.collect()
+}
+
+pub fn read_pdf_file(file: Uint8Array, text: &mut String) {
+	// let mut text = "".to_owned();
+	let file = File::from_data(file.to_vec()).expect("failed to read PDF");
+	for (page_nr, page_result) in file.pages().enumerate() {
+		let text_result = page_result.ok()
+			.map(|page| {
+				pdftotext::page_text(&page, &file).ok()
+			})
+			.flatten();
+		if let Some(ok_text) = text_result {
+			text.push_str(&ok_text);
+		}
+	}
 }

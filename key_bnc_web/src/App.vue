@@ -44,7 +44,6 @@ import {
 	watch,
 } from '@vue/runtime-core'
 import initKeyBncWasm, { KeyBnc } from 'key_bnc_wasm';
-import initPdfToTextWasm from 'pdf_text_wasm';
 import KeyBncInterface from './components/Interface.vue'
 import BncLoader from './components/BncLoader.vue'
 import RefreshApp from './components/RefreshApp.vue'
@@ -87,10 +86,7 @@ const pollBncCsv = () => {
 
 onMounted(async () => {
 	const csvImport = import('@virtual:plain-text/src/assets/BNC_wordlist.csv').then((_) => _.plainText)
-	await Promise.all([
-		initKeyBncWasm(),
-		initPdfToTextWasm(),
-	]);
+	await initKeyBncWasm();
 	state.keyBnc = KeyBnc.new()
 	const csv = await csvImport
 	state.keyBnc.load_bnc_data(csv)
