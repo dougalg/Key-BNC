@@ -8,6 +8,7 @@
 				type="file"
 				class="file-input"
 				multiple
+				accept=".pdf,text/plain"
 				@change="onFileChange"
 			>
 			<label
@@ -34,6 +35,7 @@
 </template>
 
 <script lang="ts">
+import { readFileAsArrayBuffer, readFileAsText, validateEventTarget } from '@/util/asyncFileReader'
 import { defineComponent, PropType, reactive, Ref, ref, toRefs } from '@vue/runtime-core'
 import { KeyBnc } from 'key_bnc_wasm'
 import BasicButton from './buttons/BasicButton.vue'
@@ -59,34 +61,25 @@ export default defineComponent({
 			allFiles: [] as FileObject[],
 		})
 
-		const processFile = (f: File) => {
-			const name = f.name
+		const addFileToKeyBnc = async (f: File): Promise<number> => {
 			if (f.type.toLocaleLowerCase() === 'application/pdf') {
-				const fileReader = new FileReader()
-				fileReader.onloadend = (event: ProgressEvent<FileReader>) => {
-					if (!event.target) {
-						return;
-					}
-					const id = props.keyBnc.add_pdf(new Uint8Array(event.target.result as ArrayBuffer));
-					state.allFiles.push({
-						id,
-						name,
-					})
-				}
-				fileReader.readAsArrayBuffer(f)
-				ctx.emit('corpus-changed')
-			} else {
-				const fileReader = new FileReader()
-				fileReader.onloadend = () => {
-					const id = props.keyBnc.add_entry(fileReader)
-					state.allFiles.push({
-						id,
-						name,
-					})
-				}
-				fileReader.readAsText(f)
-				ctx.emit('corpus-changed')
+				const event = await readFileAsArrayBuffer(f)
+				validateEventTarget(event);
+				return props.keyBnc.add_pdf(new Uint8Array(event.target.result as ArrayBuffer));
 			}
+			const event = await readFileAsText(f)
+			validateEventTarget(event);
+			return props.keyBnc.add_entry(event.target)
+		}
+
+		const processFile = async (f: File) => {
+			const name = f.name
+			ctx.emit('corpus-changed')
+			const id = await addFileToKeyBnc(f)
+			state.allFiles.push({
+				id,
+				name,
+			})
 		}
 
 		const onFileChange = () => {
