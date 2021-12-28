@@ -1,16 +1,21 @@
 mod pdftotext;
+mod indexeddb;
 
 extern crate serde_derive;
+extern crate wasm_bindgen_futures;
+extern crate futures;
+
 use std::collections::HashMap;
 use serde_derive::{Serialize};
 use wasm_bindgen::prelude::*;
+use wasm_bindgen_futures::future_to_promise;
 use web_sys::FileReader;
 use key_bnc_utils::utils::{tokenize, collect};
 use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
 use unicase::UniCase;
 use counter::Counter;
 use csv::Reader;
-use js_sys::Uint8Array;
+use js_sys::{Uint8Array, Promise};
 use pdf::file::File;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -70,33 +75,37 @@ impl KeyBnc {
 	/**
 	 * Add a text file to the corpus, as a JS FileReader
 	 */
-	pub fn add_entry(&mut self, file: FileReader) -> i32 {
+	pub fn add_file(&mut self, file: FileReader) -> js_sys::Promise {
 		let contents = file.result()
 			.expect("Could not read file");
+		let mut text = contents.into_serde().unwrap();
 
-		self.add_string(&mut contents.into_serde().unwrap())
+		let file_id = self.get_next_id();
+		let entry = process_file(tokenize(&mut text));
+		self.add_entry(file_id, entry);
+
+		future_to_promise(indexeddb::save_file_text(file_id, text))
 	}
 
 	/**
 	 * Add a PDF to the corpus as a Uint8Array
 	 */
-	pub fn add_pdf(&mut self, file: Uint8Array) -> i32 {
-		let mut t = String::new();
-		read_pdf_file(file, &mut t);
+	pub fn add_pdf(&mut self, file: Uint8Array) -> Promise {
+		let mut text = String::new();
+		read_pdf_file(file, &mut text);
 
-		self.add_string(&mut t)
+		let file_id = self.get_next_id();
+		let entry = process_file(tokenize(&mut text));
+		self.add_entry(file_id, entry);
+
+		// Save to IDB
+		future_to_promise(indexeddb::save_file_text(file_id, text))
 	}
 
-	fn add_string(&mut self, text: &mut String) -> i32 {
-		let file_id = self.get_next_id();
-		let entry = process_file(tokenize(text));
-
-		// Update the struct
+	fn add_entry(&mut self, key: i32, entry: CorpusPart) {
 		self.total_num_tokens_in_user_corpus += entry.token_count;
 		self.user_corpus_words_counts += entry.word_counts.clone();
-		self.entries.insert(file_id.clone(), entry);
-
-		file_id
+		self.entries.insert(key.clone(), entry);
 	}
 
 	pub fn remove_entry(&mut self, file_id: i32) {

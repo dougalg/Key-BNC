@@ -19,7 +19,9 @@ unicase_serde = "0.1.0"
 key_bnc_utils = { path = "../../key_bnc_utils" }
 serde = "^1.0.59"
 serde_derive = "^1.0.59"
+futures = "0.1"
 wasm-bindgen = { version = "0.2", features = [ "serde-serialize" ] }
+wasm-bindgen-futures = { version = "0.4" }
 web-sys = { version = "0.3", features = [ "FileReader", "Blob", "console" ] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
@@ -43,7 +45,7 @@ log = "*"
 # Note that chrono is used internally by the PDF crate, so this
 # version number should be kept in sync with that...
 chrono = { version = "0.4.19", features = [ "wasmbind", "serde" ] }
-
+indexed_db_futures = "0.2.1"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
