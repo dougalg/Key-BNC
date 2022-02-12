@@ -25,7 +25,7 @@ export const changelog: Release[] = [
 				type: ChangeType.FEATURE,
 			},
 			{
-				description: "Add support for PDF files",
+				description: "Add support for PDF files [EXPERIMENTAL]",
 				type: ChangeType.FEATURE,
 			},
 		],

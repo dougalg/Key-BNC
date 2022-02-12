@@ -9,7 +9,7 @@ use std::collections::HashMap;
 use serde_derive::{Serialize};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::future_to_promise;
-use web_sys::FileReader;
+use web_sys::{FileReader};
 use key_bnc_utils::utils::{tokenize, collect};
 use key_bnc_utils::stats::{odds_ratio, log_likelihood, dispersion_normalized};
 use unicase::UniCase;
@@ -100,6 +100,27 @@ impl KeyBnc {
 
 		// Save to IDB
 		future_to_promise(indexeddb::save_file_text(file_id, text))
+	}
+
+	/**
+	 * Read a file from IDB
+	 */
+	pub fn load_saved_file(&mut self, id: JsValue) -> Promise {
+		future_to_promise(self.add_future_idb_text(id))
+	}
+
+	async fn add_future_idb_text(&mut self, id: JsValue) -> Result<JsValue, JsValue> {
+		let id_as_i32 = id.as_f64().map(|x| {
+			x.round().rem_euclid(2f64.powi(32)) as u32 as i32
+		});
+		let text = indexeddb::get_file_text(id).await?;
+		if let Some(mut ok_text) = text.as_string() {
+			if let Some(ok_id) = id_as_i32 {
+				let entry = process_file(tokenize(&mut ok_text));
+				self.add_entry(ok_id, entry);
+			}
+		}
+		Ok(JsValue::TRUE)
 	}
 
 	fn add_entry(&mut self, key: i32, entry: CorpusPart) {

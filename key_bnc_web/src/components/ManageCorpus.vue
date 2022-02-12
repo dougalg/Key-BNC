@@ -35,6 +35,7 @@
 </template>
 
 <script lang="ts">
+import { getPdfText } from '@/services/pdf'
 import { readFileAsArrayBuffer, readFileAsText, validateEventTarget } from '@/util/asyncFileReader'
 import { defineComponent, PropType, reactive, Ref, ref, toRefs } from '@vue/runtime-core'
 import { KeyBnc } from 'key_bnc_wasm'
@@ -65,11 +66,12 @@ export default defineComponent({
 			if (f.type.toLocaleLowerCase() === 'application/pdf') {
 				const event = await readFileAsArrayBuffer(f)
 				validateEventTarget(event);
-				return props.keyBnc.add_pdf(new Uint8Array(event.target.result as ArrayBuffer));
+				const buffer = new Uint8Array(event.target.result as ArrayBuffer)
+				return props.keyBnc.add_pdf(buffer)
 			}
 			const event = await readFileAsText(f)
 			validateEventTarget(event);
-			return props.keyBnc.add_entry(event.target)
+			return props.keyBnc.add_file(event.target)
 		}
 
 		const processFile = async (f: File) => {
