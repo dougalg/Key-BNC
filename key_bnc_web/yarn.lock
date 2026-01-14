@@ -3899,7 +3899,7 @@ vite-plugin-virtual-plain-text@^1.1.0:
   resolved "https://registry.yarnpkg.com/vite-plugin-virtual-plain-text/-/vite-plugin-virtual-plain-text-1.1.0.tgz#b612004c13fb3dec20546695615ee7252fdf28ff"
   integrity sha512-P31O4rzbY1WbuMhD0XcQczzdwAW1AkIrsZlSf1//87jqvcWIREtKY8wuCfevc8J38gGNNffvxbt1Gnhjz1HgtQ==
 
-vite-plugin-wasm-pack@^0.1.7:
+vite-plugin-wasm-pack@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/vite-plugin-wasm-pack/-/vite-plugin-wasm-pack-0.1.7.tgz#b59d51699ba7f452b6093bef6baf4cfa14cf3312"
   integrity sha512-llt/d93IHI1LuDGjju6LsuXjBN/5PAEGBnC9ea4p5orFhdRzhenLkQHp/+/0c1APdCIbVqaRtSBM0AbVeLaH7g==

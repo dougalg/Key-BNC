@@ -37,19 +37,19 @@ export default defineConfig(({ mode }) => {
 			VitePWA(),
 			plainText(),
 			tsconfigPaths({
-				extensions: [ '.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.wasm'],
+				extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.wasm'],
 			}),
-			wasmPack(['./key_bnc_wasm']),
+			wasmPack('./key_bnc_wasm'),
 			htmlPlugin(),
 		],
 		define: {
 			__APP_VERSION__: `"${gitRevisionPlugin.version()}"`,
 		},
 		resolve: {
-			alias: [ {
+			alias: [{
 				find: '@',
 				replacement: path.resolve('src'),
-			} ],
+			}],
 		},
 	}
 })

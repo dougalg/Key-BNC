@@ -1,4 +1,5 @@
 extern crate serde_derive;
+extern crate console_error_panic_hook;
 use std::collections::HashMap;
 use serde_derive::{Serialize};
 use wasm_bindgen::prelude::*;
@@ -47,6 +48,7 @@ pub struct KeyBnc {
 #[wasm_bindgen]
 impl KeyBnc {
 	pub fn new() -> KeyBnc {
+		console_error_panic_hook::set_once();
 		Default::default()
 	}
 
