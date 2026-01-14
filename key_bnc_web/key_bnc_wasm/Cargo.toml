@@ -16,7 +16,7 @@ csv = "1.1.3"
 unicase = "2.6.0"
 js-sys = "0.3.37"
 unicase_serde = "0.1.0"
-key_bnc_utils = { path = "../../../key_bnc_utils" }
+key_bnc_utils = { path = "../../key_bnc_utils" }
 serde = "^1.0.59"
 serde_derive = "^1.0.59"
 wasm-bindgen = { version = "0.2", features = [ "serde-serialize" ] }
