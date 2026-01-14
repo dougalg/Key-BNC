@@ -2,7 +2,7 @@
 	"name": "key_bnc_web",
 	"version": "2.4.0",
 	"scripts": {
-		"wasm": "wasm-pack build ./key_bnc_wasm --target web",
+		"wasm": "wasm-pack build ./key_bnc_wasm --target web && cp ./key_bnc_wasm/pkg/key_bnc_wasm_bg.wasm ./",
 		"dev": "yarn wasm && vite",
 		"build": "vite build",
 		"serve": "vite preview",
