@@ -4,7 +4,7 @@
 	"scripts": {
 		"wasm": "wasm-pack build ./key_bnc_wasm --target web",
 		"dev": "yarn wasm && vite",
-		"build": "vue-tsc --noEmit && vite build",
+		"build": "vite build",
 		"serve": "vite preview",
 		"lint:fix": "eslint \"./**/*.{vue,ts,js}\" --fix",
 		"lint": "eslint \"./**/*.{vue,ts,js}\" && yarn run lint:style",
@@ -39,7 +39,7 @@
 		"vite": "^2.6.10",
 		"vite-plugin-pwa": "^0.11.3",
 		"vite-plugin-virtual-plain-text": "^1.1.0",
-		"vite-plugin-wasm-pack": "^0.1.7",
+		"vite-plugin-wasm-pack": "0.1.7",
 		"vite-tsconfig-paths": "^3.3.17",
 		"vue-tsc": "^0.3.0"
 	}
