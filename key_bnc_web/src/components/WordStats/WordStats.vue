@@ -6,8 +6,8 @@
 			</h2>
 			<stat-filters
 				v-if="wordStats.length > 0"
-				:filters="filters"
-				:open-filter-dropdown="openFilterDropdown"
+				:filters="state.filters"
+				:open-filter-dropdown="state.openFilterDropdown"
 				@toggle-filter-dropdown="toggleFilterDropdown"
 				@add-filter="addFilter"
 				@filter-change="updateFilter"
@@ -26,14 +26,14 @@
 		<word-stats-table
 			v-else
 			:words="sortedFilteredStats"
-			:sort-by="currentSort"
-			:sort-direction="currentSortDirection"
+			:sort-by="state.currentSort"
+			:sort-direction="state.currentSortDirection"
 			@set-sort="setSort"
 		/>
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
 	WordStats,
 	SortBy,
@@ -53,7 +53,7 @@ import {
 	FilterProps,
 } from './filters'
 import { toCSV } from '@/services/csv'
-import { computed, defineComponent, PropType, toRefs } from '@vue/runtime-core'
+import { computed, reactive } from '@vue/runtime-core'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,
@@ -79,101 +79,83 @@ const FilterGetters = {
 	[FilterType.DISPERSION]: getDispersionFilter,
 }
 
-export default defineComponent({
-	components: { StatFilters, WordStatsTable, BasicButton },
-	props: {
-		wordStats: {
-			type: Array as PropType<WordStats[]>,
-			required: true,
-		},
-	},
-	setup (props) {
-		const state = {
-			currentSort: SortBy.FREQUENCY,
-			currentSortDirection: SortDirection.DESC,
-			filters: [] as Filter[],
-			openFilterDropdown: null as string | null,
-		}
+const props = defineProps<{
+	wordStats: WordStats[]
+}>();
 
-		const sortedFilteredStats = computed(() => {
-			const sortFn = state.currentSortDirection === SortDirection.ASC
-				? SORTERS_ASC[state.currentSort]
-				: SORTERS_DESC[state.currentSort]
-			return props.wordStats
-				.filter((val) => {
-					if (state.filters.length === 0) {
-						return true
-					}
-					return state.filters.every((filter) => filter.test(val))
-				})
-				.sort(sortFn)
-		})
-
-		const toggleFilterDropdown = (filterId: string) => {
-			state.openFilterDropdown = state.openFilterDropdown === filterId ? null : filterId
-		}
-
-		const setSort = (newSort: SortBy): void => {
-			if (state.currentSort === newSort) {
-				state.currentSortDirection = state.currentSortDirection === SortDirection.ASC
-					? SortDirection.DESC
-					: SortDirection.ASC
-			} else {
-				state.currentSort = newSort
-				state.currentSortDirection = SortDirection.DESC
-			}
-		}
-
-		const addFilter = (filterType: FilterType): void => {
-			const newFilter = FilterGetters[filterType]()
-			state.filters.push(newFilter)
-			state.openFilterDropdown = newFilter.id
-		}
-
-		const updateFilter = (targetId: string, props: FilterProps): void => {
-			const targetFilter = state.filters.find(({ id }) => targetId === id)
-			if (!targetFilter) {
-				console.error('Could not locate filter to update with id:', targetId)
-			} else {
-				targetFilter.props = props
-			}
-		}
-
-		const removeFilter = (targetId: string) => {
-			state.filters = state.filters.filter(({ id }) => id !== targetId)
-			if (state.openFilterDropdown === targetId) {
-				state.openFilterDropdown = null
-			}
-		}
-
-		const downloadCsv = () => {
-			const filename = 'Key-BNC.csv'
-			const element = document.createElement('a')
-			const text = toCSV(sortedFilteredStats.value)
-			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-			element.setAttribute('download', filename)
-
-			element.style.display = 'none'
-			document.body.appendChild(element)
-
-			element.click()
-
-			document.body.removeChild(element)
-		}
-
-		return {
-			...toRefs(state),
-			SortBy,
-			sortedFilteredStats,
-			toggleFilterDropdown,
-			addFilter,
-			updateFilter,
-			removeFilter,
-			setSort,
-			downloadCsv,
-		}
-	},
+const state = reactive({
+	currentSort: SortBy.FREQUENCY,
+	currentSortDirection: SortDirection.DESC,
+	filters: [] as Filter[],
+	openFilterDropdown: null as string | null,
 })
+
+const sortedFilteredStats = computed(() => {
+	console.log("sorting/filtering")
+	const sortFn = state.currentSortDirection === SortDirection.ASC
+		? SORTERS_ASC[state.currentSort]
+		: SORTERS_DESC[state.currentSort]
+	return props.wordStats
+		.filter((val) => {
+			if (state.filters.length === 0) {
+				return true
+			}
+			return state.filters.every((filter) => filter.test(val))
+		})
+		.sort(sortFn)
+})
+
+const toggleFilterDropdown = (filterId: string) => {
+	state.openFilterDropdown = state.openFilterDropdown === filterId ? null : filterId
+}
+
+const setSort = (newSort: SortBy): void => {
+	if (state.currentSort === newSort) {
+		state.currentSortDirection = state.currentSortDirection === SortDirection.ASC
+			? SortDirection.DESC
+			: SortDirection.ASC
+	} else {
+		state.currentSort = newSort
+		state.currentSortDirection = SortDirection.DESC
+	}
+}
+
+const addFilter = (filterType: FilterType): void => {
+	const newFilter = FilterGetters[filterType]()
+	state.filters.push(newFilter)
+	state.openFilterDropdown = newFilter.id
+}
+
+const updateFilter = (targetId: string, props: FilterProps): void => {
+	const targetFilter = state.filters.find(({ id }) => targetId === id)
+	if (!targetFilter) {
+		console.error('Could not locate filter to update with id:', targetId)
+	} else {
+		targetFilter.props = props
+	}
+}
+
+const removeFilter = (targetId: string) => {
+	state.filters = state.filters.filter(({ id }) => id !== targetId)
+	if (state.openFilterDropdown === targetId) {
+		state.openFilterDropdown = null
+	}
+}
+
+const downloadCsv = () => {
+	const filename = 'Key-BNC.csv'
+	const element = document.createElement('a')
+	const text = toCSV(sortedFilteredStats.value)
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+	element.setAttribute('download', filename)
+
+	element.style.display = 'none'
+	document.body.appendChild(element)
+
+	element.click()
+
+	document.body.removeChild(element)
+}
 </script>
 
 <style scoped lang="scss">
