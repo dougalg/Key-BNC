@@ -38,7 +38,7 @@ import Dropdown from '@/components/Dropdown.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue'
 import { Filter } from './filters'
 import { v4 } from 'uuid'
-import { defineComponent, PropType } from '@vue/runtime-core'
+import { defineComponent, PropType } from 'vue'
 
 const buttons = [
 	{

@@ -53,7 +53,7 @@ import {
 	FilterProps,
 } from './filters'
 import { toCSV } from '@/services/csv'
-import { computed, reactive } from '@vue/runtime-core'
+import { computed, reactive } from 'vue'
 
 const SORTERS_ASC = {
 	[SortBy.FREQUENCY]: (a: WordStats, b: WordStats) => a.frequency - b.frequency,

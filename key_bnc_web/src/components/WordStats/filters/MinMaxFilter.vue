@@ -58,7 +58,7 @@ import { MinMaxFilterProps } from '../filters'
 import { Position } from '@/components/DropdownPosition'
 import Dropdown from '@/components/Dropdown.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue'
-import { computed, defineComponent } from '@vue/runtime-core'
+import { computed, defineComponent } from 'vue'
 
 const isInputElement = (el: EventTarget): el is HTMLInputElement => Boolean((el as HTMLInputElement).value);
 

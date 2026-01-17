@@ -1,13 +1,14 @@
 {
 	"name": "key_bnc_web",
 	"version": "2.4.0",
+	"type": "module",
 	"scripts": {
 		"wasm": "wasm-pack build ./key_bnc_wasm --target web && cp ./key_bnc_wasm/pkg/key_bnc_wasm_bg.wasm ./",
-		"dev": "yarn wasm && vite",
+		"dev": "pnpm wasm && vite",
 		"build": "vite build",
 		"serve": "vite preview",
 		"lint:fix": "eslint \"./**/*.{vue,ts,js}\" --fix",
-		"lint": "eslint \"./**/*.{vue,ts,js}\" && yarn run lint:style",
+		"lint": "eslint \"./**/*.{vue,ts,js}\" && pnpm run lint:style",
 		"lint:style": "stylelint \"**/*.{scss,css,vue}\"",
 		"deploy": "scp -r ./dist/* dgraham@dougalgraham.ca:key-bnc/public/",
 		"deploy:staging": "scp -r ./dist/* dgraham@dougalgraham.ca:key-bnc-staging/public/"
@@ -16,15 +17,15 @@
 		"postcss-scss": "^4.0.1",
 		"sass": "^1.43.3",
 		"uuid": "^8.3.2",
-		"vue": "^3.2.16"
+		"vue": "^3.5.26"
 	},
 	"devDependencies": {
 		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^5.0.0",
 		"@typescript-eslint/parser": "^5.0.0",
-		"@vitejs/plugin-legacy": "^1.6.2",
-		"@vitejs/plugin-vue": "^1.9.3",
-		"@vue/eslint-config-typescript": "8.0.0",
+		"@vitejs/plugin-legacy": "^7.2.1",
+		"@vitejs/plugin-vue": "^6.0.3",
+		"@vue/eslint-config-typescript": "14.6.0",
 		"eslint": "^8.0.0",
 		"eslint-plugin-vue": "^7.17.0",
 		"git-revision-webpack-plugin": "^5.0.0",
@@ -36,11 +37,12 @@
 		"stylelint-config-standard": "^23.0.0",
 		"stylelint-scss": "^4.0.0",
 		"typescript": "^4.4.3",
-		"vite": "^2.6.10",
-		"vite-plugin-pwa": "^0.11.3",
-		"vite-plugin-virtual-plain-text": "^1.1.0",
-		"vite-plugin-wasm-pack": "0.1.7",
-		"vite-tsconfig-paths": "^3.3.17",
-		"vue-tsc": "^0.3.0"
-	}
+		"vite": "^7.3.1",
+		"vite-plugin-pwa": "^1.2.0",
+		"vite-plugin-virtual-plain-text": "^1.4.5",
+		"vite-plugin-wasm-pack": "0.1.12",
+		"vite-tsconfig-paths": "^6.0.4",
+		"vue-tsc": "^3.2.2"
+	},
+	"packageManager": "pnpm@8.12.1+sha512.6705ea1966adb6587053e6cfe6fddc377f81066228daf736c4490012f44f2ff1bf0c713bb8f3145fce0e3ef669c7c15f19a59ac157838951f234c17b81ca655d"
 }

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 import { FilterType, WordStats } from '@/models'
 import MinMaxFilterVue from '@/components/WordStats/filters/MinMaxFilter.vue'
-import { Component } from '@vue/runtime-core';
+import { Component } from 'vue';
 
 export interface Filter {
 	id: string;
@@ -12,7 +12,7 @@ export interface Filter {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FilterProps {}
+export interface FilterProps { }
 
 export interface MinMaxFilterProps extends FilterProps {
 	min: number;
@@ -32,7 +32,7 @@ const createMinMaxFilter = (type: FilterType, component: Component): MinMaxFilte
 			min: 1,
 			max: Infinity,
 		},
-		test (target: WordStats) {
+		test(target: WordStats) {
 			return target[type] >= this.props.min && target[type] <= this.props.max
 		},
 	}

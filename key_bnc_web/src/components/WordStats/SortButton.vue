@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/runtime-core'
+import { defineComponent, PropType } from 'vue'
 import { SortDirection } from '@/models'
 
 export default defineComponent({
