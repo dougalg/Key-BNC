@@ -34,7 +34,11 @@ export default defineConfig(({ mode }) => {
 			legacy({
 				targets: ['defaults', 'not dead', '> 1%', 'last 2 versions'],
 			}),
-			VitePWA(),
+			VitePWA({
+				workbox: {
+					maximumFileSizeToCacheInBytes: 9_000_000 // 9MB
+				}
+			}),
 			plainText(),
 			tsconfigPaths({
 				extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.wasm'],
