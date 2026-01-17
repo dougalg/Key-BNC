@@ -196,9 +196,7 @@ tr > td:first-child {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
-	&:deep(.basic-button) {
-		margin-left: 1rem;
-	}
+	gap: 1rem;
+	padding: 0 1rem;
 }
 </style>
