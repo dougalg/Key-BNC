@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, Ref, ref, toRefs } from '@vue/runtime-core'
+import { defineComponent, PropType, reactive, Ref, ref, toRefs } from 'vue'
 import { KeyBnc } from 'key_bnc_wasm'
 import BasicButton from './buttons/BasicButton.vue'
 

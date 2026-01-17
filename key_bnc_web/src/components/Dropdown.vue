@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/runtime-core'
+import { defineComponent, PropType } from 'vue'
 import { Position } from './DropdownPosition'
 import BasicButton from '@/components/buttons/BasicButton.vue'
 

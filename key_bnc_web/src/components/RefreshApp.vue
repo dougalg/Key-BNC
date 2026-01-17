@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from '@vue/runtime-core'
+import { onMounted } from 'vue'
 import BasicButton from '@/components/buttons/BasicButton.vue'
 import { registerSW } from 'virtual:pwa-register'
 

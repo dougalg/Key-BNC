@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive } from '@vue/runtime-core'
+import { computed, onMounted, reactive } from 'vue'
 import init, { KeyBnc } from 'key_bnc_wasm'
 import KeyBncInterface from './components/Interface.vue'
 import BncLoader from './components/BncLoader.vue'
@@ -14,6 +14,7 @@ const version = __APP_VERSION__;
 
 const pollBncCsv = () => {
 	const pollFn = () => {
+		// console.log(state.keyBnc, state.keyBnc?.get_has_loaded_bnc_data());
 		state.hasLoadedBncData = state.keyBnc !== null
 			&& state.keyBnc.get_has_loaded_bnc_data()
 
@@ -25,7 +26,7 @@ const pollBncCsv = () => {
 }
 
 onMounted(async () => {
-	const csvImport = import('@virtual:plain-text/src/assets/BNC_wordlist.csv').then((_) => _.plainText)
+	const csvImport = import('@virtual:plain-text/src/assets/BNC_wordlist.csv').then((_) => _.default)
 	await init();
 	state.keyBnc = KeyBnc.new()
 	const csv = await csvImport

@@ -65,7 +65,7 @@
 import { WordStats, SortBy, SortDirection } from '@/models'
 import { WORD_STAT_HEADERS } from '@/lang/wordStats'
 import SortButton from './SortButton.vue'
-import { defineComponent, PropType } from '@vue/runtime-core'
+import { defineComponent, PropType } from 'vue'
 
 const formatter = (Intl && Intl.NumberFormat)
 	? new Intl.NumberFormat('en-CA')
