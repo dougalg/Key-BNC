@@ -18,15 +18,11 @@
 		</noscript>
 		<div id="app"></div>
 		<script type="module" src="/src/main.ts"></script>
-		<script async src="https://cdn.panelbear.com/analytics.js?site=%VITE_APP_ANALYTICS_ID%"></script>
+		<!-- Cronitor RUM -->
+		<script async src="https://rum.cronitor.io/script.js"></script>
 		<script>
-			window.panelbear = window.panelbear || function() { (window.panelbear.q = window.panelbear.q || []).push(arguments); };
-			panelbear('config', {
-				site: '%VITE_APP_ANALYTICS_ID%',
-				spaMode: 'history',
-				debug: %VITE_APP_ANALYTICS_ENABLE_DEBUG%,
-				honorDNT: true,
-			});
+			window.cronitor = window.cronitor || function() { (window.cronitor.q = window.cronitor.q || []).push(arguments); };
+			cronitor('config', { clientKey: '454ed9c7c7c5d4c91f7895f4ac7403dc' });
 		</script>
 		<!-- built files will be auto injected -->
 	</body>
