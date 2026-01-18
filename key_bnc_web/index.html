@@ -22,7 +22,7 @@
 		<script async src="https://rum.cronitor.io/script.js"></script>
 		<script>
 			window.cronitor = window.cronitor || function() { (window.cronitor.q = window.cronitor.q || []).push(arguments); };
-			cronitor('config', { clientKey: '454ed9c7c7c5d4c91f7895f4ac7403dc', environment: "staging" });
+			cronitor('config', { clientKey: '%VITE_APP_ANALYTICS_ID%', environment: "%MODE%" });
 		</script>
 		<!-- built files will be auto injected -->
 	</body>
