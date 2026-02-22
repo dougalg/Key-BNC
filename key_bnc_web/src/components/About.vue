@@ -97,7 +97,7 @@ h2 + p {
 
 .reference {
 	text-align: left;
-	word-wrap: break-word;
+	overflow-wrap: break-word;
 	padding-left: 1em;
 	text-indent: -1em;
 }

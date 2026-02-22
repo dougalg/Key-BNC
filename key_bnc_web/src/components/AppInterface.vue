@@ -40,23 +40,21 @@
 				v-show="currentTab === Tab.WORD_STATS"
 				:word-stats="wordStats"
 			/>
-			<about-view
-				v-show="currentTab === Tab.ABOUT"
-			/>
+			<about-view v-show="currentTab === Tab.ABOUT" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from 'vue'
-import { KeyBnc } from 'key_bnc_wasm'
-import { WordStats } from '../models'
-import ManageCorpus from './ManageCorpus.vue'
-import WordStatsView from './WordStats/WordStats.vue'
-import NavButton from './buttons/NavButton.vue'
-import AboutView from './About.vue'
+import { defineComponent, PropType, reactive, toRefs } from "vue";
+import { KeyBnc } from "key_bnc_wasm";
+import { WordStats } from "../models";
+import ManageCorpus from "./ManageCorpus.vue";
+import WordStatsView from "./WordStats/WordStats.vue";
+import NavButton from "./buttons/NavButton.vue";
+import AboutView from "./About.vue";
 
-const MAX_ITEMS = 1000
+const MAX_ITEMS = 1000;
 
 enum Tab {
 	ABOUT,
@@ -77,43 +75,44 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup (props) {
+	setup(props) {
 		const state = reactive({
 			wordStats: [] as Array<WordStats>,
 			currentTab: Tab.MANAGE_CORPUS,
 			isDirty: false,
-		})
+		});
 
 		const setDirty = () => {
-			state.isDirty = true
-		}
+			state.isDirty = true;
+		};
 
 		const updateStats = () => {
-			const wordStats = (props.keyBnc.get_stats() as Array<WordStats>)
-				.sort((a, b) => b.frequency - a.frequency)
-			wordStats.splice(MAX_ITEMS)
-			state.wordStats = wordStats
-		}
+			const wordStats = (
+				props.keyBnc.get_stats() as Array<WordStats>
+			).sort((a, b) => b.frequency - a.frequency);
+			wordStats.splice(MAX_ITEMS);
+			state.wordStats = wordStats;
+		};
 
 		const showStatsView = () => {
-			state.currentTab = Tab.WORD_STATS
+			state.currentTab = Tab.WORD_STATS;
 			if (state.isDirty) {
-				state.isDirty = false
-				updateStats()
+				state.isDirty = false;
+				updateStats();
 			}
-		}
+		};
 
 		return {
 			...toRefs(state),
 			setDirty,
 			showStatsView,
 			Tab,
-			setTab (tab: Tab) {
-				state.currentTab = tab
+			setTab(tab: Tab) {
+				state.currentTab = tab;
 			},
-		}
+		};
 	},
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -131,7 +130,7 @@ h1 {
 	font-variant: small-caps;
 	pointer-events: none;
 
-	@media (max-width: 620px) {
+	@media (width <= 620px) {
 		font-size: 0.8em;
 		top: 0;
 		margin: 1rem 0 0;
@@ -148,7 +147,7 @@ h1 {
 	font-size: 3em;
 	height: 2.85em;
 
-	@media (max-width: 620px) {
+	@media (width <= 620px) {
 		height: auto;
 		flex-direction: column;
 		align-items: flex-start;
