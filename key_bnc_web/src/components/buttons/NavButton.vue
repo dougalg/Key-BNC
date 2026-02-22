@@ -34,7 +34,7 @@ export default defineComponent({
 	font-weight: bold;
 	font-size: 1.5rem;
 
-	@media screen and (max-width: 740px) {
+	@media screen and (width <= 740px) {
 		font-size: 1.1rem;
 	}
 

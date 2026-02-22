@@ -1,20 +1,19 @@
-import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import legacy from '@vitejs/plugin-legacy';
-import { VitePWA } from 'vite-plugin-pwa';
-import plainText from 'vite-plugin-virtual-plain-text';
-import { GitRevisionPlugin } from 'git-revision-webpack-plugin';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import wasmPack from 'vite-plugin-wasm-pack';
+import path from "path";
+import { defineConfig, loadEnv } from "vite";
+import vue from "@vitejs/plugin-vue";
+import legacy from "@vitejs/plugin-legacy";
+import { VitePWA } from "vite-plugin-pwa";
+import plainText from "vite-plugin-virtual-plain-text";
+import { GitRevisionPlugin } from "git-revision-webpack-plugin";
+import tsconfigPaths from "vite-tsconfig-paths";
+import wasmPack from "vite-plugin-wasm-pack";
 
 const gitRevisionPlugin = new GitRevisionPlugin({
-	versionCommand: 'describe --always --tags',
-})
+	versionCommand: "describe --always --tags",
+});
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-
 	const env = loadEnv(mode, "");
 
 	const htmlPlugin = () => {
@@ -26,34 +25,34 @@ export default defineConfig(({ mode }) => {
 				});
 			},
 		};
-	}
+	};
 
 	return {
 		plugins: [
 			vue(),
 			legacy({
-				targets: ['defaults', 'not dead', '> 1%', 'last 2 versions'],
+				targets: ["defaults", "not dead", "> 1%", "last 2 versions"],
 			}),
 			VitePWA({
 				workbox: {
-					maximumFileSizeToCacheInBytes: 9_000_000 // 9MB
-				}
+					maximumFileSizeToCacheInBytes: 9_000_000, // 9MB
+				},
 			}),
 			plainText(),
-			tsconfigPaths({
-				extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.vue', '.wasm'],
-			}),
-			wasmPack.default('./key_bnc_wasm'),
+			tsconfigPaths({}),
+			wasmPack.default("./key_bnc_wasm"),
 			htmlPlugin(),
 		],
 		define: {
 			__APP_VERSION__: `"${gitRevisionPlugin.version()}"`,
 		},
 		resolve: {
-			alias: [{
-				find: '@',
-				replacement: path.resolve('src'),
-			}],
+			alias: [
+				{
+					find: "@",
+					replacement: path.resolve("src"),
+				},
+			],
 		},
-	}
-})
+	};
+});

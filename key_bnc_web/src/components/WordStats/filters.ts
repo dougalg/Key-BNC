@@ -1,7 +1,7 @@
-import { v4 } from 'uuid'
-import { FilterType, WordStats } from '@/models'
-import MinMaxFilterVue from '@/components/WordStats/filters/MinMaxFilter.vue'
-import { Component } from 'vue';
+import { v4 } from "uuid";
+import { FilterType, WordStats } from "@/models";
+import MinMaxFilterVue from "@/components/WordStats/filters/MinMaxFilter.vue";
+import { Component } from "vue";
 
 export interface Filter {
 	id: string;
@@ -11,8 +11,8 @@ export interface Filter {
 	test(target: WordStats): boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FilterProps { }
+// eslint-disable-next-line  @typescript-eslint/no-empty-object-type
+export interface FilterProps {}
 
 export interface MinMaxFilterProps extends FilterProps {
 	min: number;
@@ -23,7 +23,10 @@ export interface MinMaxFilter extends Filter {
 	props: MinMaxFilterProps;
 }
 
-const createMinMaxFilter = (type: FilterType, component: Component): MinMaxFilter => {
+const createMinMaxFilter = (
+	type: FilterType,
+	component: Component,
+): MinMaxFilter => {
 	return {
 		id: v4(),
 		type,
@@ -33,13 +36,20 @@ const createMinMaxFilter = (type: FilterType, component: Component): MinMaxFilte
 			max: Infinity,
 		},
 		test(target: WordStats) {
-			return target[type] >= this.props.min && target[type] <= this.props.max
+			return (
+				target[type] >= this.props.min && target[type] <= this.props.max
+			);
 		},
-	}
-}
+	};
+};
 
-export const getFrequencyFilter = () => createMinMaxFilter(FilterType.FREQUENCY, MinMaxFilterVue)
-export const getFrequencyBncFilter = () => createMinMaxFilter(FilterType.FREQUENCY_BNC, MinMaxFilterVue)
-export const getLlFilter = () => createMinMaxFilter(FilterType.LL, MinMaxFilterVue)
-export const getOrFilter = () => createMinMaxFilter(FilterType.OR, MinMaxFilterVue)
-export const getDispersionFilter = () => createMinMaxFilter(FilterType.DISPERSION, MinMaxFilterVue)
+export const getFrequencyFilter = () =>
+	createMinMaxFilter(FilterType.FREQUENCY, MinMaxFilterVue);
+export const getFrequencyBncFilter = () =>
+	createMinMaxFilter(FilterType.FREQUENCY_BNC, MinMaxFilterVue);
+export const getLlFilter = () =>
+	createMinMaxFilter(FilterType.LL, MinMaxFilterVue);
+export const getOrFilter = () =>
+	createMinMaxFilter(FilterType.OR, MinMaxFilterVue);
+export const getDispersionFilter = () =>
+	createMinMaxFilter(FilterType.DISPERSION, MinMaxFilterVue);

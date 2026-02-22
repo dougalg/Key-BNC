@@ -1,40 +1,44 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue'
-import init, { KeyBnc } from 'key_bnc_wasm'
-import KeyBncInterface from './components/Interface.vue'
-import BncLoader from './components/BncLoader.vue'
-import RefreshApp from './components/RefreshApp.vue'
+import { computed, onMounted, reactive } from "vue";
+import init, { KeyBnc } from "key_bnc_wasm";
+import KeyBncInterface from "./components/AppInterface.vue";
+import BncLoader from "./components/BncLoader.vue";
+import RefreshApp from "./components/RefreshApp.vue";
 
 const state = reactive({
 	keyBnc: null as KeyBnc | null,
 	hasLoadedBncData: false,
-})
+});
 
+// eslint-disable-next-line no-undef
 const version = __APP_VERSION__;
 
 const pollBncCsv = () => {
 	const pollFn = () => {
 		// console.log(state.keyBnc, state.keyBnc?.get_has_loaded_bnc_data());
-		state.hasLoadedBncData = state.keyBnc !== null
-			&& state.keyBnc.get_has_loaded_bnc_data()
+		state.hasLoadedBncData
+			= state.keyBnc !== null && state.keyBnc.get_has_loaded_bnc_data();
 
 		if (!state.hasLoadedBncData) {
-			window.setTimeout(pollFn, 20)
+			window.setTimeout(pollFn, 20);
 		}
-	}
-	window.setTimeout(pollFn, 20)
-}
+	};
+	window.setTimeout(pollFn, 20);
+};
 
 onMounted(async () => {
-	const csvImport = import('@virtual:plain-text/src/assets/BNC_wordlist.csv').then((_) => _.default)
+	const csvImport
+		= import("@virtual:plain-text/src/assets/BNC_wordlist.csv").then(
+			(_) => _.default,
+		);
 	await init();
-	state.keyBnc = KeyBnc.new()
-	const csv = await csvImport
-	state.keyBnc.load_bnc_data(csv)
-	pollBncCsv()
-})
+	state.keyBnc = KeyBnc.new();
+	const csv = await csvImport;
+	state.keyBnc.load_bnc_data(csv);
+	pollBncCsv();
+});
 
-const isReady = computed(() => Boolean(state.keyBnc) && state.hasLoadedBncData)
+const isReady = computed(() => Boolean(state.keyBnc) && state.hasLoadedBncData);
 </script>
 
 <template>
@@ -135,12 +139,12 @@ button {
 
 .fade-enter,
 .fade-leave-to {
-	opacity: 0%;
+	opacity: 0;
 }
 
 .fade-enter-to,
 .fade-leave {
-	opacity: 100%;
+	opacity: 1;
 }
 
 .fade-enter-active {
