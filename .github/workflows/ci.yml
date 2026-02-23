@@ -52,8 +52,8 @@ jobs:
               with:
                   workspaces: key_bnc_web/key_bnc_wasm
 
-            # - name: Clippy key_bnc_wasm
-            # run: cargo clippy --manifest-path key_bnc_web/key_bnc_wasm/Cargo.toml --target wasm32-unknown-unknown -- -D warnings
+            - name: Clippy key_bnc_wasm
+              run: cargo clippy --manifest-path key_bnc_web/key_bnc_wasm/Cargo.toml --target wasm32-unknown-unknown -- -D warnings
 
             - name: Fmt key_bnc_wasm
               run: cargo fmt --manifest-path key_bnc_web/key_bnc_wasm/Cargo.toml -- --check
