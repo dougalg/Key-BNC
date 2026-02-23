@@ -1,7 +1,7 @@
 #![cfg_attr(test, feature(test))]
 
-pub mod utils;
 pub mod stats;
+pub mod utils;
 
 #[cfg(test)]
 mod benches;
