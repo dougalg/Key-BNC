@@ -1,0 +1,131 @@
+name: CI
+
+on:
+    pull_request:
+
+jobs:
+    rust:
+        name: Rust (test, lint)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@master
+              with:
+                  toolchain: "1.78.0"
+                  components: clippy, rustfmt
+
+            - uses: Swatinem/rust-cache@v2
+
+            - name: Test key_bnc_utils
+              run: cargo test --manifest-path key_bnc_utils/Cargo.toml
+
+            - name: Test key_bnc_cli
+              run: cargo test --manifest-path key_bnc_cli/Cargo.toml
+
+            - name: Clippy key_bnc_utils
+              run: cargo clippy --manifest-path key_bnc_utils/Cargo.toml -- -D warnings
+
+            - name: Clippy key_bnc_cli
+              run: cargo clippy --manifest-path key_bnc_cli/Cargo.toml -- -D warnings
+
+            - name: Fmt key_bnc_utils
+              run: cargo fmt --manifest-path key_bnc_utils/Cargo.toml -- --check
+
+            - name: Fmt key_bnc_cli
+              run: cargo fmt --manifest-path key_bnc_cli/Cargo.toml -- --check
+
+    wasm:
+        name: WASM (lint, build)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@master
+              with:
+                  toolchain: "1.78.0"
+                  targets: wasm32-unknown-unknown
+                  components: clippy, rustfmt
+
+            - uses: Swatinem/rust-cache@v2
+              with:
+                  workspaces: key_bnc_web/key_bnc_wasm
+
+            - name: Clippy key_bnc_wasm
+              run: cargo clippy --manifest-path key_bnc_web/key_bnc_wasm/Cargo.toml --target wasm32-unknown-unknown -- -D warnings
+
+            - name: Fmt key_bnc_wasm
+              run: cargo fmt --manifest-path key_bnc_web/key_bnc_wasm/Cargo.toml -- --check
+
+            - name: Install wasm-pack
+              run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: "10"
+                  run_install: false
+                  package_json_file: key_bnc_web/package.json
+
+            - name: Install Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: pnpm
+                  cache-dependency-path: key_bnc_web/pnpm-lock.yaml
+
+            - name: Install JS dependencies
+              run: pnpm install --frozen-lockfile
+              working-directory: key_bnc_web
+
+            - name: Build WASM
+              run: pnpm wasm
+              working-directory: key_bnc_web
+
+    web:
+        name: Web (lint, build)
+        needs: wasm
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@master
+              with:
+                  toolchain: "1.78.0"
+                  targets: wasm32-unknown-unknown
+
+            - uses: Swatinem/rust-cache@v2
+              with:
+                  workspaces: key_bnc_web/key_bnc_wasm
+
+            - name: Install wasm-pack
+              run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: "10"
+                  run_install: false
+                  package_json_file: key_bnc_web/package.json
+
+            - name: Install Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: pnpm
+                  cache-dependency-path: key_bnc_web/pnpm-lock.yaml
+
+            - name: Install JS dependencies
+              run: pnpm install --frozen-lockfile
+              working-directory: key_bnc_web
+
+            - name: Lint
+              run: pnpm lint
+              working-directory: key_bnc_web
+
+            - name: Build
+              run: pnpm build
+              working-directory: key_bnc_web
