@@ -66,7 +66,7 @@ impl KeyBnc {
 
     pub fn add_entry(&mut self, file: FileReader) -> i32 {
         let contents = file.result().expect("Could not read file");
-        let tokens = tokenize(&mut contents.into_serde::<String>().unwrap());
+        let tokens = tokenize(&mut serde_wasm_bindgen::from_value::<String>(contents).unwrap());
         let file_id = self.get_next_id();
         let entry = process_file(tokens);
 
@@ -150,7 +150,7 @@ impl KeyBnc {
                 }
             })
             .collect();
-        JsValue::from_serde(&res).unwrap()
+        serde_wasm_bindgen::to_value(&res).unwrap()
     }
 }
 
