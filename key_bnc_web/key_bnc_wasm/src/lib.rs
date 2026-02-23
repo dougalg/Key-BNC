@@ -73,7 +73,7 @@ impl KeyBnc {
         // Update the struct
         self.total_num_tokens_in_user_corpus += entry.token_count;
         self.user_corpus_words_counts += entry.word_counts.clone();
-        self.entries.insert(file_id.clone(), entry);
+        self.entries.insert(file_id, entry);
 
         file_id
     }
@@ -91,7 +91,7 @@ impl KeyBnc {
         self.total_num_tokens_in_bnc = 0;
 
         for (_w, c) in bnc_counts.iter() {
-            self.total_num_tokens_in_bnc += *c as usize;
+            self.total_num_tokens_in_bnc += *c;
         }
         self.bnc_counts = bnc_counts;
         self.has_loaded_bnc_data = true;
@@ -113,7 +113,7 @@ impl KeyBnc {
             .user_corpus_words_counts
             .iter()
             .map(|(word, count)| {
-                let count_in_bnc = match self.bnc_counts.get(&word) {
+                let count_in_bnc = match self.bnc_counts.get(word) {
                     Some(val) => *val as f64,
                     None => 0.0,
                 };
@@ -122,7 +122,7 @@ impl KeyBnc {
                     .entries
                     .iter()
                     .map(|(id, entry)| {
-                        let count_for_part = match entry.word_counts.get(&word) {
+                        let count_for_part = match entry.word_counts.get(word) {
                             Some(val) => *val as f64,
                             None => 0.0,
                         };
@@ -136,13 +136,13 @@ impl KeyBnc {
                     log_likelihood: log_likelihood(
                         *count as f64,
                         self.total_num_tokens_in_user_corpus as f64,
-                        count_in_bnc as f64,
+                        count_in_bnc,
                         self.total_num_tokens_in_bnc as f64,
                     ),
                     odds_ratio: odds_ratio(
                         *count as f64,
                         self.total_num_tokens_in_user_corpus as f64,
-                        count_in_bnc as f64,
+                        count_in_bnc,
                         self.total_num_tokens_in_bnc as f64,
                         0.0,
                     ),
