@@ -1,5 +1,3 @@
-use std::f64::INFINITY;
-
 pub fn log_likelihood(
     target_freq: f64,
     target_corpus_size: f64,
@@ -50,7 +48,7 @@ pub fn odds_ratio(
     }
 
     if a == 0.0 || b == 0.0 || c == 0.0 || d == 0.0 {
-        return INFINITY;
+        return f64::INFINITY;
     }
     (a / b) / (c / d)
 }
