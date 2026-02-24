@@ -58,18 +58,22 @@ impl KeyBnc {
         self.has_loaded_bnc_data
     }
 
-    pub fn add_entry(&mut self, file: FileReader) -> i32 {
-        let contents = file.result().expect("Could not read file");
-        let tokens = tokenize(&mut serde_wasm_bindgen::from_value::<String>(contents).unwrap());
+    pub fn add_text_entry(&mut self, text: String) -> i32 {
+        let tokens = tokenize(&mut text.clone());
         let file_id = self.get_next_id();
         let entry = process_file(tokens);
 
-        // Update the struct
         self.total_num_tokens_in_user_corpus += entry.token_count;
         self.user_corpus_words_counts += entry.word_counts.clone();
         self.entries.insert(file_id, entry);
 
         file_id
+    }
+
+    pub fn add_entry(&mut self, file: FileReader) -> i32 {
+        let contents = file.result().expect("Could not read file");
+        let string_contents = serde_wasm_bindgen::from_value::<String>(contents).unwrap();
+        self.add_text_entry(string_contents)
     }
 
     pub fn remove_entry(&mut self, file_id: i32) {

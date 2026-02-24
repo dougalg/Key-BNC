@@ -8,6 +8,7 @@
 				type="file"
 				class="file-input"
 				multiple
+				accept=".txt,.pdf"
 				@change="onFileChange"
 			>
 			<label
@@ -37,6 +38,9 @@
 import { defineComponent, PropType, reactive, Ref, ref, toRefs } from 'vue'
 import { KeyBnc } from 'key_bnc_wasm'
 import BasicButton from './buttons/BasicButton.vue'
+import * as pdfjsLib from 'pdfjs-dist'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString()
 
 interface FileObject {
 	name: string;
@@ -59,7 +63,27 @@ export default defineComponent({
 			allFiles: [] as FileObject[],
 		})
 
+		const processPdf = async (f: File) => {
+			const arrayBuffer = await f.arrayBuffer()
+			const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+			const pages = await Promise.all(
+				Array.from({ length: pdf.numPages }, (_, i) =>
+					pdf.getPage(i + 1).then(page => page.getTextContent()).then(tc =>
+						tc.items.map((item) => ('str' in item ? item.str : '')).join(' '),
+					),
+				),
+			)
+			const text = pages.join(' ')
+			const id = props.keyBnc.add_text_entry(text)
+			state.allFiles.push({ id, name: f.name })
+			ctx.emit('corpus-changed')
+		}
+
 		const processFile = (f: File) => {
+			if (f.type === 'application/pdf') {
+				processPdf(f)
+				return
+			}
 			const fileReader = new FileReader()
 			const name = f.name
 			fileReader.onloadend = () => {
