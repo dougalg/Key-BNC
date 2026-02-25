@@ -4,7 +4,7 @@ import init, { KeyBnc } from "key_bnc_wasm";
 import KeyBncInterface from "./components/AppInterface.vue";
 import BncLoader from "./components/BncLoader.vue";
 import RefreshApp from "./components/RefreshApp.vue";
-import ChangelogModal from "./components/ChangelogModal.vue";
+import ChangelogModal from "./components/changelog/ChangelogModal.vue";
 
 const state = reactive({
 	keyBnc: null as KeyBnc | null,
