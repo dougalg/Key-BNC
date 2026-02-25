@@ -38,18 +38,17 @@ const emit = defineEmits<{
 const newReleases = computed(() =>
 	changelog.releases.filter((r) => {
 		if (!r.version) return false
-		if (!acknowledgedVersion) return true
-		return isVersionNewerThan(r.version, acknowledgedVersion.value || '')
-	})
-)
+		if (!acknowledgedVersion.value) return true
+		return isVersionNewerThan(r.version, acknowledgedVersion.value || '');
+	}))
 
 const showOlderReleases = ref(false);
 
 const olderReleases = computed(() =>
 	changelog.releases.filter((r) => {
 		if (!r.version) return false
-		if (!acknowledgedVersion) return true
-		return !isVersionNewerThan(r.version, acknowledgedVersion.value || '')
+		if (!acknowledgedVersion.value) return true
+		return !isVersionNewerThan(r.version, acknowledgedVersion.value || '');
 	}))
 
 </script>
@@ -67,7 +66,10 @@ const olderReleases = computed(() =>
 			>
 				<h3>
 					{{ release.version }}
-					<span v-if="release.date" v-html="release.date"/>
+					<span
+						v-if="release.date"
+						v-html="release.date"
+					/>
 				</h3>
 				<ul>
 					<li
@@ -79,7 +81,6 @@ const olderReleases = computed(() =>
 				</ul>
 			</template>
 			<template
-				v-if="showOlderReleases"
 				v-for="release in olderReleases"
 				:key="release.version"
 			>
