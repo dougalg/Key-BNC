@@ -8,7 +8,7 @@
 				type="file"
 				class="file-input"
 				multiple
-				accept=".txt,.pdf"
+				accept=".txt,.pdf,.csv,.md"
 				@change="onFileChange"
 			>
 			<label
@@ -17,6 +17,7 @@
 			>
 				Add files
 			</label>
+			<p>(.txt,.pdf,.csv,.md)</p>
 		</form>
 		<p>{{ allFiles.length }} files loaded.</p>
 		<ul class="file-list">
@@ -42,6 +43,38 @@ import * as pdfjsLib from 'pdfjs-dist'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString()
 
+const processPdf = async (keyBnc: KeyBnc, f: File): Promise<number> => {
+	const arrayBuffer = await f.arrayBuffer()
+	const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+	const pages = await Promise.all(
+		Array.from({ length: pdf.numPages }, (_, i) =>
+			pdf.getPage(i + 1).then(page => page.getTextContent()).then(tc =>
+				tc.items.map((item) => ('str' in item ? item.str : '')).join(' '),
+			),
+		),
+	)
+	const text = pages.join(' ')
+	return keyBnc.add_text_entry(text)
+}
+
+const processTextFile = (keyBnc: KeyBnc, f: File): Promise<number> => {
+	return new Promise<number>((resolve) => {
+		const fileReader = new FileReader()
+		fileReader.onloadend = () => {
+			const id = keyBnc.add_entry(fileReader)
+			resolve(id);
+		}
+		fileReader.readAsText(f)
+	})
+}
+
+const processorMap = new Map([
+	['application/pdf', processPdf],
+	['text/plain', processTextFile],
+	['text/csv', processTextFile],
+	['text/markdown', processTextFile],
+])
+
 interface FileObject {
 	name: string;
 	id: number;
@@ -63,37 +96,11 @@ export default defineComponent({
 			allFiles: [] as FileObject[],
 		})
 
-		const processPdf = async (f: File) => {
-			const arrayBuffer = await f.arrayBuffer()
-			const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-			const pages = await Promise.all(
-				Array.from({ length: pdf.numPages }, (_, i) =>
-					pdf.getPage(i + 1).then(page => page.getTextContent()).then(tc =>
-						tc.items.map((item) => ('str' in item ? item.str : '')).join(' '),
-					),
-				),
-			)
-			const text = pages.join(' ')
-			const id = props.keyBnc.add_text_entry(text)
-			state.allFiles.push({ id, name: f.name })
-			ctx.emit('corpus-changed')
-		}
-
-		const processFile = (f: File) => {
-			if (f.type === 'application/pdf') {
-				processPdf(f)
-				return
-			}
-			const fileReader = new FileReader()
+		const processFile = async (f: File) => {
 			const name = f.name
-			fileReader.onloadend = () => {
-				const id = props.keyBnc.add_entry(fileReader)
-				state.allFiles.push({
-					id,
-					name,
-				})
-			}
-			fileReader.readAsText(f)
+			const processor = processorMap.get(f.type) || processTextFile;
+			const id = await processor(props.keyBnc, f);
+			state.allFiles.push({ id, name })
 			ctx.emit('corpus-changed')
 		}
 
