@@ -3,7 +3,7 @@
 		"target": "esnext",
 		"useDefineForClassFields": true,
 		"module": "esnext",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"strict": true,
 		"jsx": "preserve",
 		"sourceMap": true,
@@ -12,15 +12,13 @@
 		"lib": ["esnext", "dom"],
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
-				"src/*"
-			]
+			"@/*": ["src/*"],
 		},
 		"types": [
 			"vite/client",
 			"vite-plugin-pwa/client",
-			"vite-plugin-virtual-plain-text/virtual-assets"
-		]
+			"vite-plugin-virtual-plain-text/virtual-assets",
+		],
 	},
-	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
 }
