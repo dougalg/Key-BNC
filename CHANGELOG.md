@@ -1,5 +1,11 @@
 # Changelog
 
+## V2.5
+
+Feb 26<sup>th</sup>, 2026
+- Add PDF support
+- Move analytics to Cronitor.io
+
 ## V2.4
 
 Sept 21<sup>st</sup>, 2021

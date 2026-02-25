@@ -7,6 +7,7 @@ import plainText from "vite-plugin-virtual-plain-text";
 import { GitRevisionPlugin } from "git-revision-webpack-plugin";
 import tsconfigPaths from "vite-tsconfig-paths";
 import wasmPack from "vite-plugin-wasm-pack";
+import { changelogPlugin } from "./tools/vite/changelogPlugin";
 
 const gitRevisionPlugin = new GitRevisionPlugin({
 	versionCommand: "describe --always --tags",
@@ -42,6 +43,7 @@ export default defineConfig(({ mode }) => {
 			tsconfigPaths({}),
 			wasmPack.default("./key_bnc_wasm"),
 			htmlPlugin(),
+			changelogPlugin({ logFile: path.resolve(__dirname, "../CHANGELOG.md") }),
 		],
 		define: {
 			__APP_VERSION__: `"${gitRevisionPlugin.version()}"`,

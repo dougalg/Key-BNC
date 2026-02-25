@@ -29,6 +29,11 @@ export default defineComponent({
 	&:focus {
 		border-color: #111;
 	}
+
+	&:focus-visible {
+		outline: 2px solid #eee;
+		outline-offset: 2px;
+	}
 }
 
 .basic-button--is-attached {

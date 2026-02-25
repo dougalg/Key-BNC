@@ -6,3 +6,9 @@ declare module '*.vue' {
 	const component: DefineComponent<{}, {}, any>
 	export default component
 }
+
+declare module 'virtual:changelog' {
+	import type { Changelog } from '@/typings/changelog'
+	const changelog: Changelog
+	export default changelog
+}

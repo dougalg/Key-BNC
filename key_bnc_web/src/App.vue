@@ -4,10 +4,12 @@ import init, { KeyBnc } from "key_bnc_wasm";
 import KeyBncInterface from "./components/AppInterface.vue";
 import BncLoader from "./components/BncLoader.vue";
 import RefreshApp from "./components/RefreshApp.vue";
+import ChangelogModal from "./components/ChangelogModal.vue";
 
 const state = reactive({
 	keyBnc: null as KeyBnc | null,
 	hasLoadedBncData: false,
+	isChangelogModalOpen: false,
 });
 
 // eslint-disable-next-line no-undef
@@ -44,6 +46,27 @@ const isReady = computed(() => Boolean(state.keyBnc) && state.hasLoadedBncData);
 <template>
 	<main id="app">
 		<refresh-app />
+		<changelog-modal
+			:open="state.isChangelogModalOpen"
+			:version="version"
+			@close="state.isChangelogModalOpen = false"
+		/>
+
+		<transition name="fade">
+			<button
+				v-if="isReady"
+				class="version"
+				@click="state.isChangelogModalOpen = true"
+			>
+				<p>{{ version }}</p>
+				<span class="sr-only">View changelog</span>
+				<img
+					class="logo"
+					src="@/assets/key-bnc-logo-white-225x278.png"
+					alt="A black key on a white backgorund"
+				>
+			</button>
+		</transition>
 		<transition
 			name="fade"
 			mode="out-in"
@@ -53,20 +76,6 @@ const isReady = computed(() => Boolean(state.keyBnc) && state.hasLoadedBncData);
 				:key-bnc="state.keyBnc"
 			/>
 			<bnc-loader v-else />
-		</transition>
-
-		<transition name="fade">
-			<div
-				v-if="isReady"
-				class="version"
-			>
-				<p>{{ version }}</p>
-				<img
-					class="logo"
-					src="@/assets/key-bnc-logo-white-225x278.png"
-					alt="A black key on a white backgorund"
-				>
-			</div>
 		</transition>
 	</main>
 </template>
@@ -107,6 +116,15 @@ button {
 	cursor: pointer;
 }
 
+.sr-only {
+	position:absolute;
+	left:-10000px;
+	top:auto;
+	width:1px;
+	height:1px;
+	overflow:hidden;
+}
+
 .no-outline {
 	outline: none !important;
 	-webkit-tap-highlight-color: transparent !important;
@@ -117,6 +135,7 @@ button {
 }
 
 .version {
+	all: unset;
 	position: absolute;
 	display: flex;
 	flex-direction: column;
@@ -124,13 +143,20 @@ button {
 	top: 0.5rem;
 	right: 0.5rem;
 	color: white;
-	padding: 0;
+	padding: 2px;
 	margin: 0;
 	font-size: 1.2rem;
 
 	& p {
 		margin: 0;
 	}
+}
+
+.version:focus-visible,
+.version:hover {
+	outline: 2px solid white;
+	border-radius: 2px;
+	cursor: pointer;
 }
 
 .logo {
