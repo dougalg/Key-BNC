@@ -31,6 +31,7 @@ onMounted(() => {
 <template>
 	<dialog
 		ref="dialog"
+		@click="$event.target === dialog ? emit('close') : () => {}"
 		@close="emit('close')"
 	>
 		<slot />
