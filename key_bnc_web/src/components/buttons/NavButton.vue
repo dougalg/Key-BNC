@@ -2,7 +2,7 @@
 	<button
 		role="tab"
 		type="button"
-		class="nav-tab no-outline"
+		class="nav-tab"
 		:aria-selected="isSelected"
 		:class="{
 			'is-selected': isSelected,
@@ -57,6 +57,10 @@ export default defineComponent({
 			width: 100%;
 			border-bottom: 3px solid black;
 		}
+	}
+	&:focus-visible {
+		outline: 2px solid #eee;
+		outline-offset: 2px;
 	}
 }
 

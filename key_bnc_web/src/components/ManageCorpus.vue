@@ -160,6 +160,7 @@ export default defineComponent({
 	position: absolute !important;
 	white-space: nowrap;
 	width: 1px;
+	outline: none;
 }
 
 [type="file"] + label {
