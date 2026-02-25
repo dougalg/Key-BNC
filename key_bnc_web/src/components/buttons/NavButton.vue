@@ -58,6 +58,7 @@ export default defineComponent({
 			border-bottom: 3px solid black;
 		}
 	}
+
 	&:focus-visible {
 		outline: 2px solid #eee;
 		outline-offset: 2px;

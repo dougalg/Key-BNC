@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from 'vue'
 
-const dialog = ref<InstanceType<any> | undefined>(null);
+const dialog = ref<HTMLDialogElement | undefined | null>(null);
 const internalOpen = ref(false);
 
 const props = defineProps<{
@@ -13,18 +13,18 @@ const emit = defineEmits<{
 }>()
 
 function showHideDialog() {
-  if (!dialog?.value) return;
-  if (props.open) dialog.value.showModal();
-  else dialog.value.close();
+	if (!dialog?.value) return;
+	if (props.open) dialog.value.showModal();
+	else dialog.value.close();
 }
 
 onMounted(() => {
-  watchEffect(() => {
-    if (props.open !== internalOpen.value) {
-      showHideDialog();
-      internalOpen.value = props.open;
-    }
-  });
+	watchEffect(() => {
+		if (props.open !== internalOpen.value) {
+			showHideDialog();
+			internalOpen.value = props.open;
+		}
+	});
 });
 </script>
 
