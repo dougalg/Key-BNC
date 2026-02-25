@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
 import BasicButton from './buttons/BasicButton.vue';
 import changelog from "virtual:changelog";
-import { isCleanVersion, isVersionNewerThan } from "@/utils/version";
+import { isOlderRelease, isVersionNewerThan } from "@/utils/version";
 
 const STORAGE_KEY = 'bnc_acknowledged_version';
 const acknowledgedVersion = ref<string | null>(localStorage.getItem(STORAGE_KEY));
@@ -14,7 +14,6 @@ const props = defineProps<{
 }>()
 
 const showChangelog = computed((): boolean => {
-	if (!isCleanVersion(props.version)) return false;
 	if (acknowledgedVersion.value === props.version) return false;
 	return changelog.releases.some((r) => {
 		if (!r.version) return false;
@@ -36,20 +35,18 @@ const emit = defineEmits<{
 
 
 const newReleases = computed(() =>
-	changelog.releases.filter((r) => {
-		if (!r.version) return false
-		if (!acknowledgedVersion.value) return true
-		return isVersionNewerThan(r.version, acknowledgedVersion.value || '');
-	}))
+	changelog.releases.filter((r) => !isOlderRelease(r, acknowledgedVersion.value)))
 
 const showOlderReleases = ref(false);
 
+const hasOlderReleases = computed(() =>
+	changelog.releases.some((r) => isOlderRelease(r, acknowledgedVersion.value)))
+
 const olderReleases = computed(() =>
-	changelog.releases.filter((r) => {
-		if (!r.version) return false
-		if (!acknowledgedVersion.value) return true
-		return !isVersionNewerThan(r.version, acknowledgedVersion.value || '');
-	}))
+	!showOlderReleases.value
+		? []
+		: changelog.releases
+			.filter((r) => isOlderRelease(r, acknowledgedVersion.value)));
 
 </script>
 
@@ -58,7 +55,7 @@ const olderReleases = computed(() =>
 		:open="showChangelog || props.open"
 		@close="onChangelogClose"
 	>
-		<h2>What's new</h2>
+		<h2 tabindex="-1">What's new</h2>
 		<div>
 			<template
 				v-for="release in newReleases"
@@ -99,11 +96,11 @@ const olderReleases = computed(() =>
 			</template>
 		</div>
 		<div class="button-wrapper">
-			<basic-button @click="emit('close')">
+			<basic-button @click="onChangelogClose">
 				Got it
 			</basic-button>
 			<basic-button
-				v-if="olderReleases.length > 0 && !showOlderReleases"
+				v-if="hasOlderReleases && !showOlderReleases"
 				@click="showOlderReleases = true"
 			>
 				View all changes
