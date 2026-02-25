@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import BaseModal from '@/components/BaseModal.vue'
-import BasicButton from './buttons/BasicButton.vue';
 import changelog from "virtual:changelog";
+import BaseModal from '@/components/BaseModal.vue'
+import BasicButton from '@/components/buttons/BasicButton.vue';
 import { isOlderRelease, isVersionNewerThan } from "@/utils/version";
+import ChangelogHeading from './ChangelogHeading.vue';
 
 const STORAGE_KEY = 'bnc_acknowledged_version';
 const acknowledgedVersion = ref<string | null>(localStorage.getItem(STORAGE_KEY));
@@ -61,37 +62,32 @@ const olderReleases = computed(() =>
 				v-for="release in newReleases"
 				:key="release.version"
 			>
-				<h3>
-					{{ release.version }}
-					<span
-						v-if="release.date"
-						v-html="release.date"
-					/>
-				</h3>
+				<ChangelogHeading
+					:version="release.version"
+					:date="release.date"
+				/>
 				<ul>
 					<li
 						v-for="(item, i) in release.items"
 						:key="i"
-					>
-						{{ item }}
-					</li>
+						v-html="item"
+					/>
 				</ul>
 			</template>
 			<template
 				v-for="release in olderReleases"
 				:key="release.version"
 			>
-				<h3>
-					{{ release.version }}
-					<span v-if="release.date">— {{ release.date }}</span>
-				</h3>
+				<ChangelogHeading
+					:version="release.version"
+					:date="release.date"
+				/>
 				<ul>
 					<li
 						v-for="(item, i) in release.items"
 						:key="i"
-					>
-						{{ item }}
-					</li>
+						v-html="item"
+					/>
 				</ul>
 			</template>
 		</div>
