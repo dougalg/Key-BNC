@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import changelog from "virtual:changelog";
 import BaseModal from '@/components/BaseModal.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue';
-import { isOlderRelease, isVersionNewerThan } from "@/utils/version";
+import { isOlderRelease, isVersionSameOrNewerThan } from "@/utils/version";
 import ChangelogHeading from './ChangelogHeading.vue';
 
 const STORAGE_KEY = 'bnc_acknowledged_version';
@@ -19,7 +19,7 @@ const showChangelog = computed((): boolean => {
 	return changelog.releases.some((r) => {
 		if (!r.version) return false;
 		if (!acknowledgedVersion.value) return true;
-		return isVersionNewerThan(r.version, acknowledgedVersion.value!);
+		return isVersionSameOrNewerThan(r.version, acknowledgedVersion.value!);
 	});
 });
 
