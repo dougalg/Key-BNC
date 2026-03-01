@@ -26,14 +26,12 @@ function parseChangelog(raw: string): ChangelogRelease[] {
 			if (current) {
 				changelogSchema.parse(current)
 				releases.push(current)
-			} else {
-
-				current = { version: versionMatch[1], date: '', items: [] }
-				changelogSchema.parse(current)
-
-				expectDate = true
-				continue
 			}
+
+			current = { version: versionMatch[1], date: '', items: [] }
+
+			expectDate = true
+			continue
 		}
 
 		if (expectDate && current && line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) {

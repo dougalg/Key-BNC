@@ -2,19 +2,23 @@ export function parseVersionParts(version: string): number[] {
 	return version.replace(/^[vV]/, '').split('.').map(Number)
 }
 
-export function isVersionSameOrNewerThan(candidate: string, baseline: string): boolean {
-	const ca = parseVersionParts(candidate)
-	const ba = parseVersionParts(baseline)
-	for (let i = 0; i < Math.min(ca.length, ba.length); i++) {
-		const c = ca[i] ?? 0
-		const b = ba[i] ?? 0
-		if (c !== b) return b < c
+export function isVersionNewerThan(candidate: string, baseline: string): boolean {
+	const [cMajor, cMinor, cPatch = Infinity ] = parseVersionParts(candidate)
+	const [bMajor, bMinor, bPatch = 0] = parseVersionParts(baseline)
+	if (cMajor != bMajor) {
+		return cMajor > bMajor;
 	}
-	return true
+	if (cMinor != bMinor) {
+		return cMinor > bMinor;
+	}
+	if (cPatch != bPatch) {
+		return cPatch > bPatch;
+	}
+	return false;
 }
 
 export function isOlderRelease(version: string, acknowledgedVersion: string | null) {
 	if (!version) return false
-	if (!acknowledgedVersion) return true
-	return !isVersionSameOrNewerThan(version, acknowledgedVersion || '');
+	if (!acknowledgedVersion) return false
+	return !isVersionNewerThan(version, acknowledgedVersion || '');
 }

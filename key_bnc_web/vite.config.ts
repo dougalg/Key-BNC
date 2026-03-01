@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import path from "path";
 import { defineConfig, loadEnv, UserConfig } from "vite";
+import { playwright } from "@vitest/browser-playwright";
 import vue from "@vitejs/plugin-vue";
 import legacy from "@vitejs/plugin-legacy";
 import { VitePWA } from "vite-plugin-pwa";
@@ -58,6 +59,11 @@ export default defineConfig(({ mode }) => {
 			],
 		},
 		test: {
+			browser: {
+				enabled: true,
+				provider: playwright(),
+				instances: [{ browser: "chromium" }],
+			},
 			coverage: {
 				provider: "v8",
 				include: ["src/**/*{.ts,.vue}"],

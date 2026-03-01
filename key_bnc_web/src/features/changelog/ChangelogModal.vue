@@ -1,31 +1,22 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import changelog from "virtual:changelog";
+import changelogData from "virtual:changelog";
 import BaseModal from '@/components/BaseModal.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue';
-import { isOlderRelease, isVersionSameOrNewerThan } from "./version";
 import ChangelogHeading from './ChangelogHeading.vue';
-
-const STORAGE_KEY = 'bnc_acknowledged_version';
-const acknowledgedVersion = ref<string | null>(localStorage.getItem(STORAGE_KEY));
+import { useChangelog } from './useChangelog';
 
 const props = defineProps<{
 	version: string,
 	open: boolean,
 }>()
 
-const showChangelog = computed((): boolean => {
-	if (acknowledgedVersion.value === props.version) return false;
-	return changelog.releases.some((r) => {
-		if (!r.version) return false;
-		if (!acknowledgedVersion.value) return true;
-		return isVersionSameOrNewerThan(r.version, acknowledgedVersion.value!);
-	});
-});
+const { newReleases, ...changelog } = useChangelog(changelogData, props.version);
+
+const showChangelog = computed((): boolean => props.open || newReleases.value.length > 0);
 
 const onChangelogClose = () => {
-	localStorage.setItem(STORAGE_KEY, props.version);
-	acknowledgedVersion.value = props.version;
+	changelog.acknowledgeLatestVersion();
 	showOlderReleases.value = false;
 	emit('close')
 };
@@ -34,26 +25,20 @@ const emit = defineEmits<{
 	(e: 'close'): void
 }>()
 
-
-const newReleases = computed(() =>
-	changelog.releases.filter((r) => !isOlderRelease(r.version, acknowledgedVersion.value)))
-
 const showOlderReleases = ref(false);
 
-const hasOlderReleases = computed(() =>
-	changelog.releases.some((r) => isOlderRelease(r.version, acknowledgedVersion.value)))
+const hasOlderReleases = computed(() => changelog.olderReleases.value.length > 0)
 
 const olderReleases = computed(() =>
 	!showOlderReleases.value
 		? []
-		: changelog.releases
-			.filter((r) => isOlderRelease(r.version, acknowledgedVersion.value)));
+		: changelog.olderReleases.value);
 
 </script>
 
 <template>
 	<base-modal
-		:open="showChangelog || props.open"
+		:open="showChangelog"
 		@close="onChangelogClose"
 	>
 		<h2 tabindex="-1">
