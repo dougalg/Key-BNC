@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import changelog from "virtual:changelog";
 import BaseModal from '@/components/BaseModal.vue'
 import BasicButton from '@/components/buttons/BasicButton.vue';
-import { isOlderRelease, isVersionSameOrNewerThan } from "@/utils/version";
+import { isOlderRelease, isVersionSameOrNewerThan } from "./version";
 import ChangelogHeading from './ChangelogHeading.vue';
 
 const STORAGE_KEY = 'bnc_acknowledged_version';
@@ -36,18 +36,18 @@ const emit = defineEmits<{
 
 
 const newReleases = computed(() =>
-	changelog.releases.filter((r) => !isOlderRelease(r, acknowledgedVersion.value)))
+	changelog.releases.filter((r) => !isOlderRelease(r.version, acknowledgedVersion.value)))
 
 const showOlderReleases = ref(false);
 
 const hasOlderReleases = computed(() =>
-	changelog.releases.some((r) => isOlderRelease(r, acknowledgedVersion.value)))
+	changelog.releases.some((r) => isOlderRelease(r.version, acknowledgedVersion.value)))
 
 const olderReleases = computed(() =>
 	!showOlderReleases.value
 		? []
 		: changelog.releases
-			.filter((r) => isOlderRelease(r, acknowledgedVersion.value)));
+			.filter((r) => isOlderRelease(r.version, acknowledgedVersion.value)));
 
 </script>
 
@@ -56,7 +56,9 @@ const olderReleases = computed(() =>
 		:open="showChangelog || props.open"
 		@close="onChangelogClose"
 	>
-		<h2 tabindex="-1">What's new</h2>
+		<h2 tabindex="-1">
+			What's new
+		</h2>
 		<div>
 			<template
 				v-for="release in newReleases"

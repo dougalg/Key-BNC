@@ -1,5 +1,3 @@
-import { ChangelogRelease } from "@/typings/changelog"
-
 export function parseVersionParts(version: string): number[] {
 	return version.replace(/^[vV]/, '').split('.').map(Number)
 }
@@ -15,8 +13,8 @@ export function isVersionSameOrNewerThan(candidate: string, baseline: string): b
 	return true
 }
 
-export function isOlderRelease(r: ChangelogRelease, acknowledgedVersion: string | null) {
-	if (!r.version) return false
+export function isOlderRelease(version: string, acknowledgedVersion: string | null) {
+	if (!version) return false
 	if (!acknowledgedVersion) return true
-	return !isVersionSameOrNewerThan(r.version, acknowledgedVersion || '');
+	return !isVersionSameOrNewerThan(version, acknowledgedVersion || '');
 }

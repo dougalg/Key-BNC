@@ -1,5 +1,6 @@
+/// <reference types="vitest/config" />
 import path from "path";
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig, loadEnv, UserConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import legacy from "@vitejs/plugin-legacy";
 import { VitePWA } from "vite-plugin-pwa";
@@ -56,5 +57,17 @@ export default defineConfig(({ mode }) => {
 				},
 			],
 		},
-	};
+		test: {
+			coverage: {
+				provider: "v8",
+				include: ["src/**/*{.ts,.vue}"],
+				thresholds: {
+					statements: 3.57,
+					functions: 1.88,
+					branches: 6.1,
+					lines: 3,
+				},
+			},
+		},
+	} satisfies UserConfig;
 });

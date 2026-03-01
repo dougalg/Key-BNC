@@ -78,12 +78,16 @@ jobs:
               run: pnpm install --frozen-lockfile
               working-directory: key_bnc_web
 
+            - name: Lint
+              run: pnpm lint
+              working-directory: key_bnc_web
+
             - name: Build WASM
               run: pnpm wasm
               working-directory: key_bnc_web
 
-            - name: Lint
-              run: pnpm lint
+            - name: Test
+              run: pnpm test
               working-directory: key_bnc_web
 
             - name: Build web
