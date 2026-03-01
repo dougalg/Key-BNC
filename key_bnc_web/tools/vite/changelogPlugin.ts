@@ -1,29 +1,39 @@
 import fs from "fs";
+import z from 'zod';
 
-interface ChangelogRelease {
-	version: string
-	date: string
-	items: string[]
-}
+type ChangelogRelease = z.infer<typeof changelogSchema>;
+
+const versionRe = /^##\s+(v\d[\d.]*)/i
+const itemRe = /^[-*]\s+(.+)/
+const dateRe = /\d{4}/
+
+const changelogSchema = z.object({
+	version: z.string().regex(/^v\d(.\d){1,2}$/i),
+	date: z.string(),
+	items: z.array(z.string()),
+})
 
 function parseChangelog(raw: string): ChangelogRelease[] {
 	const releases: ChangelogRelease[] = []
 	let current: ChangelogRelease | null = null
 	let expectDate = false
 
-	const versionRe = /^##\s+([vV]\d[\d.]*)/
-	const itemRe = /^[-*]\s+(.+)/
-	const dateRe = /\d{4}/
-
 	for (const rawLine of raw.split('\n')) {
 		const line = rawLine.trim()
 
 		const versionMatch = line.match(versionRe)
 		if (versionMatch) {
-			if (current) releases.push(current)
-			current = { version: versionMatch[1], date: '', items: [] }
-			expectDate = true
-			continue
+			if (current) {
+				changelogSchema.parse(current)
+				releases.push(current)
+			} else {
+
+				current = { version: versionMatch[1], date: '', items: [] }
+				changelogSchema.parse(current)
+
+				expectDate = true
+				continue
+			}
 		}
 
 		if (expectDate && current && line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) {
@@ -42,7 +52,11 @@ function parseChangelog(raw: string): ChangelogRelease[] {
 		}
 	}
 
-	if (current) releases.push(current)
+	if (current) {
+		changelogSchema.parse(current)
+
+		releases.push(current)
+	}
 	return releases
 }
 
