@@ -27,6 +27,7 @@ describe("changelog/version", () => {
 
 		it("returns false when candidate is older than baseline", () => {
 			expect(isVersionNewerThan("1.0.0", "2.0.0")).toBe(false)
+			expect(isVersionNewerThan("1.0.0", "1.1.0")).toBe(false)
 		})
 
 		it("returns false when candidate equals baseline", () => {
@@ -39,6 +40,11 @@ describe("changelog/version", () => {
 	})
 
 	describe("isOlderRelease", () => {
+		it("returns false when Version is null", () => {
+			// @ts-expect-error Fix later
+			expect(isOlderRelease(null, "1.0.0")).toBe(false)
+		})
+
 		it("returns false when acknowledgedVersion is null", () => {
 			expect(isOlderRelease("1.0.0", null)).toBe(false)
 		})
