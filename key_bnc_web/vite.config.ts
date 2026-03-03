@@ -5,7 +5,6 @@ import { playwright } from "@vitest/browser-playwright";
 import vue from "@vitejs/plugin-vue";
 import legacy from "@vitejs/plugin-legacy";
 import { VitePWA } from "vite-plugin-pwa";
-import plainText from "vite-plugin-virtual-plain-text";
 import { GitRevisionPlugin } from "git-revision-webpack-plugin";
 import tsconfigPaths from "vite-tsconfig-paths";
 import wasmPack from "vite-plugin-wasm-pack";
@@ -41,7 +40,6 @@ export default defineConfig(({ mode }) => {
 					maximumFileSizeToCacheInBytes: 9_000_000, // 9MB
 				},
 			}),
-			plainText(),
 			tsconfigPaths({}),
 			wasmPack.default("./key_bnc_wasm"),
 			htmlPlugin(),
