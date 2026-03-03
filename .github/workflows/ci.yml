@@ -17,8 +17,8 @@ jobs:
 
             - uses: Swatinem/rust-cache@v2
 
-            # - name: Test key_bnc_utils
-            #   run: cargo test --manifest-path key_bnc_utils/Cargo.toml
+            - name: Test key_bnc_utils
+              run: cargo +nightly test --manifest-path key_bnc_utils/Cargo.toml
 
             - name: Test key_bnc_cli
               run: cargo test --manifest-path key_bnc_cli/Cargo.toml
