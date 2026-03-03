@@ -87,7 +87,7 @@ jobs:
               working-directory: key_bnc_web
 
             - name: Test
-              run: pnpm exec playwright install chrome && pnpm test
+              run: pnpm exec playwright install chromium && pnpm test
               working-directory: key_bnc_web
 
             - name: Build web
