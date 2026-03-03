@@ -30,7 +30,7 @@ const pollBncCsv = () => {
 
 onMounted(async () => {
 	const csvImport
-		= import("@virtual:plain-text/src/assets/BNC_wordlist.csv").then(
+		= import("@/assets/BNC_wordlist.csv?raw").then(
 			(_) => _.default,
 		);
 	await init();

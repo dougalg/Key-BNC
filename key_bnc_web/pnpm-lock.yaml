@@ -54,6 +54,9 @@ importers:
       '@vue/eslint-config-typescript':
         specifier: 14.7.0
         version: 14.7.0(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.56.1(eslint@10.0.2(jiti@2.6.1))(typescript@5.9.3))(eslint@10.0.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@10.0.2(jiti@2.6.1))))(eslint@10.0.2(jiti@2.6.1))(typescript@5.9.3)
+      '@vue/typescript-plugin':
+        specifier: ^3.2.5
+        version: 3.2.5(typescript@5.9.3)
       eslint:
         specifier: ^10.0.2
         version: 10.0.2(jiti@2.6.1)
@@ -108,9 +111,6 @@ importers:
       vite-plugin-pwa:
         specifier: ^1.2.0
         version: 1.2.0(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(sass@1.97.3)(terser@5.46.0))(workbox-build@7.4.0)(workbox-window@7.4.0)
-      vite-plugin-virtual-plain-text:
-        specifier: ^1.4.5
-        version: 1.4.5
       vite-plugin-wasm-pack:
         specifier: 0.1.12
         version: 0.1.12
@@ -1503,6 +1503,9 @@ packages:
 
   '@vue/shared@3.5.29':
     resolution: {integrity: sha512-w7SR0A5zyRByL9XUkCfdLs7t9XOHUyJ67qPGQjOou3p6GvBeBW+AVjUUmlxtZ4PIYaRvE+1LmK44O4uajlZwcg==}
+
+  '@vue/typescript-plugin@3.2.5':
+    resolution: {integrity: sha512-efEFD1QEq4tQhLpsVOdPXNiJlhQU4Z4yG52ggvuXK8r+wrLLNMAlrM47lfzk7Mua7HCeVzxXL1r401JcCVVNMw==}
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -3287,9 +3290,6 @@ packages:
       '@vite-pwa/assets-generator':
         optional: true
 
-  vite-plugin-virtual-plain-text@1.4.5:
-    resolution: {integrity: sha512-aDPYdqQJK4XuLwcsM4xpl16DKQL6P9UY6yZ8PfkgvdfM++HGTT5ktb4vUBuw+7GA3oKAsJVNUXC48cIoVTrfQQ==}
-
   vite-plugin-wasm-pack@0.1.12:
     resolution: {integrity: sha512-WliYvQp9HXluir4OKGbngkcKxtYtifU11cqLurRRJGsl770Sjr1iIkp5RuvU3IC1poT4A57Z2/YgAKI2Skm7ZA==}
 
@@ -3374,6 +3374,14 @@ packages:
 
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
+
+  vue-component-meta@3.2.5:
+    resolution: {integrity: sha512-i7v7S6atD9aZZPouwceJoqcmBzjI4uRIxOj5dDcBPiIhFoY+U5kmy7PnEaAOh/iilJQI7I8F3lKdyZmRdplUpA==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   vue-eslint-parser@10.4.0:
     resolution: {integrity: sha512-Vxi9pJdbN3ZnVGLODVtZ7y4Y2kzAAE2Cm0CZ3ZDRvydVYxZ6VrnBhLikBsRS+dpwj4Jv4UCv21PTEwF5rQ9WXg==}
@@ -4973,6 +4981,16 @@ snapshots:
       vue: 3.5.29(typescript@5.9.3)
 
   '@vue/shared@3.5.29': {}
+
+  '@vue/typescript-plugin@3.2.5(typescript@5.9.3)':
+    dependencies:
+      '@volar/typescript': 2.4.28
+      '@vue/language-core': 3.2.5
+      '@vue/shared': 3.5.29
+      path-browserify: 1.0.1
+      vue-component-meta: 3.2.5(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -6895,8 +6913,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-virtual-plain-text@1.4.5: {}
-
   vite-plugin-wasm-pack@0.1.12:
     dependencies:
       chalk: 4.1.2
@@ -6967,6 +6983,14 @@ snapshots:
       - yaml
 
   vscode-uri@3.1.0: {}
+
+  vue-component-meta@3.2.5(typescript@5.9.3):
+    dependencies:
+      '@volar/typescript': 2.4.28
+      '@vue/language-core': 3.2.5
+      path-browserify: 1.0.1
+    optionalDependencies:
+      typescript: 5.9.3
 
   vue-eslint-parser@10.4.0(eslint@10.0.2(jiti@2.6.1)):
     dependencies:
