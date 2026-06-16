@@ -28,7 +28,7 @@
 		"@typescript-eslint/parser": "^8.58.2",
 		"@vitejs/plugin-legacy": "^8.0.1",
 		"@vitejs/plugin-vue": "^6.0.6",
-		"@vitest/browser": "^4.1.4",
+		"@vitest/browser": "^4.1.8",
 		"@vitest/browser-playwright": "^4.1.4",
 		"@vitest/coverage-v8": "4.1.4",
 		"@vue/eslint-config-typescript": "14.7.0",
