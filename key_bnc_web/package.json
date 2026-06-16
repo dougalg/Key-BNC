@@ -49,7 +49,7 @@
 		"stylelint-scss": "^7.0.0",
 		"typescript": "^6.0.2",
 		"typescript-eslint": "^8.58.2",
-		"vite": "^8.0.8",
+		"vite": "^8.0.16",
 		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-wasm-pack": "0.1.12",
 		"vite-tsconfig-paths": "^6.1.1",
